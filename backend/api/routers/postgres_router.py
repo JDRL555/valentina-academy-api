@@ -14,3 +14,13 @@ class PostgresRouter:
     if model._meta.app_label in self.labels: 
       return "postgres_db"
     return None
+  
+  def allow_relation(self, obj1, obj2, **hints):
+    if obj1._meta.app_label in self.labels or obj2._meta.app_label in self.labels:
+      return True
+    return None
+  
+  def allow_migrate(self, db, app_label, model_name=None, **hints):
+    if app_label in self.labels:
+      return db == "postgres_db"
+    return None
