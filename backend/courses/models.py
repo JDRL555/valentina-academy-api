@@ -14,8 +14,8 @@ class Courses(models.Model):
   category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
   
 class Courses_media(models.Model):
-  url_video = models.TextField(max_length=250)
-  url_cover = models.TextField(max_length=250)
+  url_video = models.TextField(max_length=500)
+  url_cover = models.TextField(max_length=500)
   course_id = models.ForeignKey(Courses, on_delete=models.CASCADE)
   
 class Purchased_course(models.Model):
