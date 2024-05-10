@@ -1,6 +1,7 @@
 class MongoRouter:
   labels = {
-    "recipes", "ingredients_recipes", "ingredients"
+    "recipes", "ingredients_recipes", "ingredients",
+    "surveys", "questions"
   }
   
   def db_for_read(self, model, **hints):
