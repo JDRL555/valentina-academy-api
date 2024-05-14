@@ -29,6 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
     'courses',
     'recipes',
     'users',
@@ -71,29 +73,16 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {},
-    'postgres_db': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get("POSTGRES_DB_NAME"),
         'USER': os.environ.get("POSTGRES_DB_USER"),
         'PASSWORD': os.environ.get("POSTGRES_DB_PASSWORD"),
         'HOST': os.environ.get("POSTGRES_DB_HOST"),
         'PORT': os.environ.get("POSTGRES_DB_PORT"),
-    },
-    'mongo_db': {
-        'ENGINE': 'djongo',
-        'NAME': os.environ.get("MONGO_DB_NAME"),
-        'CLIENT': {
-            'host': os.environ.get("MONGO_DB_HOST")
-        }
     }
+
 }
-
-DATABASE_ROUTES = [
-    "api.routers.postgres_router.PostgresRouter",
-    "api.routers.mongo_router.MongoRouter",
-]
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
