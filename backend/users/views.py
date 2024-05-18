@@ -50,6 +50,19 @@ def get_users(request):
   users = User.objects.all()
   return Response({'users': users})
 
-@api_view(['PUT'])
-def delete_user_id(request):
-  return Response({'users': 'deleting'})
+@api_view(['GET'])
+def user_id(request, id):
+    try:
+        user_id = User.objects.get(pk=id)
+    except User.DoesNotExist:
+        return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+    serializador = UserSerializer(user_id)
+    return Response(serializador.data)
+
+def is_user_active(user_id): # Aqui tienes que cambiar el status del usuario, no devolver su estado
+    try:
+        user = User.objects.get(pk=user_id)
+        return user.is_active
+    except User.DoesNotExist:
+        return False
+
