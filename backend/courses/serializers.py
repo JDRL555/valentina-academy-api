@@ -16,7 +16,7 @@ class CourseSerializer(serializers.ModelSerializer):
   class Meta:
     model = Courses
     fields = [
-      "title", "description", "duration", "price", "user", "category", "recipe", "created_at"
+      "id", "title", "description", "duration", "price", "user", "category", "recipe", "created_at"
     ]
 
 class CourseMediaSerializer(serializers.ModelSerializer):
