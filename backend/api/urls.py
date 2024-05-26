@@ -9,9 +9,9 @@ from courses.urls import urlpatterns as courses_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path('users/', include(user_views)),
-    re_path('recipe/', include(recipe_views)),
-    re_path("surveys/", include(survey_views)),
+    path('users/', include(user_views)),
+    path('recipe/', include(recipe_views)),
+    path("surveys/", include(survey_views)),
     
     path("courses/", include(courses_views))
 ]
