@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 
+import datetime
+
 # Create your models here.
 
 class Category(models.Model):
@@ -15,10 +17,10 @@ class Courses(models.Model):
   description = models.TextField(max_length=250)
   duration = models.IntegerField()
   price = models.DecimalField(max_digits=20, decimal_places=2)
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
-  category = models.ForeignKey("courses.Category", on_delete=models.CASCADE)
+  user = models.ForeignKey(User, on_delete=models.CASCADE, db_column="user")
+  category = models.ForeignKey("courses.Category", on_delete=models.CASCADE, db_column="category")
   recipe = models.CharField(max_length=500, null=True)
-  created_at = models.DateField(default=now)
+  created_at = models.DateField(default=datetime.date.today)
   
   def __str__(self):
     return self.title

@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import Courses, Category, Purchased_course, Courses_media
 
+from django.contrib.auth.models import User
+
 from users.serializers import UserSerializer
 
 
@@ -10,8 +12,8 @@ class CategorySerializer(serializers.ModelSerializer):
     fields = ["name"]
 
 class CourseSerializer(serializers.ModelSerializer):
-  category = CategorySerializer(read_only=True)
-  user = UserSerializer(read_only=True)
+  category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), required=True)
+  user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=True)
   
   class Meta:
     model = Courses

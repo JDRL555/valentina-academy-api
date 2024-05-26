@@ -81,7 +81,6 @@ DATABASES = {
         'HOST': os.environ.get("POSTGRES_DB_HOST"),
         'PORT': os.environ.get("POSTGRES_DB_PORT"),
     }
-
 }
 
 # Password validation
@@ -124,3 +123,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+APPEND_SLASH = False
