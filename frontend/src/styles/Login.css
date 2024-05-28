@@ -1,0 +1,79 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-image: url(../public/img/cocina1.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.login{
+    background-color: rgb(179, 179, 63, 0.90);
+    padding: 40px;
+    width: 50%;
+    color: black;
+    margin: 180px auto;
+    border-radius: 30px;
+    border-style: solid;
+    transition: .3s;
+}
+
+.login:hover{
+    background-color: rgb(179, 179, 63);
+    transform: scale(1.02);
+}
+
+h2{
+    display: grid;
+    place-content: center;
+}
+
+label {
+    float: left;
+    color: black;
+    cursor: default;
+    font-size: 20px;
+    margin: 5px 0;
+}
+
+input{
+    display: block;
+    width: 97%;
+    padding: 5px;
+    outline: none;
+    font-size: 18px;
+    border-radius: 30px;
+    border-style: solid;
+    background-color: black;
+    color: white;
+}
+
+section {
+    margin: 20px 0;
+}
+
+.close-btn {
+    color: white;
+    cursor: pointer;
+}
+
+.lbl-modal {
+    font-size: 20px;
+    float: left;
+}
+
+button {
+    display: block;
+    border: none;
+    padding: 15px;
+    font-size: 20px;
+    border-radius: 10px;
+    transition: 1s;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
