@@ -8,7 +8,7 @@ from survey.urls import urlpatterns as survey_views
 from courses.urls import urlpatterns as courses_views
 
 urlpatterns = [
-    path("courses/", include(courses_views)),
+    path("", include(courses_views)),
     path('admin/', admin.site.urls),
     path('users/', include(user_views)),
     path('recipes/', include(recipe_views)),

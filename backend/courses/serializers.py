@@ -3,9 +3,6 @@ from .models import Courses, Category, Purchased_course, Courses_media
 
 from django.contrib.auth.models import User
 
-from users.serializers import UserSerializer
-
-
 class CategorySerializer(serializers.ModelSerializer):
   class Meta:
     model = Category
@@ -22,6 +19,8 @@ class CourseSerializer(serializers.ModelSerializer):
     ]
 
 class CourseMediaSerializer(serializers.ModelSerializer):
+  course = serializers.PrimaryKeyRelatedField(queryset=Courses.objects.all(), required=True)
+  
   class Meta:
     model = Courses_media
     fields = [
@@ -30,6 +29,9 @@ class CourseMediaSerializer(serializers.ModelSerializer):
 
     
 class PurchasedCourseSerializer(serializers.ModelSerializer):
+  user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=True)
+  course = serializers.PrimaryKeyRelatedField(queryset=Courses.objects.all(), required=True)
+  
   class Meta:
     model = Purchased_course
     fields = [

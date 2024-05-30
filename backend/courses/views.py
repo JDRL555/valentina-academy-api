@@ -3,10 +3,12 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from django.contrib.auth.models import User
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 
-from .serializers import CourseSerializer
+from .serializers import CourseSerializer, CourseMediaSerializer, PurchasedCourseSerializer
 
-from .models import Courses, Category
+from .models import Courses, Category, Courses_media, Purchased_course
 
 
 # Create your views here.
@@ -56,6 +58,54 @@ class CourseViewSet(ModelViewSet):
     
     return Response(course)
   
-  @action(detail=False, methods=['GET'])
-  def buy_course(self, request):
-    return Response({ "data": [] })
+class PurchasedCourseViewSet(ModelViewSet):
+  queryset = Purchased_course.objects.all()
+  serializer_class = PurchasedCourseSerializer
+  
+  @action(detail=False, methods=['POST'])
+  def subscribe(self, request):
+    purchased_serialize = PurchasedCourseSerializer(data=request.data)
+    
+    if purchased_serialize.is_valid():
+      
+      try:
+        Purchased_course.objects.get(**request.data)
+        return Response({ "details": "The purchase already exists" }, status=400)
+      except:
+        purchased_serialize.save()
+        return Response(purchased_serialize.data, status=201)
+    else:
+      return Response(purchased_serialize.errors, status=400)
+
+class CourseMediaViewSet(ModelViewSet):
+  queryset = Courses_media.objects.all()
+  serializer_class = CourseMediaSerializer
+  trailing_slash = False
+  
+  @action(detail=False, methods=['POST'])
+  def create_media(self, request):
+    
+    serializer = CourseMediaSerializer(data=request.data)
+    
+    if serializer.is_valid():
+      errors = {}
+      
+      try:
+        validate = URLValidator()
+        validate(request.data["url_video"])
+      except ValidationError as err:
+        errors["url_video"] = err
+        
+      try:
+        validate = URLValidator()
+        validate(request.data["url_cover"])
+      except ValidationError as err:
+        errors["url_cover"] = err
+        
+      if len(errors.keys()) > 0:
+        return Response(errors, status=400)
+      
+      serializer.save()
+      return Response(serializer.data, status=201)
+      
+    return Response(serializer.errors, status=400)
