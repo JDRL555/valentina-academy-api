@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.timezone import now
 
 import datetime
 
@@ -37,8 +36,8 @@ class Purchased_course(models.Model):
   course = models.ForeignKey("courses.Courses", on_delete=models.CASCADE)
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   is_purchased = models.BooleanField(default=False)
-  completed = models.BooleanField()
-  purchased_at = models.DateField(default=now)
+  completed = models.BooleanField(default=False)
+  purchased_at = models.DateField(default=datetime.date.today)
   
   def __str__(self):
     return f"Course {self.course} {'purchased' if self.is_purchased else 'not purchased'}"
