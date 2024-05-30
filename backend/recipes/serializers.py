@@ -1,17 +1,21 @@
-from rest_framework import serializers
+from rest_framework_mongoengine import serializers
 from .models import Recipes,Ingredient_recipes,Ingredients
 
-class RecipesSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = Recipes
-    fields = ['name','description','created_at']
+class IngredientSerializer(serializers.DocumentSerializer):
+    class Meta:
+        model = Ingredients
+        fields = '__all__'
 
-class IngredientsSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = Ingredients
-    fields = ['name']
+class IngredientRecipeSerializer(serializers.DocumentSerializer):
+    ingredient = IngredientSerializer(read_only=True)
 
-class Ingredient_recipesSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = Ingredient_recipes
-    fields = ['recipe_id','ingredient_id','ingredient_quantity']
+    class Meta:
+        model = Ingredient_recipes
+        fields = '__all__'
+
+class RecipeSerializer(serializers.DocumentSerializer):
+    ingredient_recipes = IngredientRecipeSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Recipes
+        fields = '__all__'

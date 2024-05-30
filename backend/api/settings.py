@@ -1,5 +1,6 @@
 from pathlib import Path
 from dotenv import load_dotenv
+from .utils.mongo import connectToMongo
 import os
 
 load_dotenv()
@@ -17,7 +18,6 @@ SECRET_KEY = 'django-insecure-ut*#isk0k#=p8!$3!lru=38as0^)$^p57vixb!$7d8dn)*2-jg
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -82,6 +82,24 @@ DATABASES = {
         'PORT': os.environ.get("POSTGRES_DB_PORT"),
     }
 }
+
+MONGODB_DATABASES = {
+    "default": {
+        "name": os.environ.get("MONGO_DB_NAME"),
+        "host": os.environ.get("MONGO_DB_HOST"),
+        "tz_aware": True, # if you using timezones in django (USE_TZ = True)
+    },
+}
+
+try:
+    connectToMongo(
+        db=os.environ.get("MONGO_DB_NAME"),
+        host=os.environ.get("MONGO_DB_HOST"),
+        port=int(os.environ.get("MONGO_DB_PORT")),
+    )
+except Exception as err:
+    print(f"ERROR con la conexion a mongodb: {err}")
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
