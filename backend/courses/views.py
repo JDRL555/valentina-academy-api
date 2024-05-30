@@ -17,7 +17,44 @@ class CourseViewSet(ModelViewSet):
   
   def list(self, request):
     queryset = list(self.queryset.values())
+    for course in queryset:
+      user = User.objects.get(id=course["user_id"])
+      category = Category.objects.get(id=course["category_id"])
+      
+      course["user"] = {
+        "id": user.id,
+        "username": user.username,
+        "email": user.email,
+      }
+      
+      course["category"] = {
+        "name": category.name
+      }
+      
+      del course["user_id"]
+      del course["category_id"]
+      
     return Response(queryset)
+  
+  def retrieve(self, request, *args, **kwargs):
+    obj = self.get_object()
+    serializer = self.get_serializer(obj)
+    course = serializer.data
+
+    user = User.objects.get(id=course["user"])
+    category = Category.objects.get(id=course["category"])
+    
+    course["user"] = {
+      "id": user.id,
+      "username": user.username,
+      "email": user.email,
+    }
+    
+    course["category"] = {
+      "name": category.name
+    }
+    
+    return Response(course)
   
   @action(detail=False, methods=['GET'])
   def buy_course(self, request):
