@@ -1,9 +1,9 @@
 from pathlib import Path
 from dotenv import load_dotenv
+from .utils.mongo import connectToMongo
 import os
 
 load_dotenv()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,7 +19,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -29,8 +28,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_mongoengine',
     'courses',
-    'recipes'
+    'recipes',
+    'users',
+    'payments',
+    'survey'
 ]
 
 MIDDLEWARE = [
@@ -68,28 +73,32 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {},
-    'postgres_db': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get("POSTGRES_DB_NAME"),
         'USER': os.environ.get("POSTGRES_DB_USER"),
         'PASSWORD': os.environ.get("POSTGRES_DB_PASSWORD"),
         'HOST': os.environ.get("POSTGRES_DB_HOST"),
         'PORT': os.environ.get("POSTGRES_DB_PORT"),
-    },
-    'mongo_db': {
-        'ENGINE': 'djongo',
-        'NAME': os.environ.get("MONGO_DB_NAME"),
-        'CLIENT': {
-            'host': os.environ.get("MONGO_DB_HOST")
-        }
     }
 }
 
-DATABASE_ROUTES = [
-    "api.routers.postgres_router.PostgresRouter",
-    "api.routers.mongo_router.MongoRouter",
-]
+MONGODB_DATABASES = {
+    "default": {
+        "name": os.environ.get("MONGO_DB_NAME"),
+        "host": os.environ.get("MONGO_DB_HOST"),
+        "tz_aware": True, # if you using timezones in django (USE_TZ = True)
+    },
+}
+
+try:
+    connectToMongo(
+        db=os.environ.get("MONGO_DB_NAME"),
+        host=os.environ.get("MONGO_DB_HOST"),
+        port=int(os.environ.get("MONGO_DB_PORT")),
+    )
+except Exception as err:
+    print(f"ERROR con la conexion a mongodb: {err}")
 
 
 # Password validation
@@ -132,3 +141,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+APPEND_SLASH = False

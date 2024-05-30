@@ -1,14 +1,15 @@
-from django.db import models
+from mongoengine import Document, StringField, DateTimeField, ReferenceField, IntField
+import datetime
 
-# Create your models here.
-class Recipes(models.Model):
- name = models.CharField(max_length=200)
- description = models.TextField(max_length=250)
-class Ingredients(models.Model):
- name = models.CharField(max_length=200)
+class Recipes(Document):
+    name = StringField(required=True, max_length=100)
+    description = StringField(max_length=300)
+    created_at = DateTimeField(default=datetime.datetime.now)
 
-class Ingredient_recipes(models.Model):
- recipe_id = models.ForeignKey(Recipes, on_delete=models.CASCADE)
- Ingredient_id = models.ForeignKey(Ingredients, on_delete=models.CASCADE)
- Ingredient_quantity = models.IntegerField()
-    
+class Ingredients(Document):
+    name = StringField(required=True, max_length=100)
+
+class Ingredient_recipes(Document):
+    recipe_id = ReferenceField(Recipes, dbref=True)
+    ingredient_id = ReferenceField(Ingredients, dbref=True)
+    ingredient_quantity = IntField(min_value=1)

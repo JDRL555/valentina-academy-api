@@ -1,24 +1,44 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.utils.timezone import now
+
+import datetime
 
 # Create your models here.
 
 class Category(models.Model):
   name = models.CharField(max_length=200)
 
+  def __str__(self):
+      return self.name
+
 class Courses(models.Model):
   title = models.CharField(max_length=200)
   description = models.TextField(max_length=250)
   duration = models.IntegerField()
-  price = models.DecimalField(max_digits=20, decimal_places=20)
-  user_id = models.IntegerField()
-  category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
+  price = models.DecimalField(max_digits=20, decimal_places=2)
+  user = models.ForeignKey(User, on_delete=models.CASCADE, db_column="user")
+  category = models.ForeignKey("courses.Category", on_delete=models.CASCADE, db_column="category")
+  recipe = models.CharField(max_length=500, null=True)
+  created_at = models.DateField(default=datetime.date.today)
+  
+  def __str__(self):
+    return self.title
   
 class Courses_media(models.Model):
-  url_video = models.TextField(max_length=500)
-  url_cover = models.TextField(max_length=500)
-  course_id = models.ForeignKey(Courses, on_delete=models.CASCADE)
+  url_video = models.TextField(max_length=800)
+  url_cover = models.TextField(max_length=800)
+  course = models.ForeignKey("courses.Courses", on_delete=models.CASCADE)
+  
+  def __str__(self):
+    return self.url_video
   
 class Purchased_course(models.Model):
-  course_id = models.ForeignKey(Courses, on_delete=models.CASCADE)
-  user_id = models.IntegerField()
-  status = models.BooleanField()
+  course = models.ForeignKey("courses.Courses", on_delete=models.CASCADE)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  is_purchased = models.BooleanField(default=False)
+  completed = models.BooleanField()
+  purchased_at = models.DateField(default=now)
+  
+  def __str__(self):
+    return f"Course {self.course} {'purchased' if self.is_purchased else 'not purchased'}"
