@@ -6,38 +6,38 @@ export default function RegisterPage() {
         <form method="post">
             <h2>Registro</h2>
             <section>
-                <label for="nombres">Nombres</label>
+                <label htmlFor="nombres">Nombres</label>
                 <input type="username" placeholder="Nombres" required />
             </section>
             <section>
-                <label for="apellidos">Apellidos</label>
+                <label htmlFor="apellidos">Apellidos</label>
                 <input type="username" placeholder="Apellidos" required />
             </section>
             <section>
-                <label for="edad">Edad</label>
+                <label htmlFor="edad">Edad</label>
                 <input type="number" placeholder="Edad" required />
             </section>
             <section className="container">
-                <label for="sexo">Sexo</label>
-                <div class="opciones">
-                    <div class="opcion1">
+                <label htmlFor="sexo">Sexo</label>
+                <div className="opciones">
+                    <div className="opcion1">
                         <input type="radio" name="Hombre" id="Hombre" />
-                        <label for="Hobres">Hombre</label>
+                        <label htmlFor="Hobres">Hombre</label>
                         <input type="radio" name="Mujer" id="Mujer" />
-                        <label for="Mujer">Mujer</label>
+                        <label htmlFor="Mujer">Mujer</label>
                     </div>
                 </div>
             </section>
             <section>
-                <label for="correo">Correo</label>
+                <label htmlFor="correo">Correo</label>
                 <input type="email" placeholder="Correo" required />
             </section>
             <section>
-                <label for="contraseña">Contraseña</label>
+                <label htmlFor="contraseña">Contraseña</label>
                 <input type="password" placeholder="Contraseña" required />
             </section>
             <section>
-                <label for="confirmar">Confirmar Contraseña</label>
+                <label htmlFor="confirmar">Confirmar Contraseña</label>
                 <input type="password" placeholder="Confirmar Contraseña" required />
             </section>
             <button className="boton">Enviar</button>
