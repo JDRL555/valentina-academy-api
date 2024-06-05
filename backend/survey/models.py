@@ -8,8 +8,15 @@ class Surveys(Document):
   description = StringField(max_length=100)
   course_id = IntField(required=True)
   created_at = DateField(default=datetime.datetime.now())
-  
+
+class Answers(Document):
+  answer = StringField(required=True, max_length=500)
+  is_correct = BooleanField(default=False)
+
 class Questions(Document):
   survey_id = ReferenceField(Surveys)
   question = StringField(max_length=300)
-  is_correct = BooleanField(default=False)
+
+class AnswersQuestion(Document):
+  question = ReferenceField(Questions)
+  answer = ReferenceField(Answers)
