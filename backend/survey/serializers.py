@@ -1,12 +1,19 @@
 from rest_framework_mongoengine import serializers
-from .models import Surveys, Questions
+from .models import Answers, Questions, Surveys, AnswersQuestion
+
 
 class SurveySerializer(serializers.DocumentSerializer):
   class Meta:
     model = Surveys
-    fields = ["title", "description", "course_id", "created_at"]
+    fields = '__all__'
     
 class QuestionSerializer(serializers.DocumentSerializer):
   class Meta:
     model = Questions
-    fields = ["survey_id", "question", "is_correct"]
+    fields = '__all__'
+
+class AnswersSerializer(serializers.DocumentSerializer):
+
+  class Meta:
+    model = Answers
+    fields = '__all__'
