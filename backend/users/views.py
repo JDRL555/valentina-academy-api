@@ -41,7 +41,6 @@ class UsersViewSet(ModelViewSet):
       user.set_password(serializer.data['password'])
       user.save()
       
-      token = Token.objects.create(user=user)
-      return Response({'token': token.key, "user": serializer.data}, status=status.HTTP_201_CREATED)
+      return Response({"user": serializer.data}, status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

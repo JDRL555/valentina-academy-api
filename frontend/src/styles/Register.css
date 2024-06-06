@@ -1,58 +1,54 @@
-*{
-    margin: 0;
-    padding: 0;
-}
-
-body{
-    background-image: url(../public/img/cocina1.jpg);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-attachment: fixed;
-}
-
-.login{
-    background-color: rgb(179, 179, 63, 0.90);
-    padding: 40px;
-    width: 50%;
+.register{
+    background-color: rgba(0, 0, 0, 0.55);
+    box-sizing: border-box;
+    padding: 30px;
+    width: 60%;
     color: black;
-    margin: 180px auto;
-    border-radius: 30px;
-    border-style: solid;
     transition: .3s;
+    float: right;
 }
 
-.login:hover{
-    background-color: rgb(179, 179, 63);
-    transform: scale(1.02);
+.register:hover{
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
-h2{
-    display: grid;
-    place-content: center;
+.register h2{
+    font-size: 50px;
+    color: var(--primary-color);
 }
 
-label {
+.register label {
     float: left;
-    color: black;
+    color: var(--primary-color);
     cursor: default;
     font-size: 20px;
-    margin: 5px 0;
+    font-weight: bold;
+    margin: 10px 0;
 }
 
-input{
+.register input{
     display: block;
     width: 97%;
-    padding: 5px;
+    padding: 10px;
     outline: none;
     font-size: 18px;
     border-radius: 30px;
-    border-style: solid;
+    border: none;
+    box-shadow: 3px 5px 7px var(--more-opaque-primary-color);
     background-color: black;
-    color: white;
+    color: var(--primary-color);
+    transition: .3s;
 }
 
-section {
+.register input:focus {
+    box-shadow: 3px 5px 7px var(--opaque-primary-color);
+}
+
+.register input::placeholder {
+    color: var(--more-opaque-primary-color);
+}
+
+.register section {
     margin: 20px 0;
 }
 
@@ -66,27 +62,46 @@ section {
     float: left;
 }
 
-button {
+.register .redirect {
+    display: inline-block;
+    color: var(--primary-color);
+    text-decoration: underline;
+    font-size: 20px;
+    padding-bottom: 10px;
+}
+
+.register button {
     display: block;
     border: none;
     padding: 15px;
     font-size: 20px;
     border-radius: 10px;
     transition: 1s;
-    background-color: black;
-    color: white;
+    background-color: var(--primary-color);
+    color: black;
     cursor: pointer;
+    transition: .3s;
 }
 
-.opciones{
-    display: block;
+.register button:hover {
+    background-color: black;
+    color: var(--primary-color);
 }
 
-div.opcion1, div.opcion2{
+.register .message {
     display: inline-block;
+    visibility: hidden;
+    opacity: 0;
+    background-color: #fa5353;
+    color: white;
+    font-size: 20px;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .3s;
 }
 
-.container{
-    display: flex;
-    flex-direction: column;
+.register .message:hover {
+    background-color: #fc3939;
 }

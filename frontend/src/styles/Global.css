@@ -1,0 +1,22 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+
+  --more-opaque-primary-color: #f3dd6077;
+  --opaque-primary-color: #f3dd60b2;
+
+  --primary-color: #f3dd60;
+
+  box-sizing: border-box;
+}
+
+body{
+  background-image: url(../public/img/cocina1.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+}
