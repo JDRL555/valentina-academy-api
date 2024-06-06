@@ -44,3 +44,21 @@ class UsersViewSet(ModelViewSet):
       return Response({"user": serializer.data}, status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  
+  @action(detail=False, methods=["GET"])
+  def auth_user(self, request, token):
+    try:
+      token_object = Token.objects.get(key=token)
+      user = token_object.user
+      del user.password
+      return Response({ 
+        "user": { 
+          "first_name": user.first_name, 
+          "last_name": user.last_name, 
+          "username": user.username, 
+          "email": user.email 
+        } 
+      })
+    except Exception as err:
+      print(err)
+      return Response({ "error": "El token es invalido" }, status=status.HTTP_403_FORBIDDEN)
