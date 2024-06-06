@@ -1,3 +1,4 @@
+import cloudinary.uploader
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -5,6 +6,8 @@ from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.models import User
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+
+import cloudinary
 
 from .serializers import CourseSerializer, CourseMediaSerializer, PurchasedCourseSerializer
 
@@ -85,27 +88,25 @@ class CourseMediaViewSet(ModelViewSet):
   @action(detail=False, methods=['POST'])
   def create_media(self, request):
     
-    serializer = CourseMediaSerializer(data=request.data)
+    cover = request.FILES.get("cover")
+    video = request.FILES.get("video")
+    
+    global cover_response
+    global video_response
+    
+    try:
+      cover_response = cloudinary.uploader.upload(file=cover, resource_type='image')
+      video_response = cloudinary.uploader.upload(file=video, resource_type='video')
+    except Exception as err:
+      return Response({ "error": f"ERROR: {err}" }, status=400)
+    
+    serializer = CourseMediaSerializer(data={
+      "course": request.data.get("course"),
+      "url_cover": cover_response["secure_url"],
+      "url_video": video_response["secure_url"],
+    })
     
     if serializer.is_valid():
-      errors = {}
-      
-      try:
-        validate = URLValidator()
-        validate(request.data["url_video"])
-      except ValidationError as err:
-        errors["url_video"] = err
-        
-      try:
-        validate = URLValidator()
-        validate(request.data["url_cover"])
-      except ValidationError as err:
-        errors["url_cover"] = err
-        
-      if len(errors.keys()) > 0:
-        return Response(errors, status=400)
-      
       serializer.save()
       return Response(serializer.data, status=201)
-      
     return Response(serializer.errors, status=400)
