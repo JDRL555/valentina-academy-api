@@ -5,10 +5,13 @@
 
 :root {
 
-  --more-opaque-primary-color: #f3dd6077;
-  --opaque-primary-color: #f3dd60b2;
-
   --primary-color: #f3dd60;
+  --opaque-primary-color: #f3dd60b2;
+  --more-opaque-primary-color: #f3dd6077;
+
+  --dark-color: #181212;
+  --opaque-dark-color: #181212a9;
+  --more-opaque-dark-color: #18121277;
 
   box-sizing: border-box;
 }
