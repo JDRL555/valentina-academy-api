@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import pdfIcon from '../assets/pdf.png'
 
@@ -6,6 +6,10 @@ import '../styles/Course.css'
 
 export default function CoursePage() {
   const { id } = useParams()
+  const navigate = useNavigate()
+
+  const onCompletedCourse = () => navigate(`/survey?course_id=${id}`)
+
   return (
     <section className='courseContainer'>
       <div className='course'>
@@ -13,6 +17,7 @@ export default function CoursePage() {
           src="https://res.cloudinary.com/dxqa0mb8i/video/upload/v1695475434/Arte_del_Origen_Definitivo_obomd3.mp4"
           className='video' 
           controls
+          onEnded={onCompletedCourse}
         ></video>
       </div>
       <div className='courseDetails'>

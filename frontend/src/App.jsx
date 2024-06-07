@@ -4,6 +4,7 @@ import NotFoundPage                     from './pages/NotFoundPage.jsx'
 import LoginPage                        from './pages/LoginPage.jsx'
 import RegisterPage                     from './pages/RegisterPage.jsx'
 import CoursePage                       from './pages/CoursePage.jsx'
+import SurveyPage                       from './pages/SurveyPage.jsx'
 import './styles/Global.css'
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/login" element={< LoginPage />} />
         <Route path="/register" element={< RegisterPage />} />
         <Route path='/course/:id' element={<CoursePage />} />
+        <Route path='/survey' element={<SurveyPage />} />
       </Routes>
     </BrowserRouter>
   )
