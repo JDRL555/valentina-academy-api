@@ -5,7 +5,7 @@ export default function LandingPage() {
 
   const [token] = useCookies(["access_token"])
 
-  console.log(token);
+  console.log(token.access_token);
 
   return (
     <>

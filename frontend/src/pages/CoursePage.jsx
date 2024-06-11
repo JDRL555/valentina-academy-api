@@ -1,14 +1,18 @@
+/* eslint-disable react/prop-types */
 import { useParams, useNavigate } from 'react-router-dom'
 
 import pdfIcon from '../assets/pdf.png'
 
 import '../styles/Course.css'
 
-export default function CoursePage() {
+export default function CoursePage({ setCompleted }) {
   const { id } = useParams()
   const navigate = useNavigate()
 
-  const onCompletedCourse = () => navigate(`/survey?course_id=${id}`)
+  const onCompletedCourse = () => {
+    setCompleted(true)
+    navigate(`/survey?course_id=${id}`)
+  }
 
   return (
     <section className='courseContainer'>
