@@ -1,8 +1,12 @@
 from django.urls import path
+from rest_framework.routers import SimpleRouter
 
-from . import views
+from .views import SurveysViewSet, AnswersViewSet, QuestionsViewSet, AnswersQuestionViewSet  
+
+router = SimpleRouter()
+
+
+
 
 urlpatterns = [
-  path("", views.get_surveys),
-  path("new", views.create_survey),
-]
+] + router.urls

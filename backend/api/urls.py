@@ -7,7 +7,6 @@ from survey.urls import urlpatterns as survey_views
 from courses.urls import urlpatterns as courses_views
 from recipes.urls.recipes import urlpatterns as recipe_views
 from recipes.urls.ingredients import urlpatterns as ingredients_views 
-from recipes.urls.recipes_ingredients import urlpatterns as recipe_ingredients_views
 
 urlpatterns = [
     path("", include(courses_views)),
@@ -15,7 +14,5 @@ urlpatterns = [
     path('users/', include(user_views)),
     path('recipes/', include(recipe_views)),
     path('ingredients/', include(ingredients_views)),
-    path('recipes_ingredients/', include(recipe_ingredients_views)),
-    path("surveys/", include(survey_views)),
-    
+    path("surveys/", include(survey_views)), 
 ]

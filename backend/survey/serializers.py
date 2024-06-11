@@ -17,3 +17,9 @@ class AnswersSerializer(serializers.DocumentSerializer):
   class Meta:
     model = Answers
     fields = '__all__'
+
+class AnswersQuestionSerializer(serializers.DocumentSerializer):
+  
+  class Meta:
+    model = AnswersQuestion
+    fields = '__all__'

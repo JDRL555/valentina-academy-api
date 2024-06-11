@@ -1,67 +1,63 @@
-# from rest_framework import viewsets
 from rest_framework_mongoengine import viewsets
 from rest_framework.response import Response
-from .models import Recipes, Ingredients, Ingredient_recipes
-from .serializers import RecipeSerializer, IngredientSerializer, IngredientRecipeSerializer
+from .models import Recipes, Ingredients
+from .serializers import RecipeSerializer, IngredientSerializer
 
-class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = Recipes.objects()
-    serializer_class = RecipeSerializer
-    
-    
 class IngredientViewSet(viewsets.ModelViewSet):
     queryset = Ingredients.objects()
     serializer_class = IngredientSerializer
 
-class IngredientRecipeViewSet(viewsets.ModelViewSet):
-    queryset = Ingredient_recipes.objects()
-    serializer_class = IngredientRecipeSerializer
+class RecipeViewSet(viewsets.ModelViewSet):
+    queryset = Recipes.objects.all()  
+    serializer_class = RecipeSerializer
+
+    def list(self, request):
+        for recipe in self.queryset:
+            recipes = []
+            recipe_obj =   {
+                    "id": str(recipe.id),
+                    "name": recipe.name,
+                    "description": recipe.description,
+                    "created_at": recipe.created_at,
+                    "ingredients":[],
+                }
+            for ingredient in recipe.ingredient:
+                try:
+                    ingredient_obj = Ingredients.objects.get(id=str(ingredient.id))
+                    recipe_obj ["ingredients"].append({ 
+                        "id": str(ingredient_obj.id), 
+                        "name": ingredient_obj.name 
+                    })
+                except Exception as error:
+                    print(error)
+                    return Response({"error":"ingrediente no encontrado"})
+            recipes.append(recipe_obj)
+            print(recipes)
+        return Response(recipes)
     
-    def list(self,request):
-        queryset = list(self.queryset)
-        newList = []
-
-        for ingredients_recipes in queryset:
-            newObj = {}
-            recipes = Recipes.objects.get(id=str(ingredients_recipes["recipes"]["id"]))
-            ingredients = Ingredients.objects.get(id=str(ingredients_recipes["ingredients"]["id"]))
-
-            newObj["id"] = str(ingredients_recipes["id"])
-
-            newObj["recipes"] = {
-                "name": recipes.name,
-                "description": recipes.description,
-                "created_at": recipes.created_at,
-            }
-
-            newObj["ingredients"] = {
-                "name": ingredients.name,
-            }
-
-            newObj["ingredient_quantity"] = ingredients_recipes["ingredient_quantity"]
-
-            newList.append(newObj)
-
-        return Response(newList)
-    
+#iterar los id despues de eso con cada id hacer la consulta al modelo ingredient y eso agregarcelo al objecto recipe 
     def retrieve(self, request, *args, **kwargs):
         obj = self.get_object()
         serializer = self.get_serializer(obj)
-        ingredients_recipes = serializer.data
+        recipe_obj = serializer.data
+        recipe_obj["ingredients"] = []
 
-        recipes = Recipes.objects.get(id=ingredients_recipes["recipes"])
-        ingredients = Ingredients.objects.get(id=ingredients_recipes["ingredients"])
+        for ingredient_obj in recipe_obj["ingredient"]:
+            try:
+                ingredient = Ingredients.objects.get(id=ingredient_obj)
+                print(ingredient, "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+                recipe_obj["ingredients"].append ({ 
+                    "id": str(ingredient.id), 
+                    "name": ingredient.name 
+                })
+            except Exception as error:
+                print(error)
+                return Response({"error":"error con los ingredients"})
+        del recipe_obj["ingredient"]
+        return Response(recipe_obj)
         
-        ingredients_recipes["recipes"] = {
-                "name": recipes.name,
-                "description": recipes.description,
-                "created_at": recipes.created_at,
-                }
 
-        ingredients_recipes["ingredients"] = {
-                "name": ingredients.name,
-                }
+
         
-        ingredients_recipes["ingredient_quantity"] = ingredients_recipes["ingredient_quantity"]
 
-        return Response(ingredients_recipes)
+       
