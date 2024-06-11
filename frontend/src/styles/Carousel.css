@@ -1,0 +1,39 @@
+.posts_container{
+    position: relative;
+    width: 300vw;
+    height: 480px;
+    display: flex;
+    align-items: center;
+    background-color: gold;
+    white-space: nowrap;
+}
+  
+.posts_container .arrow_right, .posts_container .arrow_left {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+    padding: 0 25px;
+    font-size: 150px;
+    height: 100%;
+    cursor: pointer;
+    color: white;
+    background: #000;
+}
+  
+.arrow_right{
+    left: 30%;
+    -webkit-mask-image: linear-gradient(to right, transparent 1%, black 90%);
+}
+  
+.arrow_left {
+    -webkit-mask-image: linear-gradient(to left, transparent 1%, black 90%);
+}
+  
+.posts_carrusel_container{
+    width: 100%;
+    position: absolute;
+    left: 0vw;
+    transition: left 1s;
+    display: inline-flex;
+}
