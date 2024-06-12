@@ -13,7 +13,7 @@ export default function Navbar() {
         <li><a href="#">elemento 1</a></li>
         <li ><a href="#">elemento 2</a></li>
         <li><a href="#">Inicio de Sesion</a></li>
-        <li><a href="#">elemento 4</a></li>
+        <li><a href="#">Registro</a></li>
         <li><img src={user} className="user_logo" /></li>
       </ul>
     </nav>

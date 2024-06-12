@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useState }                     from 'react'
+import HomePage                         from './pages/HomePage.jsx'
 import LandingPage                      from './pages/LandingPage.jsx'
 import NotFoundPage                     from './pages/NotFoundPage.jsx'
 import LoginPage                        from './pages/LoginPage.jsx'
@@ -17,8 +18,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={< LandingPage />} />
+        <Route path="/" element={< HomePage />} />
         <Route path="*" element={< NotFoundPage />} />
+        <Route path="/landing" element={< LandingPage />} />
         <Route path="/login" element={< LoginPage />} />
         <Route path="/register" element={< RegisterPage />} />
         <Route path='/course/:id' element={<CoursePage setCompleted={setCompleted} />} />
