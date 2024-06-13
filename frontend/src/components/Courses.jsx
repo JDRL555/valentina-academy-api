@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import "../styles/Courses.css"
 
 export default function Courses({children}) {

@@ -1,37 +1,41 @@
-nav{
+.navbar{
     display: flex;
+    position: fixed;
+    top: 0;
     width: 100%;
-  }
-  
+    background-color: var(--opaque-dark-color);
+    z-index: 3;
+}
+
 .ul_logo, .ul_items {
     width: 50%;
     display: flex;
     align-items: center;
 }
-  
+
 .ul_logo {
     margin-left: 10px;
 }
-  
+
 .ul_items {
     justify-content: end;
 }
-  
+
 ul li{
     list-style: none;
     padding: 15px 10px;
 }
-  
+
 ul li h1{
     color: white;
     font-size: 30px;
 }
-  
+
 ul li img.logo{
     border-radius: 50%;
     width: 70px;
 }
-  
+
 ul li img.user_logo{
     border-radius: 100%;
     width: 50px;
@@ -41,7 +45,7 @@ ul li img.user_logo{
     transition-property: background-color;
     transition-duration: .5s;
 }
-  
+
 ul li a{
     color: white;
     text-decoration: none;
@@ -49,11 +53,11 @@ ul li a{
     transition-property: color;
     transition-duration: .5s;
 }
-  
+
 ul li a:hover{
     color: #f3dd60;
 }
-  
+
 ul li img.user_logo:hover {
     background-color: #f3dd60;
 }

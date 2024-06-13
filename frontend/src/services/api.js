@@ -1,12 +1,6 @@
-export async function fetchToApi(route, method = "GET", body = {}) {
+export async function fetchToApi(route, options = {}) {
   try {
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/${route}/`, {
-      method,
-      body: JSON.stringify(body),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/${route}/`, options)
     const data = await response.json()
     return data
   } catch (error) {

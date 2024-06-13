@@ -3,10 +3,9 @@ import "../styles/Carousel.css"
 export default function Carousel({children}) {
   
   const moveToRight = () => {
-    const carrusel  = document.querySelector(".posts_carrusel_container")
+    const carrusel  = document.querySelector(".carrusel_container")
     if(!carrusel.style.left){
       carrusel.style.left = "0vw"
-      console.log(`Antes era: ${carrusel.style.left}`)
     }
     switch(carrusel.style.left){
       case "0vw":
@@ -22,14 +21,12 @@ export default function Carousel({children}) {
         carrusel.style.left = "0vw"
         break
     }
-    console.log(`Ahora es: ${carrusel.style.left}`)
   }
 
   const moveToLeft = () => {
-    const carrusel  = document.querySelector(".posts_carrusel_container")
+    const carrusel  = document.querySelector(".carrusel_container")
     if(!carrusel.style.left){
       carrusel.style.left = "0vw"
-      console.log(`Antes era: ${carrusel.style.left}`)
     }
     switch(carrusel.style.left){
       case "0vw":
@@ -45,14 +42,13 @@ export default function Carousel({children}) {
         carrusel.style.left = "0vw"
         break
     }
-    console.log(`Ahora es: ${carrusel.style.left}`)
   }
 
   return (
-    <div className="posts_container">
+    <div className="container">
       <div className="arrow_right" onClick={moveToRight}>{">"}</div>
       <div className="arrow_left" onClick={moveToLeft}>{"<"}</div>
-      <div className="posts_carrusel_container">
+      <div className="carrusel_container">
         {children}
       </div>
     </div>

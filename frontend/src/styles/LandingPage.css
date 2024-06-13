@@ -1,0 +1,9 @@
+body {
+  overflow-x: hidden;
+}
+
+.main {
+  background-color: white;
+  padding: 20px;
+  box-sizing: border-box;
+}

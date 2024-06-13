@@ -42,7 +42,13 @@ export default function LoginPage() {
             color: COLORS.success
         })
         showMessage()
-        const response = await fetchToApi("users/login", "POST", user)
+        const response = await fetchToApi("users/login", {
+            method: "POST",
+            body: JSON.stringify(user),
+            headers: {
+                'Content-Type': "application/json"
+            }
+        })
 
         if(response?.error) {
             const message = document.querySelector(".message")
@@ -58,7 +64,7 @@ export default function LoginPage() {
                 const expires = new Date()
                 expires.setTime(expires.getTime() + (60 * 60 * 60 * 100))
                 setToken("access_token", response.token, {
-                    path: "/",
+                    path: "/dashboard",
                     expires
                 })
                 navigate("/")

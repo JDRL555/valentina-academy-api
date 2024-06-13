@@ -53,7 +53,15 @@ export default function RegisterPage() {
         color: COLORS.success
       })
       showMessage()
-      const response = await fetchToApi("users/register", "POST", user)
+      
+      const response = await fetchToApi("users/register", {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+            'Content-Type': "application/json"
+        }
+      })
+      
       if(response?.user) {
         navigate("/login")
       } else {

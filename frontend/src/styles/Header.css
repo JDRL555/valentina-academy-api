@@ -1,12 +1,22 @@
+.header {
+    background-color: var(--opaque-dark-color);
+}
+
+.header_info {
+    color: var(--primary-color);
+    padding-left: 20px;
+    padding-top: 120px;
+}
+
 .categories {
     display: flex;
 }
-  
+
 .comida_salada, .reposteria{
     padding: 20px;
     width: 50%;
 }
-  
+
 .comida_salada .img_content, .reposteria .img_content{
     display: flex;
     justify-content: center;
