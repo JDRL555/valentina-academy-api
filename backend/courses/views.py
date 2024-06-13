@@ -3,7 +3,6 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-
 from django.contrib.auth.models import User
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
@@ -17,6 +16,8 @@ import cloudinary
 
 import os
 
+from recipes.models import Recipes
+
 from .serializers import CourseSerializer, CourseMediaSerializer, PurchasedCourseSerializer, CategorySerializer
 
 from .models import Courses, Category, Courses_media, Purchased_course
@@ -24,15 +25,31 @@ from .models import Courses, Category, Courses_media, Purchased_course
 
 # Create your views here.
 class CourseViewSet(ModelViewSet):
-  queryset = Courses.objects.select_related("user", "category")
+  queryset = Courses.objects.select_related("user", "category", "media")
   serializer_class = CourseSerializer
   trailing_slash = False
+  
+  def create(self, request):
+    serializer = CourseSerializer(data=request.data)
+    
+    if serializer.is_valid():
+      try:
+        Recipes.objects.get(id=request.data["recipe"])
+      except Exception as error:
+        print(error)
+        return Response({ "error": "La receta no existe" }, status=404)
+      
+      serializer.save()
+      return Response({ "course": serializer.data }, status=201)
+    return Response(serializer.errors, status=400)
   
   def list(self, request):
     queryset = list(self.queryset.values())
     for course in queryset:
       user = User.objects.get(id=course["user_id"])
       category = Category.objects.get(id=course["category_id"])
+      media = Courses_media.objects.get(id=course["media_id"])
+      recipe = Recipes.objects.get(id=course["recipe"])
       
       course["user"] = {
         "id": user.id,
@@ -44,8 +61,20 @@ class CourseViewSet(ModelViewSet):
         "name": category.name
       }
       
+      course["media"] = {
+        "url_cover": media.url_cover,
+        "url_video": media.url_video,
+      }
+      
+      course["recipe"] = {
+        "name": recipe.name,
+        "description": recipe.description,
+        "ingredient": recipe.ingredient,
+      }
+      
       del course["user_id"]
       del course["category_id"]
+      del course["media_id"]
       
     return Response(queryset)
   
