@@ -6,6 +6,7 @@ import { translateError } from '../utils/errorTranslate'
 import { fetchToApi } from '../services/api'
 
 import { COLORS } from '../constants/message'
+import { BACKEND_ROUTES } from '../constants/routes'
 
 import "../styles/Register.css"
 
@@ -54,7 +55,7 @@ export default function RegisterPage() {
       })
       showMessage()
       
-      const response = await fetchToApi("users/register", {
+      const response = await fetchToApi(BACKEND_ROUTES.register, {
         method: "POST",
         body: JSON.stringify(user),
         headers: {

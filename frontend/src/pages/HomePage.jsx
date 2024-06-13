@@ -1,4 +1,8 @@
-import { useCookies } from 'react-cookie'
+import { useState, useEffect } from 'react'
+
+import { BACKEND_ROUTES } from '../constants/routes.js'
+
+import { fetchToApi } from '../services/api.js'
 
 import Navbar         from '../components/Navbar.jsx'
 import Header         from "../components/Header.jsx"
@@ -9,14 +13,20 @@ import img        from "../public/img/reposteria.jpg"
 
 export default function HomePage() {
 
-  const [token] = useCookies(["access_token"])
+  const [courses, setCourses] = useState([])
 
-  console.log(token.access_token);
+  useEffect(() => {
+    async function getCourses() {
+      const coursesResponse = await fetchToApi(BACKEND_ROUTES.courses)
+      console.log(coursesResponse);
+    }
+    getCourses()
+  }, [])
 
   return (
     <>
       <Navbar />
-      <Header/>
+      <Header />
       <main>
         <Courses>
           <Course 
@@ -31,10 +41,10 @@ export default function HomePage() {
           img={img} 
           title="Curso de Cremas pasteleras" 
           description="Solo por esta semana, aprovecha nuestro excelente curso que contiene todo lo referente a las cremas pasteleras. ¿Para que esperar a alguien mas que lo haga cuando tu mismo puedes preparar tu propia crema?" />
-          {/* <Course 
+          <Course 
           img={img} 
           title="Curso de Cremas pasteleras" 
-          description="Solo por esta semana, aprovecha nuestro excelente curso que contiene todo lo referente a las cremas pasteleras. ¿Para que esperar a alguien mas que lo haga cuando tu mismo puedes preparar tu propia crema?" /> */}
+          description="Solo por esta semana, aprovecha nuestro excelente curso que contiene todo lo referente a las cremas pasteleras. ¿Para que esperar a alguien mas que lo haga cuando tu mismo puedes preparar tu propia crema?" />
         </Courses>
       </main>
       <Footer />

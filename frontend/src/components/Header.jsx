@@ -1,10 +1,13 @@
+import { ContextApp } from '../context/ContextApp'
+import { useContext } from 'react'
 import "../styles/Header.css"
 
 export default function Header() {
+  const { user } = useContext(ContextApp)
   return (
     <header className="header">
       <div className="header_info">
-        <h1>Bienvenido, Joshua!</h1>
+        <h1>Bienvenido, {user.username}!</h1>
         <p>Descubre nuestros cursos, y explora entre las dos principales categorias que tenemos para ofrecer</p>
       </div>
       <section className="categories">

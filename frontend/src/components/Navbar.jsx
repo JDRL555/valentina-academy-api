@@ -1,11 +1,15 @@
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 
+import { ContextApp } from '../context/ContextApp'
+
 import logo from "../public/img/logo.jpg"
-import user from "../public/img/usuario.png"
+import userImg from "../public/img/usuario.png"
 import "../styles/Navbar.css"
 
 export default function Navbar() {
+  const { user } = useContext(ContextApp)
   const [token] = useCookies(["access_token"])
 
   return (
@@ -20,10 +24,10 @@ export default function Navbar() {
           ?
           <>
             <li>
-              <Link to={"login"}>Inicia Sesión</Link>
+              <Link to={"/login"}>Inicia Sesión</Link>
             </li>
             <li>
-              <Link to={"register"}>Registrate</Link>
+              <Link to={"/register"}>Registrate</Link>
             </li>
           </> 
           :
@@ -34,7 +38,21 @@ export default function Navbar() {
           </>
         }
         {
-          token.access_token && <li><img src={user} className="user_logo" /></li>
+          token.access_token && 
+          <li>
+            <label htmlFor="submenu_input">
+              <img src={userImg} className="user_logo" />
+            </label>
+            <input type="checkbox" id='submenu_input' />
+            <ul className='submenu'>
+              <li>
+                <Link to={""}>{ user.username }</Link>
+              </li>
+              <li>
+                <Link to={""} className='sign_out'>Cerrar sesión</Link>
+              </li>
+            </ul>
+          </li>
         }
       </ul>
     </nav>

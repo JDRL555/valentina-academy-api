@@ -5,6 +5,7 @@ import { fetchToApi } from '../services/api'
 import { translateError } from '../utils/errorTranslate'
 
 import { COLORS } from '../constants/message'
+import { BACKEND_ROUTES } from '../constants/routes'
 
 import { useCookies } from 'react-cookie'
 
@@ -42,7 +43,7 @@ export default function LoginPage() {
             color: COLORS.success
         })
         showMessage()
-        const response = await fetchToApi("users/login", {
+        const response = await fetchToApi(BACKEND_ROUTES.login, {
             method: "POST",
             body: JSON.stringify(user),
             headers: {
@@ -64,10 +65,10 @@ export default function LoginPage() {
                 const expires = new Date()
                 expires.setTime(expires.getTime() + (60 * 60 * 60 * 100))
                 setToken("access_token", response.token, {
-                    path: "/dashboard",
+                    path: "/",
                     expires
                 })
-                navigate("/")
+                navigate("/dashboard")
             } else {
                 setMessage({ 
                     value: "Hubo un error, intente mas tarde",
