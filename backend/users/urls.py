@@ -1,4 +1,3 @@
-   
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
@@ -11,4 +10,5 @@ router.register(r"", UsersViewSet)
 urlpatterns = [
   path("login/", UsersViewSet.as_view({ "post": "login" }), name="login"),
   path("register/", UsersViewSet.as_view({ "post": "register" }), name="register"),
+  path("auth/<str:token>/", UsersViewSet.as_view({ "get": "auth_user" }), name="auth"),
 ] + router.urls

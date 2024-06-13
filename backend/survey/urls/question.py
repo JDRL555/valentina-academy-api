@@ -1,9 +1,9 @@
-from ..views import IngredientRecipeViewSet
+from ..views import QuestionsViewSet
 from rest_framework_mongoengine.routers import SimpleRouter
 
 router = SimpleRouter()
 
-router.register(r"", IngredientRecipeViewSet)
+router.register(r"", QuestionsViewSet)
 
 
 urlpatterns = [] + router.urls

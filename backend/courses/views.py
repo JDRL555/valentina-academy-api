@@ -1,12 +1,23 @@
+import cloudinary.uploader
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+
 from django.contrib.auth.models import User
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+from django.http import HttpResponse
 
-from .serializers import CourseSerializer, CourseMediaSerializer, PurchasedCourseSerializer
+from jinja2 import Environment, FileSystemLoader
+
+import pdfkit
+
+import cloudinary
+
+import os
+
+from .serializers import CourseSerializer, CourseMediaSerializer, PurchasedCourseSerializer, CategorySerializer
 
 from .models import Courses, Category, Courses_media, Purchased_course
 
@@ -38,6 +49,8 @@ class CourseViewSet(ModelViewSet):
       
     return Response(queryset)
   
+
+  
   def retrieve(self, request, *args, **kwargs):
     obj = self.get_object()
     serializer = self.get_serializer(obj)
@@ -57,7 +70,31 @@ class CourseViewSet(ModelViewSet):
     }
     
     return Response(course)
-  
+
+  @action(detail=False, methods=['POST'])
+  def export_certificate(self, request):
+    datos = User.objects.all()
+
+    current_dir = os.path.dirname(__file__)
+    template_dir = os.path.join(current_dir,"template")
+
+    config = pdfkit.configuration(wkhtmltopdf=r"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
+
+    env = Environment(loader=FileSystemLoader(template_dir))
+    template = env.get_template("index_pdf.html")
+
+    html = template.render({
+      "datos" : datos
+    })
+
+    pdfkit.from_string(
+      html,
+      "certificado.pdf",
+      configuration=config
+    )
+
+    return HttpResponse(content_type='application/pdf')
+
 class PurchasedCourseViewSet(ModelViewSet):
   queryset = Purchased_course.objects.all()
   serializer_class = PurchasedCourseSerializer
@@ -85,27 +122,30 @@ class CourseMediaViewSet(ModelViewSet):
   @action(detail=False, methods=['POST'])
   def create_media(self, request):
     
-    serializer = CourseMediaSerializer(data=request.data)
+    cover = request.FILES.get("cover")
+    video = request.FILES.get("video")
+    
+    global cover_response
+    global video_response
+    
+    try:
+      cover_response = cloudinary.uploader.upload(file=cover, resource_type='image')
+      video_response = cloudinary.uploader.upload(file=video, resource_type='video')
+    except Exception as err:
+      return Response({ "error": f"ERROR: {err}" }, status=400)
+    
+    serializer = CourseMediaSerializer(data={
+      "course": request.data.get("course"),
+      "url_cover": cover_response["secure_url"],
+      "url_video": video_response["secure_url"],
+    })
     
     if serializer.is_valid():
-      errors = {}
-      
-      try:
-        validate = URLValidator()
-        validate(request.data["url_video"])
-      except ValidationError as err:
-        errors["url_video"] = err
-        
-      try:
-        validate = URLValidator()
-        validate(request.data["url_cover"])
-      except ValidationError as err:
-        errors["url_cover"] = err
-        
-      if len(errors.keys()) > 0:
-        return Response(errors, status=400)
-      
       serializer.save()
       return Response(serializer.data, status=201)
-      
     return Response(serializer.errors, status=400)
+
+class CategoryViewSet(ModelViewSet):
+  queryset = Category.objects.all()
+  serializer_class = CategorySerializer
+  trailing_slash = False
