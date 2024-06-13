@@ -45,7 +45,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         for ingredient_obj in recipe_obj["ingredient"]:
             try:
                 ingredient = Ingredients.objects.get(id=ingredient_obj)
-                print(ingredient, "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
                 recipe_obj["ingredients"].append ({ 
                     "id": str(ingredient.id), 
                     "name": ingredient.name 

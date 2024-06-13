@@ -26,7 +26,6 @@ class CourseMediaSerializer(serializers.ModelSerializer):
     fields = [
       "url_video", "url_cover", "course"
     ]
-
     
 class PurchasedCourseSerializer(serializers.ModelSerializer):
   user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=True)

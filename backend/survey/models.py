@@ -1,4 +1,4 @@
-from mongoengine import Document, StringField, IntField, DateField, BooleanField, ReferenceField
+from mongoengine import Document, StringField, IntField, DateField, BooleanField, ReferenceField, ListField
 
 import datetime
 
@@ -9,14 +9,11 @@ class Answers(Document):
 
 class Questions(Document):
   question = StringField(max_length=300)
-
-class AnswersQuestion(Document):
-  question = ReferenceField(Questions)
-  answer = ReferenceField(Answers)
+  answers = ListField(ReferenceField(Answers, required=True, dbref=True, multiple=True))
 
 class Surveys(Document):
   title = StringField(required=True, max_length=50)
   description = StringField(max_length=100)
   course_id = IntField(required=True)
-  question_id = ReferenceField(AnswersQuestion)
+  question_id =  ListField(ReferenceField(Questions, required=True, dbref=True, multiple=True))
   created_at = DateField(default=datetime.datetime.now())

@@ -17,7 +17,7 @@ import cloudinary
 
 import os
 
-from .serializers import CourseSerializer, CourseMediaSerializer, PurchasedCourseSerializer
+from .serializers import CourseSerializer, CourseMediaSerializer, PurchasedCourseSerializer, CategorySerializer
 
 from .models import Courses, Category, Courses_media, Purchased_course
 
@@ -95,7 +95,6 @@ class CourseViewSet(ModelViewSet):
 
     return HttpResponse(content_type='application/pdf')
 
-
 class PurchasedCourseViewSet(ModelViewSet):
   queryset = Purchased_course.objects.all()
   serializer_class = PurchasedCourseSerializer
@@ -145,3 +144,8 @@ class CourseMediaViewSet(ModelViewSet):
       serializer.save()
       return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
+
+class CategoryViewSet(ModelViewSet):
+  queryset = Category.objects.all()
+  serializer_class = CategorySerializer
+  trailing_slash = False
