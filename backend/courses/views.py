@@ -8,6 +8,8 @@ from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 
+from django.db.models import Q
+
 from jinja2 import Environment, FileSystemLoader
 
 import pdfkit
@@ -44,7 +46,43 @@ class CourseViewSet(ModelViewSet):
     return Response(serializer.errors, status=400)
   
   def list(self, request):
-    queryset = list(self.queryset.values())
+    global queryset
+    if request.query_params:
+      filter_q = Q()
+      for key, value in request.query_params.items():
+        
+        related_fields = { 
+          "user": int, 
+          "category": int, 
+          "media": int, 
+          "recipe": str 
+        }
+        
+        if hasattr(Courses, key):
+          if key in related_fields.keys():
+            
+            try:
+              value = int(value)
+            except:
+              pass
+            
+            if type(value) == related_fields[key]:
+              filter_q &= Q(**{key: value})
+            else:
+              return Response(
+                { "error": f"El filtro {value} no coincide con el valor {related_fields[key]}" },
+                status=400
+              )
+          else:
+            filter_q &= Q(**{key: value[0]})
+        else:
+          return Response({ "error": "Columna no encontrada a filtrar" }, status=400)
+        
+      queryset = list(self.queryset.filter(filter_q).values())
+    else:
+      queryset = list(self.queryset.values())
+      
+
     for course in queryset:
       user = User.objects.get(id=course["user_id"])
       category = Category.objects.get(id=course["category_id"])
@@ -58,15 +96,18 @@ class CourseViewSet(ModelViewSet):
       }
       
       course["category"] = {
-        "name": category.name
+        "id": category.id,
+        "name": category.name,
       }
       
       course["media"] = {
+        "id": media.id,
         "url_cover": media.url_cover,
         "url_video": media.url_video,
       }
       
       course["recipe"] = {
+        "id": str(recipe.id),
         "name": recipe.name,
         "description": recipe.description,
         "ingredient": recipe.ingredient,
