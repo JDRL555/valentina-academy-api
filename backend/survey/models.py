@@ -8,8 +8,8 @@ class Answers(Document):
   is_correct = BooleanField(default=False)
 
 class Questions(Document):
-  question = StringField(max_length=300)
-  answers = ListField(ReferenceField(Answers, required=True, dbref=True, multiple=True))
+  question = StringField(max_length=300, required=True)
+  answers_id = ListField(ReferenceField(Answers, required=True, dbref=True, multiple=True))
 
 class Surveys(Document):
   title = StringField(required=True, max_length=50)
