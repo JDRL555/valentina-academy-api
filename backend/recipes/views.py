@@ -33,7 +33,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
                     print(error)
                     return Response({"error":"ingrediente no encontrado"})
             recipes.append(recipe_obj)
-            print(recipes)
         return Response(recipes)
     
 #iterar los id despues de eso con cada id hacer la consulta al modelo ingredient y eso agregarcelo al objecto recipe 
