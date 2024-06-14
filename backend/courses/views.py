@@ -82,6 +82,8 @@ class CourseViewSet(ModelViewSet):
     else:
       queryset = list(self.queryset.values())
       
+    if len(queryset) == 0:
+      return Response(queryset)
 
     for course in queryset:
       user = User.objects.get(id=course["user_id"])
@@ -110,7 +112,13 @@ class CourseViewSet(ModelViewSet):
         "id": str(recipe.id),
         "name": recipe.name,
         "description": recipe.description,
-        "ingredient": recipe.ingredient,
+        "steps": recipe.steps,
+        "ingredient": [
+          { 
+            "id": str(ingredient.id), 
+            "name": ingredient.name 
+          } for ingredient in recipe.ingredient
+        ],
       }
       
       del course["user_id"]
@@ -118,9 +126,7 @@ class CourseViewSet(ModelViewSet):
       del course["media_id"]
       
     return Response(queryset)
-  
 
-  
   def retrieve(self, request, *args, **kwargs):
     obj = self.get_object()
     serializer = self.get_serializer(obj)
