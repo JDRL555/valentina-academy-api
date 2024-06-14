@@ -5,6 +5,7 @@
 }
 
 .course {
+  padding-top: 90px;
   background-color: var(--more-opaque-dark-color);
   display: flex;
   justify-content: center;
@@ -59,6 +60,7 @@
   height: 60px;
   object-fit: cover;
   border-radius: 100%;
+  background-color: var(--primary-color);
 }
 
 .pdfContainer {
@@ -99,6 +101,12 @@
   margin: 10px 0;
 }
 
+.recipe p {
+  text-align: center;
+  margin: 10px;
+  font-size: 18px;
+}
+
 .recipeContainer {
   display: flex;
 }
@@ -121,13 +129,18 @@
   list-style-type: none;
 }
 
-.recipeIngredients ul li {
+.recipeIngredients ul li,
+.recipeInstructions ol li {
   font-size: 17px;
   padding: 5px 0;
 }
 
 .recipeInstructions p {
   margin: 10px 0;
+}
+
+.recipeInstructions ol {
+  margin: 10px;
 }
 
 .video {

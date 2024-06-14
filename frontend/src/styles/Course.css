@@ -20,7 +20,7 @@
   background-color: var(--more-opaque-dark-color);
   padding: 30px;
   box-sizing: border-box;
-  height: auto;
+  height: 180px;
 }
 
 .course_info:hover {
