@@ -45,11 +45,12 @@ class SurveysViewSet(viewsets.ModelViewSet):
         survey_obj = serializer.data
         survey_obj["questions"] = []
 
-        for question_id in  survey_obj["question_id"]:
+        for questions_id in  survey_obj["question_id"]:
             try:
-                question_obj = Questions.objects.get(id=question_id)
+                question_obj = Questions.objects.get(id=questions_id)
                 for answer_id in question_obj.answers_id:
-                    answer_obj = Answers.objects.get(id=answer_id)
+                    print(question_obj.answers_id,"-------------------------")
+                    answer_obj = Answers.objects.get(id=str(answer_id.id))
                     survey_obj["questions"].append({
                         "id": str(question_obj.id),
                         "question": question_obj.question,
@@ -60,7 +61,7 @@ class SurveysViewSet(viewsets.ModelViewSet):
             except Exception as error:
                 print(error)
             return Response({"error":"error con los answers"})
-        # del survey_obj["questions_id"]
+        del question_obj["question_id"]
         return Response(survey_obj)
     
 
