@@ -15,19 +15,21 @@ import CourseSkeleton from '../components/CourseSkeleton.jsx'
 export default function HomePage() {
 
   const [courses, setCourses] = useState([])
+  const [category, setCategory] = useState(null)
 
   useEffect(() => {
     async function getCourses() {
+      setCourses([])
       const response = await fetchToApi(BACKEND_ROUTES.courses)
       setCourses(response)
     }
     getCourses()
-  }, [])
+  }, [category])
 
   return (
     <>
       <Navbar />
-      <Header />
+      <Header setCategory={setCategory} />
       <main>
         <Courses>
           {
