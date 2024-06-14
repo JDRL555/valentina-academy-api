@@ -82,6 +82,8 @@ class CourseViewSet(ModelViewSet):
     else:
       queryset = list(self.queryset.values())
       
+    if len(queryset) == 0:
+      return Response(queryset)
 
     for course in queryset:
       user = User.objects.get(id=course["user_id"])
@@ -110,7 +112,13 @@ class CourseViewSet(ModelViewSet):
         "id": str(recipe.id),
         "name": recipe.name,
         "description": recipe.description,
-        "ingredient": recipe.ingredient,
+        "steps": recipe.steps,
+        "ingredient": [
+          { 
+            "id": str(ingredient.id), 
+            "name": ingredient.name 
+          } for ingredient in recipe.ingredient
+        ],
       }
       
       del course["user_id"]
@@ -118,9 +126,7 @@ class CourseViewSet(ModelViewSet):
       del course["media_id"]
       
     return Response(queryset)
-  
 
-  
   def retrieve(self, request, *args, **kwargs):
     obj = self.get_object()
     serializer = self.get_serializer(obj)
@@ -128,6 +134,8 @@ class CourseViewSet(ModelViewSet):
 
     user = User.objects.get(id=course["user"])
     category = Category.objects.get(id=course["category"])
+    media = Courses_media.objects.get(id=course["media"])
+    recipe = Recipes.objects.get(id=course["recipe"])
     
     course["user"] = {
       "id": user.id,
@@ -136,7 +144,27 @@ class CourseViewSet(ModelViewSet):
     }
     
     course["category"] = {
+      "id": category.id,
       "name": category.name
+    }
+    
+    course["media"] = {
+      "id": media.id,
+      "url_cover": media.url_cover,
+      "url_video": media.url_video,
+    }
+    
+    course["recipe"] = {
+      "id": str(recipe.id),
+      "name": recipe.name,
+      "description": recipe.description,
+      "steps": recipe.steps,
+      "ingredient": [
+        { 
+          "id": str(ingredient.id), 
+          "name": ingredient.name 
+        } for ingredient in recipe.ingredient
+      ],
     }
     
     return Response(course)
