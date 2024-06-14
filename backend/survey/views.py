@@ -14,6 +14,7 @@ class SurveysViewSet(viewsets.ModelViewSet):
         surveys = []
         for survey in self.queryset:
             survey_obj = {
+                "id": str(survey.id),
                 "title": survey.title,
                 "description": survey.description,
                 "course": survey.course_id,
@@ -21,10 +22,10 @@ class SurveysViewSet(viewsets.ModelViewSet):
                 "questions": [],
             }
             for question in survey.question_id:
-                if question.answers_id:  # Check if question has answers
+                if question.answers_id: 
                     try:
                         question_obj = Questions.objects.get(id=str(question.id))
-                        for answer_id in question.answers_id:  # Iterate through answer IDs
+                        for answer_id in question.answers_id: 
                             answer_obj = Answers.objects.get(id=str(answer_id.id))
                             survey_obj["questions"].append({
                                 "id": str(question_obj.id),
@@ -38,24 +39,29 @@ class SurveysViewSet(viewsets.ModelViewSet):
             surveys.append(survey_obj)
         return Response(surveys)
     
-    # def retrieve(self, request, *args, **kwargs):
-    #     obj = self.get_object()
-    #     serializer = self.get_serializer(obj)
-    #     question_obj = serializer.data
-    #     question_obj["answers"] = []
+    def retrieve(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.get_serializer(obj)
+        survey_obj = serializer.data
+        survey_obj["questions"] = []
 
-    #     for answers in question_obj["answers_id"]:
-    #         try:
-    #             answers_obj = Answers.objects.get(id=answers)
-    #             question_obj["answers"].append ({ 
-    #                 "answer": answers_obj.answer, 
-    #                 "is_correct": answers_obj.is_correct 
-    #             })
-    #         except Exception as error:
-    #             print(error)
-    #             return Response({"error":"error con los answers"})
-    #     del question_obj["answers_id"]
-    #     return Response(question_obj)
+        for question_id in  survey_obj["question_id"]:
+            try:
+                question_obj = Questions.objects.get(id=question_id)
+                for answer_id in question_obj.answers_id:
+                    answer_obj = Answers.objects.get(id=answer_id)
+                    survey_obj["questions"].append({
+                        "id": str(question_obj.id),
+                        "question": question_obj.question,
+                        "answers": [
+                            {"answer": answer_obj.answer, "is_correct": answer_obj.is_correct}
+                        ],
+                    })
+            except Exception as error:
+                print(error)
+            return Response({"error":"error con los answers"})
+        # del survey_obj["questions_id"]
+        return Response(survey_obj)
     
 
 
