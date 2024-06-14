@@ -20,6 +20,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                     "description": recipe.description,
                     "created_at": recipe.created_at,
                     "ingredients":[],
+                    "steps": recipe.steps,
                 }
             for ingredient in recipe.ingredient:
                 try:
