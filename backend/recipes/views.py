@@ -12,8 +12,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     serializer_class = RecipeSerializer
 
     def list(self, request):
+        recipes = []
         for recipe in self.queryset:
-            recipes = []
             recipe_obj =   {
                     "id": str(recipe.id),
                     "name": recipe.name,
