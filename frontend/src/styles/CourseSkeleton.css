@@ -1,0 +1,64 @@
+.course_card_skeleton {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  color: var(--primary-color);
+  animation-name: oscurecer;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+
+.img_skeleton_container {
+  background-color: grey;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding: 20px;
+}
+
+.img_skeleton {
+  width: 30%;
+  margin: 30px;
+}
+
+.course_info_skeleton {
+  padding: 20px;
+  height: 130px;
+  background-color: #4e4e4e;
+}
+
+.course_info_title {
+  padding-bottom: 10px;
+}
+
+.title_skeleton {
+  width: 100%;
+  height: 20px;
+  margin: auto;
+  margin-bottom: 20px;
+  border-radius: 30px;
+  background-color: grey;
+}
+
+.description_skeleton {
+  width: 100%;
+  height: 10px;
+  margin: 10px auto;
+  border-radius: 30px;
+  background-color: grey;
+}
+
+@keyframes oscurecer {
+  0% {
+    filter: brightness(0.5);
+  }
+  50% {
+    filter: brightness(1);
+  }
+  100% {
+    filter: brightness(0.5);
+  }
+}

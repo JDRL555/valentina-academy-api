@@ -13,7 +13,7 @@
 .courses_container {
     width: 100%;
     display: flex;
-    overflow-y: auto;
+    flex-wrap: wrap;
     gap: 30px;
     margin: 30px;
     margin-top: 10px;
