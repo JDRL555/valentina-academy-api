@@ -134,6 +134,8 @@ class CourseViewSet(ModelViewSet):
 
     user = User.objects.get(id=course["user"])
     category = Category.objects.get(id=course["category"])
+    media = Courses_media.objects.get(id=course["media"])
+    recipe = Recipes.objects.get(id=course["recipe"])
     
     course["user"] = {
       "id": user.id,
@@ -142,7 +144,27 @@ class CourseViewSet(ModelViewSet):
     }
     
     course["category"] = {
+      "id": category.id,
       "name": category.name
+    }
+    
+    course["media"] = {
+      "id": media.id,
+      "url_cover": media.url_cover,
+      "url_video": media.url_video,
+    }
+    
+    course["recipe"] = {
+      "id": str(recipe.id),
+      "name": recipe.name,
+      "description": recipe.description,
+      "steps": recipe.steps,
+      "ingredient": [
+        { 
+          "id": str(ingredient.id), 
+          "name": ingredient.name 
+        } for ingredient in recipe.ingredient
+      ],
     }
     
     return Response(course)
