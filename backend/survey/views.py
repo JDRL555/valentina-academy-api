@@ -1,7 +1,8 @@
 from rest_framework_mongoengine import viewsets, serializers
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.exceptions import ValidationError
+# from django.db.models import Q
+from mongoengine import Q
 
 from .models import Surveys, Answers, Questions
 from .serializers import SurveySerializer, QuestionSerializer, AnswersSerializer
@@ -11,8 +12,37 @@ class SurveysViewSet(viewsets.ModelViewSet):
     serializer_class = SurveySerializer
 
     def list(self, request):
+        global queryset
+        if request.query_params:
+            filter_q = Q()
+            for key, value in request.query_params.items():
+                related_fields = { 
+                    "course_id": int
+                }
+                if hasattr(Surveys, key):
+                    if key in related_fields.keys():
+                        try:
+                            value = int(value)
+                        except:
+                            pass
+                        if type(value) == related_fields[key]:
+                            filter_q &= Q(**{key: value})
+                        else:
+                            return Response({ "error": f"El filtro {value} no coincide con el valor {related_fields[key]}" },status=400)
+                    else:
+                        filter_q &= Q(**{key: value})
+                else:
+                    return Response({ "error": "Columna no encontrada a filtrar" }, status=400)
+                
+            queryset = list(self.queryset.filter(filter_q))
+            if len(queryset) == 0:
+                return Response(queryset)
+        else:
+            queryset = list(self.queryset)
+    
         surveys = []
-        for survey in self.queryset:
+
+        for survey in queryset:
             survey_obj = {
                 "id": str(survey.id),
                 "title": survey.title,
@@ -45,23 +75,27 @@ class SurveysViewSet(viewsets.ModelViewSet):
         survey_obj = serializer.data
         survey_obj["questions"] = []
 
-        for questions_id in  survey_obj["question_id"]:
+        for question_id in  survey_obj["question_id"]:
             try:
-                question_obj = Questions.objects.get(id=questions_id)
-                for answer_id in question_obj.answers_id:
-                    print(question_obj.answers_id,"-------------------------")
-                    answer_obj = Answers.objects.get(id=str(answer_id.id))
-                    survey_obj["questions"].append({
+                question_obj = Questions.objects.get(id=question_id)
+                question_list = {
                         "id": str(question_obj.id),
                         "question": question_obj.question,
-                        "answers": [
-                            {"answer": answer_obj.answer, "is_correct": answer_obj.is_correct}
-                        ],
-                    })
+                        "answers": []
+                    }
+                for answer_id in question_obj.answers_id:
+                    answer_obj = Answers.objects.get(id=str(answer_id.id))
+                    answers = {
+                        "answer": answer_obj.answer,
+                        "is_correct": answer_obj.is_correct,
+                    }
+                    question_list["answers"].append(answers)
+                survey_obj["questions"].append(question_list)
+                
             except Exception as error:
                 print(error)
-            return Response({"error":"error con los answers"})
-        del question_obj["question_id"]
+                return Response({"error":"error en obtener el id"})
+        del survey_obj["question_id"]
         return Response(survey_obj)
     
 
@@ -123,7 +157,6 @@ class QuestionsViewSet(viewsets.ModelViewSet):
                     print(error)
                     return Response({"error":"respuesta no encontrado"})
             questions.append(question_obj)
-            print(questions)
         return Response(questions)
  
     def retrieve(self, request, *args, **kwargs):
