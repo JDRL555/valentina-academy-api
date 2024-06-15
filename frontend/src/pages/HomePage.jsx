@@ -20,7 +20,7 @@ export default function HomePage() {
   useEffect(() => {
     async function getCourses() {
       setCourses([])
-      const response = await fetchToApi(BACKEND_ROUTES.courses)
+      const response = await fetchToApi(BACKEND_ROUTES.courses, {}, category ? { category } : {})
       setCourses(response)
     }
     getCourses()
@@ -31,7 +31,7 @@ export default function HomePage() {
       <Navbar />
       <Header setCategory={setCategory} />
       <main>
-        <Courses>
+        <Courses setCategory={setCategory}>
           {
             !courses.length
             ?

@@ -18,3 +18,12 @@
     margin: 30px;
     margin-top: 10px;
 }
+
+.reload_icon {
+    cursor: pointer;
+    transition: .5s;
+}
+
+.reload_icon:hover {
+    transform: rotate(360deg);
+}
