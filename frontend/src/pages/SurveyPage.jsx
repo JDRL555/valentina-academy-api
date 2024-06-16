@@ -35,7 +35,7 @@ export default function SurveyPage() {
   useEffect(() => {
     async function getSurveys() {
       if(!params.get("course_id")) {
-        navigate(-1)
+        navigate("/dashboard")
         return null
       }
 
@@ -44,11 +44,10 @@ export default function SurveyPage() {
         {}, 
         { course_id: params.get("course_id") }
       )
-
       setSurvey(response[0])
     }
     getSurveys()
-  })
+  }, [])
 
   const onStartSurvey = () => {
     setSurveyStart(true)
@@ -112,7 +111,8 @@ export default function SurveyPage() {
     start
   } = useTimer({
     expiryTimestamp, 
-    onExpire: onEndSurvey
+    onExpire: onEndSurvey,
+    autoStart: false
   })
 
   const renderInitialData = () => 
@@ -144,7 +144,10 @@ export default function SurveyPage() {
 
   const renderSurvey = () => <>
     <h1 className='timer'>
-      Tiempo restante: {minutes === 0 ? "00" : minutes}:{seconds === 0 ? "00" : seconds}
+      Tiempo restante: 
+      {minutes === 0 ? "00" : minutes < 10 ? `0${minutes}` : minutes}
+      :
+      {seconds === 0 ? "00" : seconds < 10 ? `0${seconds}` : seconds}
     </h1>
     <Survey survey={survey} />
     <button onClick={onEndSurvey} className="startBtn" style={{ margin: "0" }}>

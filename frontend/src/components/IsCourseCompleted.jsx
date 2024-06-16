@@ -8,8 +8,7 @@ export default function IsCourseCompleted({ children, completed }) {
 
   useEffect(() => {
     if(!completed) {
-      navigate(-1)
-      return null
+      navigate("/dashboard")
     }
   })
 
