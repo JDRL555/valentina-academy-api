@@ -13,14 +13,14 @@ export default function Survey({ survey }) {
     <section className='questionContainer'>
       <form>
         {
-          survey.map((question, index) => (
+          survey.questions.map((question, index) => (
             <div className="question" key={index}>
               <h2>{question.question}</h2>
               <ul>
                 {
                   question.answers.map((answer, indexAnswer) => (
                     <li className="answer" key={indexAnswer} onClick={onClickAnswer}>
-                      {answer.description}
+                      {answer.answer}
                     </li>
                   ))
                 }

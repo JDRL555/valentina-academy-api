@@ -3,7 +3,13 @@ import { useEffect, useState } from 'react'
 import { useTimer } from 'react-timer-hook'
 
 import Survey from '../components/Survey'
+
+import { fetchToApi } from '../services/api'
+
 import { COLORS } from '../constants/message'
+import { BACKEND_ROUTES } from '../constants/routes'
+
+
 import "../styles/SurveyPage.css"
 
 export default function SurveyPage() {
@@ -20,82 +26,28 @@ export default function SurveyPage() {
     percentage: 100,
     completed: false
   })
+  const [survey, setSurvey] = useState({})
 
   let [counter, setCounter] = useState(3)
 
   let counterInterval = null
-  const survey = [
-    {
-      question: "Cuanta cantidad se necesita de harina para la masa?",
-      answers: [
-        {
-          description: "10",
-          correct: false
-        },
-        {
-          description: "30",
-          correct: false
-        },
-        {
-          description: "40",
-          correct: true
-        },
-      ]
-    },
-    {
-      question: "A cuantos grados se tiene que cocinar la torta?",
-      answers: [
-        {
-          description: "150",
-          correct: false
-        },
-        {
-          description: "110",
-          correct: true
-        },
-        {
-          description: "140",
-          correct: false
-        }
-      ]
-    },
-    {
-      question: "Es necesario amasar bastante antes de hornear?",
-      answers: [
-        {
-          description: "No, ya que con una buena mezcla ya es posible hornear",
-          correct: false
-        },
-        {
-          description: "Si, ya que se busca una mezcla homogenea para hornear",
-          correct: true
-        },
-        {
-          description: "No es realmente necesario",
-          correct: false
-        }
-      ]
-    },
-    {
-      question: "Para esta receta se necesita usar polvo de hornear?",
-      answers: [
-        {
-          description: "Si, ya que sin ella no se puede rellenar el pan",
-          correct: true
-        },
-        {
-          description: "No, con la masa asi ya es mas que suficiente",
-          correct: false
-        }
-      ]
-    }
-  ]
 
   useEffect(() => {
-    if(!params.get("course_id")) {
-      navigate(-1)
-      return null
+    async function getSurveys() {
+      if(!params.get("course_id")) {
+        navigate(-1)
+        return null
+      }
+
+      const response = await fetchToApi(
+        BACKEND_ROUTES.surveys, 
+        {}, 
+        { course_id: params.get("course_id") }
+      )
+
+      setSurvey(response[0])
     }
+    getSurveys()
   })
 
   const onStartSurvey = () => {
@@ -127,7 +79,7 @@ export default function SurveyPage() {
       )
     })
 
-    if(answersSelected.length !== survey.length && minutes == 0 && seconds == 0) {
+    if(answersSelected.length !== survey.questions.length && minutes == 0 && seconds == 0) {
       setError("Completa todas las respuestas")
       error.style.display = "block"
     } else {
@@ -137,9 +89,9 @@ export default function SurveyPage() {
 
       let percentage = 0
       answersSelected.map((answerSelected, index) => {
-        const answer = survey[index].answers.find(answer => answer.description == answerSelected)
-        if(answer.correct) {
-          const value = 100 / survey.length
+        const answer = survey.questions[index].answers.find(answer => answer.answer == answerSelected)
+        if(answer.is_correct) {
+          const value = 100 / survey.questions.length
           let result = percentage + value
           percentage = parseInt(result.toFixed(1)) < 0 ? 0 : parseInt(result.toFixed(1))
         }

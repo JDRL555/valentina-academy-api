@@ -8,7 +8,9 @@ import { BACKEND_ROUTES } from '../constants/routes'
 import { fetchToApi } from '../services/api'
 
 import pdfIcon from '../assets/pdf.png'
+
 import Navbar from '../components/Navbar'
+import CoursesSkeleton from '../components/CoursesSkeleton'
 
 import userImg from "../public/img/usuario.png"
 
@@ -22,7 +24,6 @@ export default function CoursePage({ setCompleted }) {
   useEffect(() => {
     async function getCourse() {
       const response = await fetchToApi(`${BACKEND_ROUTES.courses}/${id}`)
-      console.log(response);
       setCourse(response)
     }
     getCourse()
@@ -38,7 +39,7 @@ export default function CoursePage({ setCompleted }) {
       <Navbar /> 
       {
         !course 
-        ? <div>Cargando...</div>
+        ? <CoursesSkeleton />
         :
         <main className='courseContainer'>
           <div className='course'>
