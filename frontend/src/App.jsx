@@ -9,7 +9,7 @@ import LandingPage                      from './pages/LandingPage.jsx'
 import NotFoundPage                     from './pages/NotFoundPage.jsx'
 import LoginPage                        from './pages/LoginPage.jsx'
 import RegisterPage                     from './pages/RegisterPage.jsx'
-import CoursePage                       from './pages/CoursePage.jsx'
+import CoursePage                       from './pages/CoursePage/index.jsx'
 import SurveyPage                       from './pages/SurveyPage.jsx'
 
 import IsAuthorized                     from './components/IsAuthorized.jsx'
