@@ -1,7 +1,8 @@
 from rest_framework_mongoengine import viewsets, serializers
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.exceptions import ValidationError
+# from django.db.models import Q
+from mongoengine import Q
 
 from .models import Surveys, Answers, Questions
 from .serializers import SurveySerializer, QuestionSerializer, AnswersSerializer
@@ -11,8 +12,37 @@ class SurveysViewSet(viewsets.ModelViewSet):
     serializer_class = SurveySerializer
 
     def list(self, request):
+        global queryset
+        if request.query_params:
+            filter_q = Q()
+            for key, value in request.query_params.items():
+                related_fields = { 
+                    "course_id": int
+                }
+                if hasattr(Surveys, key):
+                    if key in related_fields.keys():
+                        try:
+                            value = int(value)
+                        except:
+                            pass
+                        if type(value) == related_fields[key]:
+                            filter_q &= Q(**{key: value})
+                        else:
+                            return Response({ "error": f"El filtro {value} no coincide con el valor {related_fields[key]}" },status=400)
+                    else:
+                        filter_q &= Q(**{key: value})
+                else:
+                    return Response({ "error": "Columna no encontrada a filtrar" }, status=400)
+                
+            queryset = list(self.queryset.filter(filter_q))
+            if len(queryset) == 0:
+                return Response(queryset)
+        else:
+            queryset = list(self.queryset)
+    
         surveys = []
-        for survey in self.queryset:
+
+        for survey in queryset:
             survey_obj = {
                 "id": str(survey.id),
                 "title": survey.title,
@@ -59,7 +89,6 @@ class SurveysViewSet(viewsets.ModelViewSet):
                         "answer": answer_obj.answer,
                         "is_correct": answer_obj.is_correct,
                     }
-                    print(answers,"<------------")
                     question_list["answers"].append(answers)
                 survey_obj["questions"].append(question_list)
                 
