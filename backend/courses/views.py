@@ -256,17 +256,38 @@ class PurchasedCourseViewSet(ModelViewSet):
   
   @action(detail=False, methods=['POST'])
   def subscribe(self, request):
-    purchased_serialize = PurchasedCourseSerializer(data=request.data)
+    global course
+    global user
     
-    if purchased_serialize.is_valid():
-      try:
-        Purchased_course.objects.get(**request.data)
-        return Response({ "details": "La compra ya existe" }, status=400)
-      except:
-        purchased_serialize.save()
-        return Response(purchased_serialize.data, status=201)
-    else:
-      return Response(purchased_serialize.errors, status=400)
+    errors = {}
+    
+    if not request.data.get("course_id"): 
+      errors["course_id"] = "El id del curso es requerido"
+    
+    if not request.data.get("user_id"):
+      errors["user_id"] = "El id del usuario es requerido"
+      
+    if len(errors.keys()) != 0:
+      return Response(errors, status=400)
+    
+    try:
+      user = User.objects.get(id=request.data["user_id"])
+    except:
+      return Response({ "error": "Usuario no encontrado" }, status=404)
+    
+    try:
+      course = Courses.objects.get(id=request.data["course_id"])
+    except:
+      return Response({ "error": "Curso no encontrado" }, status=404)
+    
+    try:
+      Purchased_course.objects.get(course_id=course.id, user_id=user.id)
+      return Response({ "error": "La compra ya existe" }, status=400)
+    except:
+      purchased_serialize = self.serializer_class(data=request.data)
+      purchased_serialize.is_valid(raise_exception=True)
+      purchased_serialize.save()
+      return Response(purchased_serialize.data, status=201)
     
   @action(detail=False, methods=['POST'])
   def complete_course(self, request):
