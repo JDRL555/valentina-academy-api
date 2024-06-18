@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+
+import PayCoursePage from './PayCoursePage'
 import CoursePage from './CoursePage'
 
 import { ContextApp } from '../../context/ContextApp'
@@ -23,9 +25,9 @@ export default function Index({ setCompleted }) {
       if(response.length == 0) {
         setIsPurchased(false)
         return
-      } 
+      }
 
-      if(!response[0].is_purchased) {
+      if(!response[0]?.is_purchased) {
         setIsPurchased(false)
         return
       }
@@ -36,5 +38,5 @@ export default function Index({ setCompleted }) {
   })
 
 
-  return isPurchased ? <CoursePage setCompleted={setCompleted} /> : <div>Compralo ya</div>
+  return isPurchased ? <CoursePage setCompleted={setCompleted} /> : <PayCoursePage />
 }
