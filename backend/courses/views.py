@@ -233,6 +233,25 @@ class PurchasedCourseViewSet(ModelViewSet):
       
     if len(queryset) == 0:
       return Response(queryset)
+    
+    for payment in queryset:
+      course = Courses.objects.get(id=payment["course_id"])
+      media = Courses_media.objects.get(id=course.media_id)
+      
+      payment["course"] = {
+        "id": course.id,
+        "title": course.title,
+        "description": course.description,
+        "price": course.price,
+        "media": {
+          "id": media.id,
+          "url_cover": media.url_cover,
+          "url_video": media.url_video,
+        }
+      }
+      
+      del payment["course_id"]
+    
     return Response(queryset)
   
   @action(detail=False, methods=['POST'])
