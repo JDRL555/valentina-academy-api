@@ -53,6 +53,7 @@ class UsersViewSet(ModelViewSet):
       del user.password
       return Response({ 
         "user": { 
+          "id": user.id,
           "first_name": user.first_name, 
           "last_name": user.last_name, 
           "username": user.username, 
