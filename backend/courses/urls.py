@@ -12,5 +12,6 @@ router.register(r"category", CategoryViewSet)
 urlpatterns = [
   path("courses/subscribe/", PurchasedCourseViewSet.as_view({ "post": "subscribe" }), name="subscribe"),
   path("courses/create_media/", CourseMediaViewSet.as_view({ "post": "create_media" }), name="create_media"),
-  path("courses/export_certificate/", CourseViewSet.as_view({ "post": "export_certificate" }), name="pdf")
+  path("courses/export_certificate/", CourseViewSet.as_view({ "post": "export_certificate" }), name="pdf"),
+  path("courses/complete/", PurchasedCourseViewSet.as_view({ "post": "complete_course" }), name="complete")
 ] + router.urls

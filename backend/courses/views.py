@@ -196,22 +196,98 @@ class CourseViewSet(ModelViewSet):
 class PurchasedCourseViewSet(ModelViewSet):
   queryset = Purchased_course.objects.all()
   serializer_class = PurchasedCourseSerializer
+  trailing_slash = False
+  
+  def list(self, request):
+    global queryset
+    if request.query_params:
+      filter_q = Q()
+      for key, value in request.query_params.items():
+        
+        related_fields = { 
+          "user_id": int 
+        }
+        
+        if hasattr(Purchased_course, key):
+          if key in related_fields.keys():
+            try:
+              value = int(value)
+            except:
+              pass
+            
+            if type(value) == related_fields[key]:
+              filter_q &= Q(**{key: value})
+            else:
+              return Response(
+                { "error": f"El filtro {value} no coincide con el valor {related_fields[key]}" },
+                status=400
+              )
+          else:
+            filter_q &= Q(**{key: value[0]})
+        else:
+          return Response({ "error": "Columna no encontrada a filtrar" }, status=400)
+        
+      queryset = list(self.queryset.filter(filter_q).values())
+    else:
+      queryset = list(self.queryset.values())
+      
+    if len(queryset) == 0:
+      return Response(queryset)
+    return Response(queryset)
   
   @action(detail=False, methods=['POST'])
   def subscribe(self, request):
     purchased_serialize = PurchasedCourseSerializer(data=request.data)
     
     if purchased_serialize.is_valid():
-      
       try:
         Purchased_course.objects.get(**request.data)
-        return Response({ "details": "The purchase already exists" }, status=400)
+        return Response({ "details": "La compra ya existe" }, status=400)
       except:
         purchased_serialize.save()
         return Response(purchased_serialize.data, status=201)
     else:
       return Response(purchased_serialize.errors, status=400)
-
+    
+  @action(detail=False, methods=['POST'])
+  def complete_course(self, request):
+    
+    global course
+    global purchased
+    
+    errors = {}
+    
+    if not request.data.get("course_id"): 
+      errors["course_id"] = "El id del curso es requerido"
+    
+    if not request.data.get("user_id"):
+      errors["user_id"] = "El id del usuario es requerido"
+      
+    if len(errors.keys()) != 0:
+      return Response(errors, status=400)
+    
+    try:
+      course = Courses.objects.get(id=request.data["course_id"])
+    except:
+      return Response({ "error": "Curso no encontrado" }, status=404)
+    
+    try:
+      purchased = Purchased_course.objects.get(course=course.id, user=request.data["user_id"])
+    except:
+      return Response({ "error": "Compra no encontrada" }, status=404)
+    
+    if not purchased.is_purchased:
+      return Response({ "error": "El curso debe ser comprado" }, status=401)
+    
+    if purchased.completed:
+      return Response({ "error": "El curso ya esta completado" }, status=401)
+    
+    serializer = self.serializer_class(purchased, data={ "completed": True }, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    
+    return Response({ "purchased": serializer.data })
+    
 class CourseMediaViewSet(ModelViewSet):
   queryset = Courses_media.objects.all()
   serializer_class = CourseMediaSerializer
