@@ -12,7 +12,8 @@ import { fetchToApi } from '../../services/api'
 export default function Index({ setCompleted }) {
   const { id } = useParams()
   const { user } = useContext(ContextApp)
-  const [ isPurchased, setIsPurchased ] = useState(false)
+  const [ isPurchased, setIsPurchased ] = useState(null)
+  const [ course, setCourse ] = useState(null)
 
   useEffect(() => {
     async function wasPurchased() {
@@ -27,6 +28,10 @@ export default function Index({ setCompleted }) {
         return
       }
 
+      if(response[0]?.course) {
+        setCourse(response[0].course)
+      }
+
       if(!response[0]?.is_purchased) {
         setIsPurchased(false)
         return
@@ -35,8 +40,13 @@ export default function Index({ setCompleted }) {
       setIsPurchased(true)
     }
     wasPurchased()
-  })
+  }, [isPurchased])
 
-
-  return isPurchased ? <CoursePage setCompleted={setCompleted} /> : <PayCoursePage />
+  if(!isPurchased) {
+    if(!course) {
+      return <div>cargando...</div>
+    }
+    return <PayCoursePage course={course} />
+  }
+  return <CoursePage setCompleted={setCompleted} /> 
 }

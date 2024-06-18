@@ -4,5 +4,6 @@ export const BACKEND_ROUTES = {
   auth: "users/auth",
   courses: "courses",
   surveys: "surveys",
-  purchased_courses: "purchased"
+  purchased_courses: "purchased",
+  subscribe: "courses/subscribe"
 }

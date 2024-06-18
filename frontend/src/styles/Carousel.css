@@ -22,11 +22,11 @@
 
 .arrow_right{
     left: 30%;
-    -webkit-mask-image: linear-gradient(to right, transparent 1%, black 90%);
+    mask-image: linear-gradient(to right, transparent 1%, black 90%);
 }
 
 .arrow_left {
-    -webkit-mask-image: linear-gradient(to left, transparent 1%, black 90%);
+    mask-image: linear-gradient(to left, transparent 1%, black 90%);
 }
 
 .carrusel_container{
