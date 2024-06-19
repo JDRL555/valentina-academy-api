@@ -11,6 +11,7 @@ import LoginPage                        from './pages/LoginPage.jsx'
 import RegisterPage                     from './pages/RegisterPage.jsx'
 import CoursePage                       from './pages/CoursePage/Index.jsx'
 import SurveyPage                       from './pages/SurveyPage.jsx'
+import TeacherPage                      from './pages/TeacherPage/Index.jsx'
 
 import IsAuthorized                     from './components/IsAuthorized.jsx'
 import IsCourseCompleted                from './components/IsCourseCompleted.jsx'
@@ -58,6 +59,14 @@ export default function App() {
                 <SurveyPage /> 
               </IsCourseCompleted>
             }  
+          />
+          <Route 
+            path='/teacher'
+            element={
+              <IsAuthorized>
+                <TeacherPage />
+              </IsAuthorized>
+            }
           />
         </Routes>
       </BrowserRouter>

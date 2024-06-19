@@ -1,0 +1,125 @@
+.teacher_container {
+  margin-top: 120px;
+  background-color: var(--opaque-primary-color);
+  padding: 20px;
+}
+
+.teacher_container h1 {
+  font-size: 35px;
+  text-align: center;
+}
+
+.teacher_card {
+  margin: 10px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: var(--opaque-dark-color);
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: .3s;
+}
+
+.teacher_card:hover {
+  background-color: var(--dark-color);
+}
+
+.teacher_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.teacher_card h1, .fa-solid {
+  margin: 0 5px;
+  font-size: 30px;
+}
+
+.fa-plus {
+  padding: 10px;
+  border-radius: 100%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.fa-plus:hover {
+  background-color: #84eb3f;
+  color: white;
+}
+
+.fa-pen-to-square, .fa-trash {
+  transition: .3s;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.fa-pen-to-square:hover {
+  background-color: #3737eb;
+  color: white;
+}
+
+.fa-trash:hover {
+  background-color: #eb3737;
+  color: white;
+}
+
+.fa-caret-right {
+  transition: .3s;
+}
+
+.teacher_details h2 {
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.teacher_info {
+  display: flex;
+  opacity: 0;
+  margin-top: 25px;
+  justify-content: space-around;
+  transition: .3s;
+  animation: fade-out .5s forwards;
+}
+
+.teacher_info p {
+  margin: 10px 0;
+}
+
+.teacher_multimedia_container h2 {
+  padding-bottom: 20px;
+  text-align: center;
+  font-size: 25px;
+}
+
+.teacher_multimedia {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.teacher_multimedia img,
+.teacher_multimedia video {
+  width: 400px;
+}
+
+@keyframes fade-out {
+  from {
+    display: flex;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  to {
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  to {
+    display: flex;
+    opacity: 1;
+  }
+}
