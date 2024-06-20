@@ -1,10 +1,19 @@
 /* eslint-disable react/prop-types */
+import { useState } from 'react'
+
+import CreateModal from './components/CreateModal/CreateModal'
+import EditModal from './components/EditModal/EditModal'
+import DeleteModal from './components/DeleteModal/DeleteModal'
+
 import Navbar from '../../components/Navbar'
 
 import "../../styles/TeacherPage.css"
 
 export default function TeacherPage({ courses }) {
-
+  const [showCreate, setShowCreate] = useState(false)
+  const [showEdit, setShowEdit] = useState(false)
+  const [showDelete, setShowDelete] = useState(false)
+  const [courseId, setCourseId] = useState(0)
   const animationData = []
 
   const onCourseClicked = (index) => {
@@ -33,7 +42,13 @@ export default function TeacherPage({ courses }) {
     <>
       <Navbar />
       <main className='teacher_container'>
-        <h1>Administración de cursos <i className="fa-solid fa-plus"></i></h1>
+        <h1>
+          Administración de cursos 
+          <i 
+            className="fa-solid fa-plus"
+            onClick={() => setShowCreate(true)}
+          ></i>
+        </h1>
         {
           courses.map((course, index) => {
             animationData.push({ deg: 0, animation: "fade-out .5s forwards" })
@@ -42,8 +57,20 @@ export default function TeacherPage({ courses }) {
                 <div className='teacher_header'>
                   <h1>{course.title}</h1>
                   <div>
-                    <i className="fa-solid fa-pen-to-square"></i>
-                    <i className="fa-solid fa-trash"></i>
+                    <i 
+                      className="fa-solid fa-pen-to-square"
+                      onClick={() => {
+                        setCourseId(course.id)
+                        setShowEdit(true)
+                      }}
+                    ></i>
+                    <i 
+                      className="fa-solid fa-trash"
+                      onClick={() => {
+                        setCourseId(course.id)
+                        setShowDelete(true)
+                      }}  
+                    ></i>
                     <i className="fa-solid fa-caret-right"></i>
                   </div>
                 </div>
@@ -67,6 +94,20 @@ export default function TeacherPage({ courses }) {
           })
         }
       </main>
+      <CreateModal 
+        showModal={showCreate} 
+        setShowModal={setShowCreate} 
+      />
+      <EditModal 
+        showModal={showEdit} 
+        setShowModal={setShowEdit} 
+        courseId={courseId}
+      />
+      <DeleteModal 
+        showModal={showDelete}
+        setShowModal={setShowDelete}
+        courseId={courseId}
+      />
     </>
   )
 }
