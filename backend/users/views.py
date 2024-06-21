@@ -6,6 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 
 from .serializers import UserSerializer
 
@@ -39,6 +40,8 @@ class UsersViewSet(ModelViewSet):
       
       user = User.objects.get(username=serializer.data['username'])
       user.set_password(serializer.data['password'])
+      viewer_group = Group.objects.get(name="student")
+      user.groups.add(viewer_group)
       user.save()
       
       return Response({"user": serializer.data}, status=status.HTTP_201_CREATED)

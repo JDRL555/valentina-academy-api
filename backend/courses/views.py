@@ -25,7 +25,12 @@ from .serializers import CourseSerializer, CourseMediaSerializer, PurchasedCours
 from .models import Courses, Category, Courses_media, Purchased_course
 
 
+from users.validators import is_admin 
+
+
 # Create your views here.
+
+
 class CourseViewSet(ModelViewSet):
   queryset = Courses.objects.select_related("user", "category", "media")
   serializer_class = CourseSerializer
