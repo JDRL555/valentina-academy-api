@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import video from '../../../../assets/video_loading.png'
 import error from '../../../../assets/error.png'
@@ -33,6 +34,8 @@ export default function CreateModal({ showModal, setShowModal }) {
   })
   const [courseStatus, setCourseStatus] = useState({ status: null, error: "" })
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     async function getCourseInfo() {
       const categoriesResponse = await fetchToApi(BACKEND_ROUTES.categories)
@@ -57,14 +60,28 @@ export default function CreateModal({ showModal, setShowModal }) {
       body: formData
     })
 
+    if(mediaResponse?.error) {
+      setCourseStatus({ status: false, error })
+      return
+    }
+
+    setNewCourse({ ...newCourse, media: mediaResponse.id })
+    console.log(newCourse);
+
     const courseResponse = await fetchToApi(BACKEND_ROUTES.courses, {
       method: "POST",
-      body: JSON.stringify(newCourse)
+      body: JSON.stringify({ ...newCourse, media: mediaResponse.id }),
+      headers: {
+        'Content-type': "application/json"
+      }
     })
 
     if(courseResponse?.detail) {
       setCourseStatus({ status: false, error: "Hubo un error, intenta nuevamente" })
+      return
     }
+
+    navigate("/teacher")
 
     
   }
@@ -99,7 +116,7 @@ export default function CreateModal({ showModal, setShowModal }) {
           <input required onChange={onInputChange} type="time" id='duration' />
         </div>
         <div className='input_container'>
-          <label htmlFor="price">Precio del curso</label>
+          <label htmlFor="price">Precio del curso (dólares)</label>
           <input required onChange={onInputChange} type="number" id='price' />
         </div>
         <button type="submit">
