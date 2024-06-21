@@ -6,13 +6,13 @@ from django.contrib.auth.models import User
 class CategorySerializer(serializers.ModelSerializer):
   class Meta:
     model = Category
-    fields = ["name"]
+    fields = ["id", "name"]
     
 class CourseMediaSerializer(serializers.ModelSerializer):
   class Meta:
     model = Courses_media
     fields = [
-      "url_video", "url_cover"
+      "id", "url_video", "url_cover"
     ]
 
 class CourseSerializer(serializers.ModelSerializer):
