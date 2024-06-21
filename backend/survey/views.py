@@ -1,10 +1,11 @@
 from rest_framework_mongoengine import viewsets, serializers
 from rest_framework.response import Response
 from rest_framework import status
-# from django.db.models import Q
+
 from mongoengine import Q
 
 from .models import Surveys, Answers, Questions
+from courses.models import Courses
 from .serializers import SurveySerializer, QuestionSerializer, AnswersSerializer
 
 class SurveysViewSet(viewsets.ModelViewSet):
@@ -47,33 +48,61 @@ class SurveysViewSet(viewsets.ModelViewSet):
                 "id": str(survey.id),
                 "title": survey.title,
                 "description": survey.description,
-                "course": survey.course_id,
+                "course": {},
                 "created_at": survey.created_at,
                 "questions": [],
             }
+            try:
+                course_obj = Courses.objects.get(id=survey.course_id)
+                survey_obj["course"] = {
+                    "title": course_obj.title,
+                    "description": course_obj.description
+                }
+            except Exception as error:
+                print(error)
+                return Response({"error":"error curso no existe!"})
+                  
             for question in survey.question_id:
-                if question.answers_id: 
-                    try:
-                        question_obj = Questions.objects.get(id=str(question.id))
-                        for answer_id in question.answers_id: 
-                            answer_obj = Answers.objects.get(id=str(answer_id.id))
-                            survey_obj["questions"].append({
-                                "id": str(question_obj.id),
-                                "question": question_obj.question,
-                                "answers": [
-                                    {"answer": answer_obj.answer, "is_correct": answer_obj.is_correct}
-                                ],
-                            })
-                    except Exception as error:
-                        print(error)
+                try:
+                    question_obj = Questions.objects.get(id=str(question.id))
+                    questions_obj = {
+                            "id": str(question_obj.id),
+                            "question": question_obj.question,
+                            "answers": [],
+                        }
+                    for answer_id in question.answers_id: 
+                        answer_obj = Answers.objects.get(id=str(answer_id.id))
+                        questions_obj["answers"].append({
+                            "answer": answer_obj.answer, 
+                            "is_correct": answer_obj.is_correct
+                        })
+                    survey_obj["questions"].append(questions_obj)
+                except Exception as error:
+                    print(error)
+                    return Response({"error":"error en la pregunta y respuesta!"})
             surveys.append(survey_obj)
         return Response(surveys)
+
+
+    
     
     def retrieve(self, request, *args, **kwargs):
         obj = self.get_object()
         serializer = self.get_serializer(obj)
         survey_obj = serializer.data
         survey_obj["questions"] = []
+
+        course_id = survey_obj.get('course_id')
+
+        if course_id:
+            try:
+                course_obj = Courses.objects.get(id=course_id) 
+                survey_obj['course_id'] = {
+                    'title': course_obj.title,
+                    'description': course_obj.description,
+                }
+            except Courses.DoesNotExist:
+                return Response({"error": "error en id"})
 
         for question_id in  survey_obj["question_id"]:
             try:
@@ -98,12 +127,6 @@ class SurveysViewSet(viewsets.ModelViewSet):
         del survey_obj["question_id"]
         return Response(survey_obj)
     
-
-
-
-
-
-
 
 class QuestionsViewSet(viewsets.ModelViewSet):
     queryset = Questions.objects()
