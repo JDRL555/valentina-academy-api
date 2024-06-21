@@ -4,8 +4,6 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from django.contrib.auth.models import User
-from django.core.validators import URLValidator
-from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 
 from django.db.models import Q
@@ -349,7 +347,6 @@ class CourseMediaViewSet(ModelViewSet):
       return Response({ "error": f"ERROR: {err}" }, status=400)
     
     serializer = CourseMediaSerializer(data={
-      "course": request.data.get("course"),
       "url_cover": cover_response["secure_url"],
       "url_video": video_response["secure_url"],
     })
