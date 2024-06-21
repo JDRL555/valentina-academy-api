@@ -259,22 +259,22 @@ class PurchasedCourseViewSet(ModelViewSet):
     
     errors = {}
     
-    if not request.data.get("course_id"): 
-      errors["course_id"] = "El id del curso es requerido"
+    if not request.data.get("course"): 
+      errors["course"] = "El id del curso es requerido"
     
-    if not request.data.get("user_id"):
-      errors["user_id"] = "El id del usuario es requerido"
+    if not request.data.get("user"):
+      errors["user"] = "El id del usuario es requerido"
       
     if len(errors.keys()) != 0:
       return Response(errors, status=400)
     
     try:
-      user = User.objects.get(id=request.data["user_id"])
+      user = User.objects.get(id=request.data["user"])
     except:
       return Response({ "error": "Usuario no encontrado" }, status=404)
     
     try:
-      course = Courses.objects.get(id=request.data["course_id"])
+      course = Courses.objects.get(id=request.data["course"])
     except:
       return Response({ "error": "Curso no encontrado" }, status=404)
     
