@@ -35,8 +35,8 @@ export default function PayCoursePage({ course }) {
     const response = await fetchToApi(BACKEND_ROUTES.subscribe, {
       method: "POST",
       body: JSON.stringify({
-        course_id: course.id,
-        user_id: user.id,
+        course: course.id,
+        user: user.id,
         is_purchased: true
       }),
       headers: {
@@ -69,7 +69,11 @@ export default function PayCoursePage({ course }) {
             </p>
           </div>
           <div className='payment_img'>
-            <img src={course.media.url_cover} alt="cover" />
+            <div 
+              className='payment_course_img'
+              style={{ backgroundImage: `url('${course.media.url_cover}')` }}
+            >
+            </div>
           </div>
         </section>
       </main>

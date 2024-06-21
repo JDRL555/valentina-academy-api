@@ -1,6 +1,6 @@
-import video from '../assets/video_loading.png'
-import pdfIcon from '../assets/pdf_skeleton.png'
-import "../styles/CoursesSkeleton.css"
+import video from '../../assets/video_loading.png'
+import pdfIcon from '../../assets/pdf_skeleton.png'
+import "../../styles/CoursesSkeleton.css"
 
 export default function CoursesSkeleton() {
   return (

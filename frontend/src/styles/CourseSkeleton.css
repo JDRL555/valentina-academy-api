@@ -13,7 +13,7 @@
 }
 
 .img_skeleton_container {
-  background-color: grey;
+  background-color: var(--skeleton-light-color);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   padding: 20px;
@@ -27,7 +27,7 @@
 .course_info_skeleton {
   padding: 20px;
   height: 130px;
-  background-color: #4e4e4e;
+  background-color: var(--skeleton-dark-color);
 }
 
 .course_info_title {
@@ -40,7 +40,7 @@
   margin: auto;
   margin-bottom: 20px;
   border-radius: 30px;
-  background-color: grey;
+  background-color: var(--skeleton-light-color);
 }
 
 .description_skeleton {
@@ -48,17 +48,5 @@
   height: 10px;
   margin: 10px auto;
   border-radius: 30px;
-  background-color: grey;
-}
-
-@keyframes oscurecer {
-  0% {
-    filter: brightness(0.5);
-  }
-  50% {
-    filter: brightness(1);
-  }
-  100% {
-    filter: brightness(0.5);
-  }
+  background-color: var(--skeleton-light-color);
 }

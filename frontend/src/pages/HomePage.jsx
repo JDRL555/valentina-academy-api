@@ -10,7 +10,7 @@ import Footer         from "../components/Footer.jsx"
 import Courses        from "../components/Courses.jsx"
 import Course         from "../components/Course.jsx"
 
-import CourseSkeleton from '../components/CourseSkeleton.jsx'
+import CourseSkeleton from '../components/skeletons/CourseSkeleton.jsx'
 
 export default function HomePage() {
 

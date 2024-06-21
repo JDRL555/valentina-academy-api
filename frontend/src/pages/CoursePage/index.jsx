@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 import { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import PayCoursePage from './PayCoursePage'
 import CoursePage from './CoursePage'
+import PayCourseSkeleton from '../../components/skeletons/PayCourseSkeleton'
 
 import { ContextApp } from '../../context/ContextApp'
 import { BACKEND_ROUTES } from '../../constants/routes'
@@ -15,6 +16,8 @@ export default function Index({ setCompleted }) {
   const [ isPurchased, setIsPurchased ] = useState(null)
   const [ course, setCourse ] = useState(null)
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     async function wasPurchased() {
       const response = await fetchToApi(
@@ -23,8 +26,14 @@ export default function Index({ setCompleted }) {
         { user_id: user.id, course_id: id }
       )
 
+      if(response.error) {
+        navigate("/dashboard")
+      }
+
       if(response.length == 0) {
+        const courseResponse = await fetchToApi(`${BACKEND_ROUTES.courses}/${id}`)
         setIsPurchased(false)
+        setCourse(courseResponse)
         return
       }
 
@@ -44,7 +53,7 @@ export default function Index({ setCompleted }) {
 
   if(!isPurchased) {
     if(!course) {
-      return <div>cargando...</div>
+      return <PayCourseSkeleton />
     }
     return <PayCoursePage course={course} />
   }

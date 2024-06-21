@@ -1,0 +1,71 @@
+.payment_skeleton_title,
+.payment_skeleton_description,
+.payment_skeleton_price,
+.payment_skeleton_button,
+.payment_skeleton_img {
+  animation-name: oscurecer;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+
+.payment_skeleton_container {
+  margin-top: 120px;
+  padding: 20px;
+  background-color: var(--opaque-primary-color);
+}
+
+.payment_skeleton {
+  background-color: var(--dark-color);
+  color: var(--primary-color);
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.payment_skeleton_details {
+  width: 50%;
+  padding-top: 20px;
+  padding-left: 30px;
+  box-sizing: border-box;
+}
+
+.payment_skeleton_img {
+  width: 50%;
+  text-align: right;  
+}
+
+.payment_skeleton_title {
+  width: 80%;
+  height: 50px;
+  background-color: var(--skeleton-light-color);
+  border-radius: 20px;
+}
+
+.payment_skeleton_description, .payment_skeleton_price {
+  margin: 20px 0;
+  width: 80%;
+  height: 30px;
+  background-color: var(--skeleton-light-color);
+  border-radius: 20px;
+}
+
+.payment_skeleton_button {
+  width: 75%;
+  padding: 15px;
+  font-size: 20px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--skeleton-dark-color);
+  color: var(--skeleton-light-color);
+}
+
+.payment_skeleton_course_img {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  mask-image: linear-gradient(to right, transparent 1%, black 90%);
+}

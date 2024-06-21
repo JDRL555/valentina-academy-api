@@ -10,7 +10,7 @@ import { fetchToApi } from '../../services/api'
 import pdfIcon from '../../assets/pdf.png'
 
 import Navbar from '../../components/Navbar'
-import CoursesSkeleton from '../../components/CoursesSkeleton'
+import CoursesSkeleton from '../../components/skeletons/CoursesSkeleton'
 
 import userImg from "../../public/img/usuario.png"
 

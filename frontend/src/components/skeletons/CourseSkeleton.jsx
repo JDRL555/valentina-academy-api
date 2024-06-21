@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable react/prop-types */
-import img from '../assets/img.png'
-import "../styles/CourseSkeleton.css"
+import img from '../../assets/img.png'
+import "../../styles/CourseSkeleton.css"
 
 export default function CourseSkeleton() {
   return (

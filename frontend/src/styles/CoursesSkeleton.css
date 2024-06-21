@@ -29,8 +29,8 @@
   justify-content: center;
   margin: 30px;
   border-radius: 10px;
-  background-color: #494949b0;
-  border: 10px solid #808080b0;
+  background-color: var(--skeleton-dark-color);
+  border: 10px solid var(--skeleton-light-color);
 }
 
 .course_video_icon_skeleton {
@@ -52,7 +52,7 @@
 }
 
 .details_skeleton {
-  background-color: #494949b0;
+  background-color: var(--skeleton-dark-color);
   padding: 20px;
   margin-bottom: 30px;
   border-radius: 10px;
@@ -64,7 +64,7 @@
   width: 100%;
   height: 50px;
   border-radius: 10px;
-  background-color: #808080b0;
+  background-color: var(--skeleton-light-color);
 }
 
 .details_skeleton .course_description_skeleton {
@@ -72,7 +72,7 @@
   width: 500px;
   height: 20px;
   border-radius: 10px;
-  background-color: #808080b0;
+  background-color: var(--skeleton-light-color);
 }
 
 .author_container_skeleton {
@@ -87,7 +87,7 @@
   height: 60px;
   object-fit: cover;
   border-radius: 100%;
-  background-color: #808080b0;
+  background-color: var(--skeleton-light-color);
 }
 
 
@@ -95,11 +95,11 @@
   width: 30%;
   height: 20px;
   border-radius: 10px;
-  background-color: #808080b0;
+  background-color: var(--skeleton-light-color);
 }
 
 .pdf_container_skeleton {
-  background-color: #808080b0;
+  background-color: var(--skeleton-light-color);
   height: 50px;
   padding-block: 10px;
   border-radius: 10px;
@@ -116,7 +116,7 @@
 }
 
 .recipe_skeleton {
-  background-color: #494949b0;
+  background-color: var(--skeleton-dark-color);
   border-radius: 10px;
   width: 50%;
   padding: 20px;
@@ -125,7 +125,7 @@
 .recipe_skeleton .recipe_name_skeleton {
   width: 100%;
   height: 40px;
-  background-color: #808080b0;
+  background-color: var(--skeleton-light-color);
   border-radius: 10px;
   text-align: center;
   margin: 10px 0;
@@ -136,7 +136,7 @@
   margin: 10px auto;
   width: 60%;
   height: 20px;
-  background-color: #808080b0;
+  background-color: var(--skeleton-light-color);
   border-radius: 10px;
 }
 
@@ -157,7 +157,7 @@
 .recipe_ingredients_skeleton .recipe_title_skeleton {
   width: 100%;
   height: 30px;
-  background-color: #808080b0;
+  background-color: var(--skeleton-light-color);
   border-radius: 10px;
 }
 
@@ -174,7 +174,7 @@
   width: 100%;
   height: 10px;
   border-radius: 10px;
-  background-color: #808080b0;
+  background-color: var(--skeleton-light-color);
   padding: 5px 0;
 }
 
@@ -187,7 +187,7 @@
   height: 30px;
   margin-left: 10px;
   border-radius: 10px;
-  background-color: #808080b0;
+  background-color: var(--skeleton-light-color);
 }
 
 .recipe_instruction_skeleton {
@@ -195,7 +195,7 @@
   width: 100%;
   height: 10px;
   border-radius: 10px;
-  background-color: #808080b0;
+  background-color: var(--skeleton-light-color);
 }
 
 .recipe_instructions_skeleton .recipe_instructions_list_skeleton {
@@ -208,17 +208,5 @@
   }
   to {
     transform: rotate(360deg);
-  }
-}
-
-@keyframes oscurecer {
-  0% {
-    filter: brightness(0.5);
-  }
-  50% {
-    filter: brightness(1);
-  }
-  100% {
-    filter: brightness(0.5);
   }
 }
