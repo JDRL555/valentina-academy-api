@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 import video from '../../../../assets/video_loading.png'
 import error from '../../../../assets/error.png'
@@ -13,7 +12,7 @@ import Modal from '../Modal/Modal'
 import "./CreateModal.css"
 
 export default function CreateModal({ showModal, setShowModal }) {
-  const [step, setStep] = useState(1)
+  const [creating, setCreating] = useState(false)
 
   const [categories, setCategories] = useState([])
   const [users, setUsers] = useState([])
@@ -34,8 +33,6 @@ export default function CreateModal({ showModal, setShowModal }) {
   })
   const [courseStatus, setCourseStatus] = useState({ status: null, error: "" })
 
-  const navigate = useNavigate()
-
   useEffect(() => {
     async function getCourseInfo() {
       const categoriesResponse = await fetchToApi(BACKEND_ROUTES.categories)
@@ -49,7 +46,7 @@ export default function CreateModal({ showModal, setShowModal }) {
   }, [])
 
   const onCreateCourse = async e => {
-    setStep(0)
+    setCreating(true)
     e.preventDefault()
     const formData = new FormData()
     formData.append("cover", newCourseMedia.cover)
@@ -81,14 +78,10 @@ export default function CreateModal({ showModal, setShowModal }) {
       return
     }
 
-    navigate("/teacher")
-
+    setShowModal(false)
+    setCreating(false)
+    window.location.href = "/teacher"
     
-  }
-
-  const onSubmitStep = e => {
-    e.preventDefault()
-    setStep(e.target.id)
   }
 
   const onInputChange = e => {
@@ -99,10 +92,9 @@ export default function CreateModal({ showModal, setShowModal }) {
     }
   }
 
-  const stepOne = () =>     
+  const createForm = () =>     
     <>
-      <p><b>Paso 1: Información general del curso</b></p>
-      <form className='modal_form' onSubmit={onSubmitStep} id="2">
+      <form className='modal_form' onSubmit={onCreateCourse}>
         <div className='input_container'>
           <label htmlFor="title">Titulo del curso</label>
           <input required onChange={onInputChange} type="text" id='title' />
@@ -113,22 +105,12 @@ export default function CreateModal({ showModal, setShowModal }) {
         </div>
         <div className='input_container'>
           <label htmlFor="duration">Duración del curso</label>
-          <input required onChange={onInputChange} type="time" id='duration' />
+          <input required onChange={onInputChange} type="time" step={1} id='duration' />
         </div>
         <div className='input_container'>
           <label htmlFor="price">Precio del curso (dólares)</label>
           <input required onChange={onInputChange} type="number" id='price' />
         </div>
-        <button type="submit">
-          Siguiente paso
-        </button>
-      </form>
-    </>
-
-  const stepTwo = () =>     
-    <>
-      <p><b>Paso 2: categoría y autor del curso</b></p>
-      <form className='modal_form' onSubmit={onSubmitStep} id="3">
         <div className='input_container'>
           <label htmlFor="category">Categoría del curso</label>
           <select id='category' required onChange={onInputChange}>
@@ -155,19 +137,6 @@ export default function CreateModal({ showModal, setShowModal }) {
             }
           </select>
         </div>
-        <button onClick={() => setStep(1)}>
-          Paso anterior
-        </button>
-        <button type='submit'>
-          Siguiente paso
-        </button>
-      </form>
-    </>
-
-  const stepThree = () =>     
-    <>
-      <p><b>Paso 3: Contenido multimedia del curso</b></p>
-      <form className='modal_form' onSubmit={onSubmitStep} id="4">
         <div className='input_container'>
           <label htmlFor="cover">Carátula del curso</label>
           <input required onChange={onInputChange} type="file" accept='image/*' id='cover' />
@@ -176,19 +145,6 @@ export default function CreateModal({ showModal, setShowModal }) {
           <label htmlFor="video">Vídeo del curso</label>
           <input required onChange={onInputChange} type="file" accept='video/*' id='video' />
         </div>
-        <button onClick={() => setStep(2)}>
-          Paso anterior
-        </button>
-        <button type="submit">
-          Siguiente paso
-        </button>
-      </form>
-    </>
-
-  const stepFour = () =>     
-    <>
-      <p><b>Paso 4: receta del curso</b></p>
-      <form className='modal_form' onSubmit={onCreateCourse} id="5">
         <div className='input_container'>
           <label htmlFor="recipe">Receta del curso</label>
           <select id='recipe' required onChange={onInputChange}>
@@ -200,9 +156,6 @@ export default function CreateModal({ showModal, setShowModal }) {
             }
           </select>
         </div>
-        <button onClick={() => setStep(3)}>
-          Paso anterior
-        </button>
         <button type='submit'>
           Crear curso
         </button>
@@ -235,14 +188,8 @@ export default function CreateModal({ showModal, setShowModal }) {
     <Modal showModal={showModal} setShowModal={setShowModal}>
       <h1>Crea un nuevo Curso</h1>
       {
-        step == 1 
-        ? stepOne()
-        : step == 2
-        ? stepTwo()
-        : step == 3
-        ? stepThree()
-        : step == 4 
-        ? stepFour()
+        !creating 
+        ? createForm()
         : courseResponse()
       }
     </Modal>
