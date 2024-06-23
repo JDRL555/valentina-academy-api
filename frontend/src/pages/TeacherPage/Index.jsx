@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-import { fetchToApi } from '../../services/api'
-import { BACKEND_ROUTES } from '../../constants/routes'
+import { fetchToApi } from '@api'
+import { BACKEND_ROUTES } from '@constants/routes'
 
 import TeacherPage from './TeacherPage'
 

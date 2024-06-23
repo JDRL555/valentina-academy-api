@@ -1,6 +1,6 @@
 import { ContextApp } from '../context/ContextApp'
 import { useContext } from 'react'
-import "../styles/Header.css"
+import "@styles/Header.css"
 
 export default function Header({ setCategory }) {
   const { user } = useContext(ContextApp)

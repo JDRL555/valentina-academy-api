@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable react/prop-types */
-import "../styles/Courses.css"
+import "@styles/Courses.css"
 
 export default function Courses({children, setCategory}) {
   return (

@@ -1,4 +1,4 @@
-import "../styles/Carousel.css"
+import "@styles/Carousel.css"
 
 export default function Carousel({children}) {
   

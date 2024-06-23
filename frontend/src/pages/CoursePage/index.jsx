@@ -5,11 +5,11 @@ import { useParams, useNavigate } from 'react-router-dom'
 
 import PayCoursePage from './PayCoursePage'
 import CoursePage from './CoursePage'
-import PayCourseSkeleton from '../../components/skeletons/PayCourseSkeleton'
+import PayCourseSkeleton from '@components/skeletons/PayCourseSkeleton'
 
 import { ContextApp } from '../../context/ContextApp'
-import { BACKEND_ROUTES } from '../../constants/routes'
-import { fetchToApi } from '../../services/api'
+import { BACKEND_ROUTES } from '@constants/routes'
+import { fetchToApi } from '@api'
 
 export default function Index({ setCompleted }) {
   const { id } = useParams()

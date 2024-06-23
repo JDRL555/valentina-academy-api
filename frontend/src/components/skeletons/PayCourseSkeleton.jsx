@@ -1,8 +1,8 @@
-import Navbar from '../../components/Navbar'
+import Navbar from '@components/Navbar'
 
-import img from '../../assets/img.png'
+import img from '@assets/img.png'
 
-import '../../styles/PayCourseSkeleton.css'
+import '@styles/PayCourseSkeleton.css'
 
 export default function PayCoursePage() {
   return (

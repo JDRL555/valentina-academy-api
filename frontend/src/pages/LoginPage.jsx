@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { fetchToApi } from '../services/api'
+import { fetchToApi } from '@api'
 
 import { translateError } from '../utils/errorTranslate'
 
-import { COLORS } from '../constants/message'
-import { BACKEND_ROUTES } from '../constants/routes'
+import { COLORS } from '@constants/message'
+import { BACKEND_ROUTES } from '@constants/routes'
 
 import { useCookies } from 'react-cookie'
 
-import "../styles/Login.css"
+import "@styles/Login.css"
 
 export default function LoginPage() {
     

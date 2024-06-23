@@ -4,10 +4,10 @@ import { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 
-import { BACKEND_ROUTES } from '../constants/routes'
+import { BACKEND_ROUTES } from '@constants/routes'
 
 import { ContextApp } from '../context/ContextApp'
-import { fetchToApi } from '../services/api'
+import { fetchToApi } from '@api'
 
 export default function IsAuthorized({ children }) {
   const [token] = useCookies(["access_token"])

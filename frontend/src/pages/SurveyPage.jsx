@@ -2,15 +2,15 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useTimer } from 'react-timer-hook'
 
-import Survey from '../components/Survey'
+import Survey from '@components/Survey'
 
-import { fetchToApi } from '../services/api'
+import { fetchToApi } from '@api'
 
-import { COLORS } from '../constants/message'
-import { BACKEND_ROUTES } from '../constants/routes'
+import { COLORS } from '@constants/message'
+import { BACKEND_ROUTES } from '@constants/routes'
 
 
-import "../styles/SurveyPage.css"
+import "@styles/SurveyPage.css"
 
 export default function SurveyPage() {
 

@@ -3,18 +3,18 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
-import { BACKEND_ROUTES } from '../../constants/routes'
+import { BACKEND_ROUTES } from '@constants/routes'
 
-import { fetchToApi } from '../../services/api'
+import { fetchToApi } from '@api'
 
-import pdfIcon from '../../assets/pdf.png'
+import pdfIcon from '@assets/pdf.png'
 
-import Navbar from '../../components/Navbar'
-import CoursesSkeleton from '../../components/skeletons/CoursesSkeleton'
+import Navbar from '@components/Navbar'
+import CoursesSkeleton from '@components/skeletons/CoursesSkeleton'
 
 import userImg from "../../public/img/usuario.png"
 
-import '../../styles/CoursePage.css'
+import '@styles/CoursePage.css'
 
 export default function CoursePage({ setCompleted }) {
   const [course, setCourse] = useState()

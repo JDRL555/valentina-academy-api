@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react'
 
-import { BACKEND_ROUTES } from '../constants/routes.js'
+import { BACKEND_ROUTES } from '@constants/routes.js'
 
-import { fetchToApi } from '../services/api.js'
+import { fetchToApi } from '@api'
 
-import Navbar         from '../components/Navbar.jsx'
-import Header         from "../components/Header.jsx"
-import Footer         from "../components/Footer.jsx"
-import Courses        from "../components/Courses.jsx"
-import Course         from "../components/Course.jsx"
+import Navbar         from '@components/Navbar.jsx'
+import Header         from "@components/Header.jsx"
+import Footer         from "@components/Footer.jsx"
+import Courses        from "@components/Courses.jsx"
+import Course         from "@components/Course.jsx"
 
-import CourseSkeleton from '../components/skeletons/CourseSkeleton.jsx'
+import CourseSkeleton from '@components/skeletons/CourseSkeleton.jsx'
 
 export default function HomePage() {
 

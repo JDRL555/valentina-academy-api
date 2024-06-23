@@ -3,12 +3,12 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { translateError } from '../utils/errorTranslate'
 
-import { fetchToApi } from '../services/api'
+import { fetchToApi } from '@api'
 
-import { COLORS } from '../constants/message'
-import { BACKEND_ROUTES } from '../constants/routes'
+import { COLORS } from '@constants/message'
+import { BACKEND_ROUTES } from '@constants/routes'
 
-import "../styles/Register.css"
+import "@styles/Register.css"
 
 export default function RegisterPage() {
 

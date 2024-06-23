@@ -1,4 +1,4 @@
-import "../styles/HeaderCard.css"
+import "@styles/HeaderCard.css"
 export default function HeaderCard({presentation, img}) {
   return (
     <div className="card">

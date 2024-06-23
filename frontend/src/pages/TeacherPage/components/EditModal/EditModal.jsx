@@ -1,4 +1,4 @@
-import Modal from '../Modal/Modal'
+import Modal from '@components/Modal/Modal'
 
 export default function EditModal({ showModal, setShowModal, courseId }) {
   return (

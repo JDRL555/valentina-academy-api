@@ -5,9 +5,9 @@ import CreateModal from './components/CreateModal/CreateModal'
 import EditModal from './components/EditModal/EditModal'
 import DeleteModal from './components/DeleteModal/DeleteModal'
 
-import Navbar from '../../components/Navbar'
+import Navbar from '@components/Navbar'
 
-import "../../styles/TeacherPage.css"
+import "@styles/TeacherPage.css"
 
 export default function TeacherPage({ courses }) {
   const [showCreate, setShowCreate] = useState(false)

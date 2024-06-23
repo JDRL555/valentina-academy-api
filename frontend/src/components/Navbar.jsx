@@ -6,7 +6,7 @@ import { ContextApp } from '../context/ContextApp'
 
 import logo from "../public/img/logo.jpg"
 import userImg from "../public/img/usuario.png"
-import "../styles/Navbar.css"
+import "@styles/Navbar.css"
 
 export default function Navbar() {
   const { user } = useContext(ContextApp)

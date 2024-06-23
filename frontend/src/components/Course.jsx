@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom'
-import "../styles/Course.css"
+import "@styles/Course.css"
 
 export default function Course({id, img, title, description}) {
   const words = description.split(" ")

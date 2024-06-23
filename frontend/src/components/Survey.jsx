@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import "../styles/Survey.css"
+import "@styles/Survey.css"
 
 export default function Survey({ survey }) {
 

@@ -3,15 +3,15 @@
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { fetchToApi } from '../../services/api'
-import { BACKEND_ROUTES } from '../../constants/routes'
+import { fetchToApi } from '@api'
+import { BACKEND_ROUTES } from '@constants/routes'
 import { ContextApp } from '../../context/ContextApp'
 
-import { COLORS } from '../../constants/message'
+import { COLORS } from '@constants/message'
 
-import Navbar from '../../components/Navbar'
+import Navbar from '@components/Navbar'
 
-import '../../styles/PayCoursePage.css'
+import '@styles/PayCoursePage.css'
 
 export default function PayCoursePage({ course }) {
   const { user } = useContext(ContextApp)
