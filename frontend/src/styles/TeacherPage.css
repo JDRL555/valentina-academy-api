@@ -68,22 +68,43 @@
   transition: .3s;
 }
 
-.teacher_details h2 {
+.teacher_details h2,
+.teacher_recipe h2 {
   padding-bottom: 10px;
   text-align: center;
 }
 
 .teacher_info {
   display: flex;
-  opacity: 0;
-  margin-top: 25px;
   justify-content: space-around;
-  transition: .3s;
-  animation: fade-out .5s forwards;
 }
 
 .teacher_info p {
   margin: 10px 0;
+}
+
+.teacher_info_container {
+  opacity: 0;
+  margin-top: 25px;
+  transition: .3s;
+  animation: fade-out .5s forwards;
+}
+
+.teacher_details {
+  width: 30%;
+}
+
+.teacher_recipe {
+  width: 70%;
+}
+
+.teacher_recipe_details {
+  display: flex;
+  gap: 20px;
+}
+
+.teacher_recipe_details li {
+  padding: 5px;
 }
 
 .teacher_multimedia_container h2 {
@@ -95,6 +116,7 @@
 .teacher_multimedia {
   display: flex;
   align-items: center;
+  justify-content: space-around;
   gap: 10px;
 }
 
@@ -105,7 +127,7 @@
 
 @keyframes fade-out {
   from {
-    display: flex;
+    display: block;
     visibility: visible;
     opacity: 1;
   }
@@ -119,7 +141,7 @@
 
 @keyframes fade-in {
   to {
-    display: flex;
+    display: block;
     opacity: 1;
   }
 }

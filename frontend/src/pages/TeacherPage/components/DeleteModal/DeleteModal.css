@@ -1,0 +1,33 @@
+.teacher_deleting_container {
+  text-align: center;
+}
+
+.teacher_btn_container {
+  margin: auto;
+  width: 70%;
+}
+
+.teacher_delete_btn,
+.teacher_cancel_btn {
+  padding: 15px;
+  font-size: 18px;
+  margin: 10px;
+  background-color: var(--dark-color);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.teacher_delete_btn:hover {
+  background-color: rgb(233, 35, 35);
+  border: 1px solid var(--dark-color);
+  color: white;
+}
+
+.teacher_cancel_btn:hover {
+  background-color: rgb(48, 35, 233);
+  border: 1px solid var(--dark-color);
+  color: white;
+}

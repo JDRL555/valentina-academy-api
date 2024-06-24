@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import video from '@assets/video_loading.png'
 import error from '@assets/error.png'
@@ -12,12 +12,15 @@ import Modal from '@components/Modal/Modal'
 
 import "./CreateModal.css"
 
-export default function CreateModal({ showModal, setShowModal }) {
+export default function CreateModal({ 
+  showModal,
+  setShowModal, 
+  categories,
+  users,
+  recipes, 
+}) {
   const [creating, setCreating] = useState(false)
 
-  const [categories, setCategories] = useState([])
-  const [users, setUsers] = useState([])
-  const [recipes, setRecipes] = useState([])
   const [newCourse, setNewCourse] = useState({
     title: "",
     description: "",
@@ -41,131 +44,6 @@ export default function CreateModal({ showModal, setShowModal }) {
       setNewCourse({ ...newCourse, [e.target.id]: e.target.value })
     }
   }
-
-  const inputs = [
-    { 
-      label: "Título del curso",
-      value: "", 
-      id: "title",
-      type: "text",
-      onChange: onInputChange,
-      required: true,
-      options: []
-    },
-    { 
-      label: "Descripción del curso",
-      value: "", 
-      id: "description",
-      type: "textarea",
-      onChange: onInputChange,
-      required: true,
-      options: []
-    },
-    { 
-      label: "Duración del curso",
-      value: "", 
-      id: "duration",
-      type: "time",
-      onChange: onInputChange,
-      required: true,
-      options: []
-    },
-    { 
-      label: "Precio del curso",
-      value: "", 
-      id: "price",
-      type: "number",
-      onChange: onInputChange,
-      required: true,
-      options: []
-    },
-    { 
-      label: "Categoría del curso",
-      value: "", 
-      id: "category",
-      type: "select",
-      onChange: onInputChange,
-      required: true,
-      options: []
-    },
-    { 
-      label: "Autor del curso",
-      value: "", 
-      id: "user",
-      type: "select",
-      onChange: onInputChange,
-      required: true,
-      options: []
-    },
-    { 
-      label: "Carátula del curso",
-      value: "", 
-      id: "cover",
-      type: "file",
-      onChange: onInputChange,
-      required: true,
-      options: []
-    },
-    { 
-      label: "Video del curso",
-      value: "", 
-      id: "video",
-      type: "file",
-      onChange: onInputChange,
-      required: true,
-      options: []
-    },
-    { 
-      label: "Receta del curso",
-      value: "", 
-      id: "recipe",
-      type: "select",
-      onChange: onInputChange,
-      required: true,
-      options: []
-    },
-  ]
-
-  useEffect(() => {
-    async function getCourseInfo() {
-      const categoriesResponse = await fetchToApi(BACKEND_ROUTES.categories)
-      const usersResponse = await fetchToApi(BACKEND_ROUTES.users)
-      const recipesResponse = await fetchToApi(BACKEND_ROUTES.recipes)
-      setCategories(categoriesResponse)
-      setUsers(usersResponse)
-      setRecipes(recipesResponse)
-
-      categories.map(
-        category => inputs[4].options.push(
-          { 
-            value: category.id, 
-            label: category.name 
-          }
-        )
-      )
-
-      users.map(
-        user => inputs[5].options.push(
-          { 
-            value: user.id, 
-            label: `${user.first_name} ${user.last_name}` 
-          }
-        )
-      )
-
-      recipes.map(
-        recipe => inputs[9].options.push(
-          { 
-            value: recipe.id, 
-            label: recipe.name 
-          }
-        )
-      )
-    }
-    getCourseInfo()
-  }, [])
-
-  
 
   const onCreateCourse = async e => {
     setCreating(true)
