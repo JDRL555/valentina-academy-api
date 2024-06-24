@@ -500,9 +500,7 @@ class CourseMediaViewSet(ModelViewSet):
   serializer_class = CourseMediaSerializer
   trailing_slash = False
   
-  @action(detail=False, methods=['POST'])
-  def create_media(self, request):
-    
+  def create(self, request):
     cover = request.FILES.get("cover")
     video = request.FILES.get("video")
     
@@ -523,6 +521,35 @@ class CourseMediaViewSet(ModelViewSet):
     if serializer.is_valid():
       serializer.save()
       return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+  
+  def partial_update(self, request, pk):
+    cover = request.FILES.get("cover")
+    video = request.FILES.get("video")
+    
+    global cover_response
+    global video_response
+    
+    try:
+      cover_response = cloudinary.uploader.upload(file=cover, resource_type='image')
+      video_response = cloudinary.uploader.upload(file=video, resource_type='video')
+    except Exception as err:
+      return Response({ "error": f"ERROR: {err}" }, status=400)
+    
+    media = Courses_media.objects.get(id=pk)
+    
+    serializer = CourseMediaSerializer(
+      instance=media,
+      data={
+        "url_cover": cover_response["secure_url"],
+        "url_video": video_response["secure_url"]
+      },
+      partial=True
+    )
+    
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=200)
     return Response(serializer.errors, status=400)
 
 class CategoryViewSet(ModelViewSet):
