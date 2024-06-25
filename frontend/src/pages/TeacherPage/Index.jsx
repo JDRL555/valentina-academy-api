@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react'
 import { fetchToApi } from '@api'
 import { BACKEND_ROUTES } from '@constants/routes'
 
-import TeacherPage from './TeacherPage'
+import Navbar from '@components/Navbar/Navbar'
+
+import CoursesAdmin from '@pages/CoursesAdmin/CoursesAdmin'
 
 export default function Index() {
 
@@ -17,11 +19,10 @@ export default function Index() {
     getCourses()
   }, [])
 
-  if(courses.length == 0) {
-    return <h1>Cargando...</h1>
-  }
-
   return (
-    <TeacherPage courses={courses} />
+    <>
+      <Navbar />
+      <CoursesAdmin courses={courses} />
+    </>
   )
 }

@@ -4,17 +4,17 @@ import { useState }                     from 'react'
 
 import { ContextApp } from './context/ContextApp.jsx'
 
-import HomePage                         from './pages/HomePage.jsx'
-import LandingPage                      from './pages/LandingPage.jsx'
-import NotFoundPage                     from './pages/NotFoundPage.jsx'
-import LoginPage                        from './pages/LoginPage.jsx'
-import RegisterPage                     from './pages/RegisterPage.jsx'
+import HomePage                         from './pages/HomePage/HomePage.jsx'
+import LandingPage                      from './pages/LandingPage/LandingPage.jsx'
+import NotFoundPage                     from './pages/NotFoundPage/NotFoundPage.jsx'
+import LoginPage                        from './pages/LoginPage/LoginPage.jsx'
+import RegisterPage                     from './pages/RegisterPage/RegisterPage.jsx'
 import CoursePage                       from './pages/CoursePage/Index.jsx'
-import SurveyPage                       from './pages/SurveyPage.jsx'
+import SurveyPage                       from './pages/SurveyPage/SurveyPage.jsx'
 import TeacherPage                      from './pages/TeacherPage/Index.jsx'
 
-import IsAuthorized                     from './components/IsAuthorized.jsx'
-import IsCourseCompleted                from './components/IsCourseCompleted.jsx'
+import IsAuthorized                     from './layouts/IsAuthorized/IsAuthorized.jsx'
+import IsCourseCompleted                from './layouts/IsCourseCompleted/IsCourseCompleted.jsx'
 
 import './styles/Global.css'
 
@@ -32,8 +32,14 @@ export default function App() {
     <ContextApp.Provider value={{ user, setUser }}>
       <BrowserRouter>
         <Routes>
-          <Route path="*" element={< NotFoundPage />} />
-          <Route path="/" element={< LandingPage />} />
+          <Route 
+            path="*" 
+            element={< NotFoundPage />} 
+          />
+          <Route 
+            path="/" 
+            element={< LandingPage />} 
+          />
           <Route 
             path="/dashboard" 
             element={
@@ -42,8 +48,14 @@ export default function App() {
               </IsAuthorized>
             } 
           />
-          <Route path="/login" element={< LoginPage />} />
-          <Route path="/register" element={< RegisterPage />} />
+          <Route 
+            path="/login" 
+            element={< LoginPage />} 
+          />
+          <Route 
+            path="/register" 
+            element={< RegisterPage />} 
+          />
           <Route 
             path='/course/:id' 
             element={

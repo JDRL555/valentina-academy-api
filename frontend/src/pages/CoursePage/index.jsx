@@ -3,11 +3,10 @@
 import { useContext, useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
-import PayCoursePage from './PayCoursePage'
-import CoursePage from './CoursePage'
-import PayCourseSkeleton from '@components/skeletons/PayCourseSkeleton'
+import PayCoursePage from './Payment/PayCoursePage'
+import CoursePage from './Course/CoursePage'
 
-import { ContextApp } from '../../context/ContextApp'
+import { ContextApp } from '@context/ContextApp'
 import { BACKEND_ROUTES } from '@constants/routes'
 import { fetchToApi } from '@api'
 
@@ -53,9 +52,6 @@ export default function Index({ setCompleted }) {
   }, [isPurchased])
 
   if(!isPurchased) {
-    if(!course) {
-      return <PayCourseSkeleton />
-    }
     return <PayCoursePage course={course} />
   }
   return <CoursePage setCompleted={setCompleted} /> 
