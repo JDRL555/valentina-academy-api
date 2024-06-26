@@ -13,7 +13,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         recipes = []
-        for recipe in self.queryset:
+        queryset = Recipes.objects.all()  
+        for recipe in queryset:
             recipe_obj =   {
                     "id": str(recipe.id),
                     "name": recipe.name,
