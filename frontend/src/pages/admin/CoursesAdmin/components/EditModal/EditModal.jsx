@@ -10,8 +10,6 @@ import { BACKEND_ROUTES } from '@constants/routes'
 
 import Modal from '@components/Modal/Modal'
 
-import "./EditModal.css"
-
 export default function EditModal({ 
   showModal, 
   setShowModal,  

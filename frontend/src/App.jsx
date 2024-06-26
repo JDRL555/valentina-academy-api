@@ -11,7 +11,12 @@ import LoginPage                        from './pages/LoginPage/LoginPage.jsx'
 import RegisterPage                     from './pages/RegisterPage/RegisterPage.jsx'
 import CoursePage                       from './pages/CoursePage/Index.jsx'
 import SurveyPage                       from './pages/SurveyPage/SurveyPage.jsx'
-import TeacherPage                      from './pages/TeacherPage/Index.jsx'
+
+import AdminPage                        from './pages/AdminPage/AdminPage.jsx'
+import UsersAdmin                       from './pages/admin/UsersAdmin/UsersAdmin.jsx'
+import CoursesAdmin                     from './pages/admin/CoursesAdmin/CoursesAdmin.jsx'
+import RecipesAdmin                     from './pages/admin/RecipesAdmin/RecipesAdmin.jsx'
+
 
 import IsAuthorized                     from './layouts/IsAuthorized/IsAuthorized.jsx'
 import IsCourseCompleted                from './layouts/IsCourseCompleted/IsCourseCompleted.jsx'
@@ -73,10 +78,34 @@ export default function App() {
             }  
           />
           <Route 
-            path='/teacher'
+            path='/courses/admin'
             element={
               <IsAuthorized>
-                <TeacherPage />
+                <CoursesAdmin />
+              </IsAuthorized>
+            }
+          />
+          <Route 
+            path='/users/admin'
+            element={
+              <IsAuthorized>
+                <UsersAdmin />
+              </IsAuthorized>
+            }
+          />
+          <Route 
+            path='/recipes/admin'
+            element={
+              <IsAuthorized>
+                <RecipesAdmin />
+              </IsAuthorized>
+            }
+          />
+          <Route 
+            path='/admin'
+            element={
+              <IsAuthorized>
+                <AdminPage />
               </IsAuthorized>
             }
           />

@@ -10,8 +10,6 @@ import { BACKEND_ROUTES } from '@constants/routes'
 
 import Modal from '@components/Modal/Modal'
 
-import "./CreateModal.css"
-
 export default function CreateModal({ 
   showModal,
   setShowModal, 
@@ -79,7 +77,7 @@ export default function CreateModal({
 
     setShowModal(false)
     setCreating(false)
-    window.location.href = "/teacher"
+    window.location.href = "/courses/admin"
     
   }
 

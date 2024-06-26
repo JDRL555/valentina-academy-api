@@ -31,6 +31,265 @@ body{
   background-attachment: fixed;
 }
 
+.main_content {
+  text-align: center;
+  margin-top: 120px;
+  background-color: var(--opaque-primary-color);
+  padding: 20px;
+}
+
+.modal_form {
+  margin: 20px;
+  max-height: 400px;
+}
+
+.input_container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 15px 0;
+}
+
+.modal_form label {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.modal_form input,
+.modal_form textarea,
+.modal_form select {
+  width: 450px;
+  padding: 5px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: 1px solid var(--dark-color);
+  outline: none;
+}
+
+.modal_form textarea {
+  height: 200px;
+  resize: none;
+}
+
+.modal_form button {
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 18px;
+  border-radius: 10px;
+  background-color: var(--primary-color);
+  border: none;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.modal_form button:hover {
+  background-color: var(--dark-color);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.admin_checks_container {
+  margin-top: 10px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.admin_checks input,
+.admin_checks label {
+  width: 20px;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.admin_steps {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  resize: none;
+}
+
+.admin_steps textarea {
+  width: 95%;
+}
+
+.response_creation {
+  text-align: center;
+  padding: 20px;
+}
+
+.response_creation h1 {
+  font-size: 35px;
+}
+
+.error_icon {
+  width: 100px;
+  background-color: white;
+  border-radius: 100%;
+}
+
+.error_text {
+  color: #db343c;
+  margin: 10px 0;
+}
+
+.admin_container h1 {
+  font-size: 35px;
+  text-align: center;
+}
+
+.admin_card {
+  margin: 10px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: var(--opaque-dark-color);
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: .3s;
+}
+
+.admin_card:hover {
+  background-color: var(--dark-color);
+}
+
+.admin_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin_card h1, .fa-solid {
+  margin: 0 5px;
+  font-size: 30px;
+}
+
+.fa-plus, .fa-minus {
+  padding: 10px;
+  border-radius: 100%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.fa-plus:hover {
+  background-color: #84eb3f;
+  color: white;
+}
+
+.fa-pen-to-square, .fa-trash {
+  transition: .3s;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.fa-pen-to-square:hover {
+  background-color: #3737eb;
+  color: white;
+}
+
+.fa-caret-right {
+  transition: .3s;
+}
+
+.fa-trash:hover,
+.fa-minus:hover {
+  background-color: #eb3737;
+  color: white;
+}
+
+
+.admin_details h2,
+.admin_recipe h2 {
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.admin_info {
+  display: flex;
+  justify-content: space-around;
+}
+
+.admin_info p {
+  margin: 10px 0;
+}
+
+.admin_info_container {
+  opacity: 0;
+  margin-top: 25px;
+  transition: .3s;
+  animation: fade-out .5s forwards;
+}
+
+.admin_details {
+  width: 30%;
+}
+
+.admin_recipe {
+  width: 70%;
+}
+
+.admin_recipe_details {
+  display: flex;
+  gap: 20px;
+}
+
+.admin_recipe_details li {
+  padding: 5px;
+  text-align: left;
+}
+
+.admin_multimedia_container h2 {
+  padding-bottom: 20px;
+  text-align: center;
+  font-size: 25px;
+}
+
+.admin_multimedia {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+.admin_multimedia img,
+.admin_multimedia video {
+  width: 400px;
+}
+
+.admin_deleting_container {
+  text-align: center;
+}
+
+.admin_btn_container {
+  margin: auto;
+  width: 70%;
+}
+
+.admin_delete_btn,
+.admin_cancel_btn {
+  padding: 15px;
+  font-size: 18px;
+  margin: 10px;
+  background-color: var(--dark-color);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.admin_delete_btn:hover {
+  background-color: rgb(233, 35, 35);
+  border: 1px solid var(--dark-color);
+  color: white;
+}
+
+.admin_cancel_btn:hover {
+  background-color: rgb(48, 35, 233);
+  border: 1px solid var(--dark-color);
+  color: white;
+}
+
 @keyframes oscurecer {
   0% {
     filter: brightness(0.5);
@@ -40,5 +299,26 @@ body{
   }
   100% {
     filter: brightness(0.5);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  to {
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  to {
+    display: block;
+    opacity: 1;
   }
 }

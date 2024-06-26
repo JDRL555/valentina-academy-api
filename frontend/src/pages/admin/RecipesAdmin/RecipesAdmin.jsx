@@ -4,43 +4,40 @@ import { useState, useEffect } from 'react'
 import { fetchToApi } from '@api'
 import { BACKEND_ROUTES } from '@constants/routes'
 
-import CoursesAdminSkeleton from './skeleton/CoursesAdminSkeleton'
+import Navbar from '@components/Navbar/Navbar'
+
+import AdminSkeleton from '../skeleton/AdminSkeleton'
 
 import CreateModal from './components/CreateModal/CreateModal'
 import EditModal from './components/EditModal/EditModal'
 import DeleteModal from './components/DeleteModal/DeleteModal'
 
-import "./CoursesAdmin.css"
-
-export default function CoursesAdmin({ courses }) {
+export default function RecipesAdmin() {
   const [showCreate, setShowCreate] = useState(false)
   const [showEdit, setShowEdit] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
-  const [courseId, setCourseId] = useState(0)
+  const [recipeId, setRecipeId] = useState(0)
 
-  const [categories, setCategories] = useState([])
-  const [users, setUsers] = useState([])
   const [recipes, setRecipes] = useState([])
+  const [ingredients, setIngredients] = useState([])
 
   useEffect(() => {
     async function getCourseInfo() {
-      const categoriesResponse = await fetchToApi(BACKEND_ROUTES.categories)
-      const usersResponse = await fetchToApi(BACKEND_ROUTES.users)
       const recipesResponse = await fetchToApi(BACKEND_ROUTES.recipes)
-      setCategories(categoriesResponse)
-      setUsers(usersResponse)
+      const ingredientsResponse = await fetchToApi(BACKEND_ROUTES.ingredients)
       setRecipes(recipesResponse)
+      setIngredients(ingredientsResponse)
     }
     getCourseInfo()
   }, [])
   const animationData = []
 
-  const onCourseClicked = (index) => {
-    const coursesCard = document.querySelectorAll(".teacher_card")
-    const courseCard = coursesCard[index]
+  const onRecipeClicked = (index) => {
+    const recipesCard = document.querySelectorAll(".admin_card")
+    const recipeCard = recipesCard[index]
 
-    const teacherInfo = courseCard.querySelector(".teacher_info_container")
-    const arrow = courseCard.querySelector(".fa-caret-right")
+    const teacherInfo = recipeCard.querySelector(".admin_info_container")
+    const arrow = recipeCard.querySelector(".fa-caret-right")
 
     if(animationData[index].deg == 0 && animationData[index].animation == "fade-out .5s forwards") {
       animationData[index].deg = 90
@@ -53,65 +50,59 @@ export default function CoursesAdmin({ courses }) {
     teacherInfo.style.animation = animationData[index].animation
   }
 
-  if(courses.length == 0) {
-    return <CoursesAdminSkeleton />
+  if(recipes?.length == 0) {
+    return <AdminSkeleton />
   }
 
   return (
     <>
-      <main className='teacher_container'>
+      <Navbar />
+      <main className='main_content'>
         <h1>
-          Administración de cursos 
+          Administración de recetas 
           <i 
             className="fa-solid fa-plus"
             onClick={() => setShowCreate(true)}
           ></i>
         </h1>
         {
-          courses.map((course, index) => {
+          recipes.map((recipe, index) => {
             animationData.push({ deg: 0, animation: "fade-out .5s forwards" })
             return (
-              <section key={index} className='teacher_card' onClick={() => onCourseClicked(index)}>
-                <div className='teacher_header'>
-                  <h1>{course.title}</h1>
+              <section key={index} className='admin_card' onClick={() => onRecipeClicked(index)}>
+                <div className='admin_header'>
+                  <h1>{recipe.name}</h1>
                   <div>
                     <i 
                       className="fa-solid fa-pen-to-square"
                       onClick={() => {
-                        setCourseId(course.id)
+                        setRecipeId(recipe.id)
                         setShowEdit(true)
                       }}
                     ></i>
                     <i 
                       className="fa-solid fa-trash"
                       onClick={() => {
-                        setCourseId(course.id)
+                        setRecipeId(recipe.id)
                         setShowDelete(true)
                       }}  
                     ></i>
                     <i className="fa-solid fa-caret-right"></i>
                   </div>
                 </div>
-                <div className='teacher_info_container'>
-                  <div className='teacher_info'>
-                    <div className='teacher_details'>
-                      <h2>Detalles del curso</h2>
-                      <p><b>Descripción:</b> {course.description}</p>
-                      <p><b>Duración:</b> {course.duration}</p>
-                      <p><b>Categoría:</b> {course.category.name}</p>
-                      <p><b>Autor:</b> {course.user.username}</p>
-                      <p><b>Precio:</b> {course.price}$</p>
+                <div className='admin_info_container'>
+                  <div className='admin_info'>
+                    <div className='admin_details'>
+                      <h2>Detalles de la receta</h2>
+                      <p><b>Descripción:</b> {recipe.description}</p>
                     </div>
-                    <div className='teacher_recipe'>
-                      <h2>Receta</h2>
-                      <h3>{course.recipe.name}</h3>
-                      <p><b>Descripción:</b> {course.recipe.description}</p>
-                      <div className='teacher_recipe_details'>
+                    <div className='admin_recipe'>
+                      <div className='admin_recipe_details'>
                         <div>
                           <h3>Ingredientes</h3>
                           <ul>
                             {
-                              course.recipe.ingredient.map(ingredient => (
+                              recipe.ingredients.map(ingredient => (
                                 <li key={ingredient.id}>{ingredient.name}</li>
                               ))
                             }
@@ -121,20 +112,13 @@ export default function CoursesAdmin({ courses }) {
                         <h3>Pasos</h3>
                           <ul>
                             {
-                              course.recipe.steps.map(step => (
+                              recipe.steps.map(step => (
                                 <li key={step}>{step}</li>
                               ))
                             }
                           </ul>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                  <div className='teacher_multimedia_container'>
-                    <h2>Contenido multimedia</h2>
-                    <div className='teacher_multimedia'>
-                      <img src={course.media.url_cover} alt="" />
-                      <video src={course.media.url_video} controls />
                     </div>
                   </div>
                 </div>
@@ -145,23 +129,19 @@ export default function CoursesAdmin({ courses }) {
       </main>
       <CreateModal 
         showModal={showCreate} 
-        setShowModal={setShowCreate} 
-        categories={categories}
-        users={users}
-        recipes={recipes}
+        setShowModal={setShowCreate}
+        ingredients={ingredients} 
       />
       <EditModal 
         showModal={showEdit} 
-        setShowModal={setShowEdit} 
-        courseId={courseId}
-        categories={categories}
-        users={users}
-        recipes={recipes}
+        setShowModal={setShowEdit}
+        ingredients={ingredients} 
+        recipeId={recipeId}
       />
       <DeleteModal 
         showModal={showDelete}
         setShowModal={setShowDelete}
-        courseId={courseId}
+        recipeId={recipeId}
       />
     </>
   )

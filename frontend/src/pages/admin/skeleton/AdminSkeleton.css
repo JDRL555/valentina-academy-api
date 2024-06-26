@@ -1,15 +1,9 @@
-.teacher_skeleton_container {
-  margin-top: 120px;
-  background-color: var(--opaque-primary-color);
-  padding: 20px;
-}
-
-.teacher_skeleton_container h1 {
+.admin_skeleton_container h1 {
   font-size: 35px;
   text-align: center;
 }
 
-.teacher_skeleton_card {
+.admin_skeleton_card {
   margin: 10px;
   padding: 20px;
   border-radius: 10px;
@@ -21,13 +15,13 @@
   animation-fill-mode: both;
 }
 
-.teacher_skeleton_header {
+.admin_skeleton_header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.teacher_skeleton_card h1, .fa-solid {
+.admin_skeleton_card h1, .fa-solid {
   margin: 0 5px;
   font-size: 30px;
 }
@@ -41,7 +35,7 @@
   color: var(--skeleton-light-color);
 }
 
-.teacher_skeleton_skeleton_title {
+.admin_skeleton_skeleton_title {
   width: 88%;
   height: 40px;
   background-color: var(--skeleton-light-color);

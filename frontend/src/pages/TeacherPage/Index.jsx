@@ -5,7 +5,7 @@ import { BACKEND_ROUTES } from '@constants/routes'
 
 import Navbar from '@components/Navbar/Navbar'
 
-import CoursesAdmin from '@pages/CoursesAdmin/CoursesAdmin'
+import CoursesAdmin from '@pages/admin/CoursesAdmin/CoursesAdmin'
 
 export default function Index() {
 

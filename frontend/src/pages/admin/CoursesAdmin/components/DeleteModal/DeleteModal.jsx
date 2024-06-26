@@ -4,11 +4,9 @@ import { useState } from 'react'
 import { fetchToApi } from '@api'
 import { BACKEND_ROUTES } from '@constants/routes'
 
-import video from '../../../../assets/video_loading.png'
+import video from '@assets/video_loading.png'
 
 import Modal from '@components/Modal/Modal'
-
-import "./DeleteModal.css"
 
 export default function DeleteModal({ showModal, setShowModal, courseId }) {
 
@@ -22,7 +20,7 @@ export default function DeleteModal({ showModal, setShowModal, courseId }) {
         'Content-Type': "application/json"
       }
     })
-    window.location.href = "/teacher"
+    window.location.href = "/admin"
   }
 
   return (
@@ -30,16 +28,16 @@ export default function DeleteModal({ showModal, setShowModal, courseId }) {
       {
         deleting 
         ?
-        <div className='teacher_deleting_container'>
+        <div className='admin_deleting_container'>
           <img src={video} className='course_video_icon_skeleton' />
           <h1>Eliminando curso...</h1>
         </div>
         :
         <>
           <h1>Estas seguro de eliminar el curso?</h1>
-          <div className='teacher_btn_container'>
-            <button className='teacher_cancel_btn' onClick={() => setShowModal(false)}>Cancelar</button>
-            <button className='teacher_delete_btn' onClick={onDelete}>Eliminar</button>
+          <div className='admin_btn_container'>
+            <button className='admin_cancel_btn' onClick={() => setShowModal(false)}>Cancelar</button>
+            <button className='admin_delete_btn' onClick={onDelete}>Eliminar</button>
           </div>
         </>
       }
