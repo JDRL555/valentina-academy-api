@@ -18,9 +18,7 @@ from rest_framework.decorators import permission_classes
 class UsersViewSet(ModelViewSet):
   queryset = User.objects.all()
   serializer_class = UserSerializer
-  permission_classes = [
-     AdminPermission
-  ]
+  permission_classes = []
   
   @action(detail=False, methods=['POST'])
   def login(self, request):

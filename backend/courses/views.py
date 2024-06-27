@@ -1,7 +1,8 @@
 import cloudinary.uploader
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework import viewsets
+from rest_framework import mixins
 
 from django.contrib.auth.models import User
 from django.http import HttpResponse
@@ -23,11 +24,10 @@ from .serializers import CourseSerializer, CourseMediaSerializer, PurchasedCours
 from .models import Courses, Category, Courses_media, Purchased_course
 
 from api.validators import StudentPermission, TeacherPermission, AdminPermission
-from rest_framework.decorators import permission_classes
 
-class CourseViewSet(ModelViewSet):
+class CourseViewSet(viewsets.ModelViewSet):
   permission_classes = [
-    StudentPermission | TeacherPermission
+    StudentPermission | TeacherPermission | AdminPermission
   ]
   queryset = Courses.objects.select_related("user", "category", "media")
   serializer_class = CourseSerializer
@@ -170,9 +170,13 @@ class CourseViewSet(ModelViewSet):
     }
     
     return Response(course)
-
-  @action(detail=False, methods=['POST'])
-  def export_certificate(self, request):
+  
+class CourseCertificateViewSet(viewsets.ViewSet):
+  permission_classes = [
+    StudentPermission
+  ]
+  
+  def create(self, request):
     datos = User.objects.all()
 
     current_dir = os.path.dirname(__file__)
@@ -195,7 +199,7 @@ class CourseViewSet(ModelViewSet):
 
     return HttpResponse(content_type='application/pdf')
 
-class PurchasedCourseViewSet(ModelViewSet):
+class PurchasedCourseViewSet(viewsets.ModelViewSet):
   permission_classes = [
     StudentPermission | TeacherPermission
   ]
@@ -259,8 +263,7 @@ class PurchasedCourseViewSet(ModelViewSet):
     
     return Response(queryset)
   
-  @action(detail=False, methods=['POST'])
-  def subscribe(self, request):
+  def create(self, request):
     global course
     global user
     
@@ -333,7 +336,7 @@ class PurchasedCourseViewSet(ModelViewSet):
     
     return Response({ "purchased": serializer.data })
     
-class CourseMediaViewSet(ModelViewSet):
+class CourseMediaViewSet(viewsets.ModelViewSet):
   # permission_classes = [TeacherPermission]
   queryset = Courses_media.objects.all()
   serializer_class = CourseMediaSerializer
@@ -391,7 +394,7 @@ class CourseMediaViewSet(ModelViewSet):
       return Response(serializer.data, status=200)
     return Response(serializer.errors, status=400)
 
-class CategoryViewSet(ModelViewSet):
+class CategoryViewSet(viewsets.ModelViewSet):
   # permission_classes = [TeacherPermission]
   queryset = Category.objects.all()
   serializer_class = CategorySerializer

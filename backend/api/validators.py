@@ -9,9 +9,7 @@ class StudentPermission(permissions.BasePermission):
             return False
         if not has_role(request.user, Student):
             return False
-        if not has_permission(request.user, 'get_courses'):
-            return False
-        if not request.method in SAFE_METHODS:
+        if request.path != "/courses/export_certificate/" and not request.method in SAFE_METHODS:
             return False
         return True
 
