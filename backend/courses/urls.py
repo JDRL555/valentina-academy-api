@@ -1,16 +1,21 @@
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
-from .views import CourseViewSet, PurchasedCourseViewSet, CourseMediaViewSet, CategoryViewSet
+from courses import views
 
 router = SimpleRouter()
-router.register(r"courses", CourseViewSet)
-router.register(r"purchased", PurchasedCourseViewSet)
-router.register(r"courses_media", CourseMediaViewSet)
-router.register(r"category", CategoryViewSet)
+router.register(r"courses", views.CourseViewSet)
+router.register(r"purchased", views.PurchasedCourseViewSet)
+router.register(r"courses_media", views.CourseMediaViewSet)
+router.register(r"category", views.CategoryViewSet)
 
 urlpatterns = [
-  path("courses/subscribe/", PurchasedCourseViewSet.as_view({ "post": "subscribe" }), name="subscribe"),
-  path("courses/export_certificate/", CourseViewSet.as_view({ "post": "export_certificate" }), name="pdf"),
-  path("courses/complete/", PurchasedCourseViewSet.as_view({ "post": "complete_course" }), name="complete")
+  path(
+    "courses/export_certificate/", 
+    views.CourseCertificateViewSet.as_view({ "post": "create" }), name="pdf"
+  ),
+  path(
+    "courses/complete/", 
+    views.PurchasedCourseViewSet.as_view({ "post": "complete_course" }), name="complete"
+  )
 ] + router.urls

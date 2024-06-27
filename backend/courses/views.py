@@ -1,7 +1,8 @@
 import cloudinary.uploader
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework import viewsets
+from rest_framework import mixins
 
 from django.contrib.auth.models import User
 from django.http import HttpResponse
@@ -22,176 +23,12 @@ from .serializers import CourseSerializer, CourseMediaSerializer, PurchasedCours
 
 from .models import Courses, Category, Courses_media, Purchased_course
 
-from users.validators import StudentPermission, TeacherPermission
+from api.validators import StudentPermission, TeacherPermission, AdminPermission
 
-
-# Create your views here.
-
-# class CourseGet(ReadOnlyModelViewSet):
-#   permission_classes = [StudentPermission]
-#   queryset = Courses.objects.all()
-#   serializer_class = CourseSerializer
-#   trailing_slash = False
-
-#   def list(self, request):
-#     global queryset
-#     if request.query_params:
-#       filter_q = Q()
-#       for key, value in request.query_params.items():
-        
-#         related_fields = { 
-#           "user": int, 
-#           "category": int, 
-#           "media": int, 
-#           "recipe": str 
-#         }
-        
-#         if hasattr(Courses, key):
-#           if key in related_fields.keys():
-            
-#             try:
-#               value = int(value)
-#             except:
-#               pass
-            
-#             if type(value) == related_fields[key]:
-#               filter_q &= Q(**{key: value})
-#             else:
-#               return Response(
-#                 { "error": f"El filtro {value} no coincide con el valor {related_fields[key]}" },
-#                 status=400
-#               )
-#           else:
-#             filter_q &= Q(**{key: value[0]})
-#         else:
-#           return Response({ "error": "Columna no encontrada a filtrar" }, status=400)
-        
-#       queryset = list(self.queryset.filter(filter_q).values())
-#     else:
-#       queryset = list(self.queryset.values())
-      
-#     if len(queryset) == 0:
-#       return Response(queryset)
-
-#     for course in queryset:
-#       user = User.objects.get(id=course["user_id"])
-#       category = Category.objects.get(id=course["category_id"])
-#       media = Courses_media.objects.get(id=course["media_id"])
-#       recipe = Recipes.objects.get(id=course["recipe"])
-      
-#       course["user"] = {
-#         "id": user.id,
-#         "username": user.username,
-#         "email": user.email,
-#       }
-      
-#       course["category"] = {
-#         "id": category.id,
-#         "name": category.name,
-#       }
-      
-#       course["media"] = {
-#         "id": media.id,
-#         "url_cover": media.url_cover,
-#         "url_video": media.url_video,
-#       }
-      
-#       course["recipe"] = {
-#         "id": str(recipe.id),
-#         "name": recipe.name,
-#         "description": recipe.description,
-#         "steps": recipe.steps,
-#         "ingredient": [
-#           { 
-#             "id": str(ingredient.id), 
-#             "name": ingredient.name 
-#           } for ingredient in recipe.ingredient
-#         ],
-#       }
-      
-#       del course["user_id"]
-#       del course["category_id"]
-#       del course["media_id"]
-      
-#     return Response(queryset)
-
-# class PurchasedGet(ReadOnlyModelViewSet):
-#   permission_classes = [StudentPermission]
-#   queryset = Purchased_course.objects.all()
-#   serializer_class = PurchasedCourseSerializer
-#   trailing_slash = False
-
-#   def list(self, request):
-#     global queryset
-#     if request.query_params:
-#       filter_q = Q()
-#       for key, value in request.query_params.items():
-        
-#         related_fields = { 
-#           "user_id": int 
-#         }
-        
-#         if hasattr(Purchased_course, key):
-#           if key in related_fields.keys():
-#             try:
-#               value = int(value)
-#             except:
-#               pass
-            
-#             if type(value) == related_fields[key]:
-#               filter_q &= Q(**{key: value})
-#             else:
-#               return Response(
-#                 { "error": f"El filtro {value} no coincide con el valor {related_fields[key]}" },
-#                 status=400
-#               )
-#           else:
-#             filter_q &= Q(**{key: value[0]})
-#         else:
-#           return Response({ "error": "Columna no encontrada a filtrar" }, status=400)
-        
-#       queryset = list(self.queryset.filter(filter_q).values())
-#     else:
-#       queryset = list(self.queryset.values())
-      
-#     if len(queryset) == 0:
-#       return Response(queryset)
-    
-#     for payment in queryset:
-#       course = Courses.objects.get(id=payment["course_id"])
-#       media = Courses_media.objects.get(id=course.media_id)
-      
-#       payment["course"] = {
-#         "id": course.id,
-#         "title": course.title,
-#         "description": course.description,
-#         "price": course.price,
-#         "media": {
-#           "id": media.id,
-#           "url_cover": media.url_cover,
-#           "url_video": media.url_video,
-#         }
-#       }
-      
-#       del payment["course_id"]
-    
-#     return Response(queryset)
-
-# class CourseMediaGet(ReadOnlyModelViewSet):
-#   permission_classes = [StudentPermission]
-#   queryset = Courses_media.objects.all()
-#   serializer_class = CourseMediaSerializer
-#   trailing_slash = False
-
-# class CategoryGet(ReadOnlyModelViewSet):
-#   permission_classes = [StudentPermission]
-#   queryset = Category.objects.all()
-#   serializer_class = CategorySerializer
-#   trailing_slash = False
-
-
-class CourseViewSet(ModelViewSet):
-  # permission_classes = [TeacherPermission]
+class CourseViewSet(viewsets.ModelViewSet):
+  permission_classes = [
+    StudentPermission | TeacherPermission | AdminPermission
+  ]
   queryset = Courses.objects.select_related("user", "category", "media")
   serializer_class = CourseSerializer
   trailing_slash = False
@@ -333,9 +170,13 @@ class CourseViewSet(ModelViewSet):
     }
     
     return Response(course)
-
-  @action(detail=False, methods=['POST'])
-  def export_certificate(self, request):
+  
+class CourseCertificateViewSet(viewsets.ViewSet):
+  permission_classes = [
+    StudentPermission
+  ]
+  
+  def create(self, request):
     datos = User.objects.all()
 
     current_dir = os.path.dirname(__file__)
@@ -358,8 +199,10 @@ class CourseViewSet(ModelViewSet):
 
     return HttpResponse(content_type='application/pdf')
 
-class PurchasedCourseViewSet(ModelViewSet):
-  permission_classes = [TeacherPermission]
+class PurchasedCourseViewSet(viewsets.ModelViewSet):
+  permission_classes = [
+    StudentPermission | TeacherPermission
+  ]
   queryset = Purchased_course.objects.all()
   serializer_class = PurchasedCourseSerializer
   trailing_slash = False
@@ -420,8 +263,7 @@ class PurchasedCourseViewSet(ModelViewSet):
     
     return Response(queryset)
   
-  @action(detail=False, methods=['POST'])
-  def subscribe(self, request):
+  def create(self, request):
     global course
     global user
     
@@ -494,8 +336,8 @@ class PurchasedCourseViewSet(ModelViewSet):
     
     return Response({ "purchased": serializer.data })
     
-class CourseMediaViewSet(ModelViewSet):
-  permission_classes = [TeacherPermission]
+class CourseMediaViewSet(viewsets.ModelViewSet):
+  # permission_classes = [TeacherPermission]
   queryset = Courses_media.objects.all()
   serializer_class = CourseMediaSerializer
   trailing_slash = False
@@ -552,8 +394,8 @@ class CourseMediaViewSet(ModelViewSet):
       return Response(serializer.data, status=200)
     return Response(serializer.errors, status=400)
 
-class CategoryViewSet(ModelViewSet):
-  permission_classes = [TeacherPermission]
+class CategoryViewSet(viewsets.ModelViewSet):
+  # permission_classes = [TeacherPermission]
   queryset = Category.objects.all()
   serializer_class = CategorySerializer
   trailing_slash = False

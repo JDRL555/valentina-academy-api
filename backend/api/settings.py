@@ -40,6 +40,7 @@ THIRD_PART_APPS = [
     'rest_framework.authtoken',
     'rest_framework_mongoengine',
     'corsheaders',
+    'rolepermissions',
 ]
 
 PROJECT_APPS = [
@@ -162,12 +163,14 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        # 'rest_authtoken.auth.AuthTokenAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.permissions.BasePermission',
-        # 'rest_framework.authentication.SessionAuthentication',
-    ]
+   'DEFAULT_AUTHENTICATION_CLASSES': (
+       'rest_framework.authentication.TokenAuthentication',
+   ),
+   'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAdminUser'
+   )
 }
+
+ROLEPERMISSIONS_MODULE = 'api.roles'
 
 APPEND_SLASH = False
