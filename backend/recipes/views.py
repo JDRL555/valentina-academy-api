@@ -40,7 +40,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         obj = self.get_object()
         serializer = self.get_serializer(obj)
         recipe_obj = serializer.data
-        recipe_obj["ingredient"] = []
+        recipe_obj["ingredients"] = []
 
         for ingredient_obj in recipe_obj["ingredient"]:
             try:
