@@ -21,39 +21,77 @@ export default function EditModal({
   const [recipe, setRecipe] = useState({
     name: "",
     description: "",
-    ingredient: [],
+    ingredients: [],
     steps: []
   })
   const [courseStatus, setRecipeStatus] = useState({ status: null, error: "" })
 
   useEffect(() => {
     async function getRecipeInfo() {
-      setRecipe({})
-      const recipeResponse = await fetchToApi(`${BACKEND_ROUTES.recipes}/${recipeId}`)
-      setRecipe(recipeResponse)
-    }
+      if(showModal) {
+        setRecipe({})
+        const recipeResponse = await fetchToApi(`${BACKEND_ROUTES.recipes}/${recipeId}`)
+        setRecipe(recipeResponse)
+      } else {
+        setUpdating(false)
+      }
+    } 
     getRecipeInfo()
-  }, [])
+  }, [showModal])
 
   const onInputChange = e => {
     setRecipe({ ...recipe, [e.target.id]: e.target.value })
   }
 
+  const onIngredientsChange = (e) => {
+    const updatedIngredients = [...recipe.ingredients];
+    const ingredientId = e.target.id;
+
+    if (e.target.checked) {
+      if (!updatedIngredients.find((i) => i.id === ingredientId)) {
+        updatedIngredients.push({ id: ingredientId })
+      }
+    } else {
+      const ingredientIndex = updatedIngredients.findIndex((i) => i.id === ingredientId);
+      if (ingredientIndex !== -1) {
+        updatedIngredients.splice(ingredientIndex, 1)
+      }
+    }
+
+    setRecipe({ ...recipe, ingredients: updatedIngredients })
+  };
+
+
   const onStepChange = e => {
-    setRecipe({ 
-      ...recipe, 
-      steps: recipe.steps.map(
-        (step, index) => 
-          index === parseInt(e.target.value) - 1 ? e.target.value : step
-      ) 
-    })
+    const newSteps = recipe.steps
+    newSteps[e.target.id] = e.target.value
+
+    setRecipe({ ...recipe, steps: newSteps })
+  }
+
+  const onDeleteStep = () => {
+    if(recipe.steps.length !== 1) {
+      const newSteps = recipe.steps
+      newSteps.pop()
+      setRecipe({ ...recipe, steps: newSteps })
+    }
+  }
+
+  const onAddStep = () => {
+    const newSteps = recipe.steps
+    newSteps.push("")
+    setRecipe({ ...recipe, steps: newSteps })
   }
 
   const onEditRecipe = async e => {
     setUpdating(true)
     e.preventDefault()
 
-    const recipeResponse = await fetchToApi(BACKEND_ROUTES.recipes, {
+    const newIngredients = recipe.ingredients.map(ingredient => ingredient.id)
+
+    setRecipe({ ...recipe, ingredients: newIngredients })
+
+    const recipeResponse = await fetchToApi(`${BACKEND_ROUTES.recipes}/${recipeId}`, {
       method: "PATCH",
       body: JSON.stringify(recipe),
       headers: {
@@ -82,13 +120,13 @@ export default function EditModal({
     <>
       <form className='modal_form' onSubmit={onEditRecipe}>
         <div className='input_container'>
-          <label htmlFor="title">Nombre de la receta</label>
+          <label htmlFor="name">Nombre de la receta</label>
           <input 
             required 
             onChange={onInputChange}
-            value={recipe.name} 
+            defaultValue={recipe.name} 
             type="text" 
-            id='title' 
+            id='name' 
           />
         </div>
         <div className='input_container'>
@@ -96,7 +134,7 @@ export default function EditModal({
           <textarea 
             required 
             onChange={onInputChange}
-            value={recipe.description} 
+            defaultValue={recipe.description} 
             id='description' 
           />
         </div>
@@ -106,41 +144,43 @@ export default function EditModal({
             {
               ingredients.map(ingredient => (
                 <div key={ingredient.id} className='admin_checks'>
-                  <label htmlFor={ingredient.name}>{ingredient.name}</label>
                   <input 
                     key={ingredient.id} 
                     type="checkbox" 
-                    id={ingredient.name} 
-                    checked={
-                      recipe.ingredient?.map(ingredientRecipe => ingredientRecipe.name).includes(ingredient.name)
-                    }
+                    id={ingredient.id} 
+                    checked={recipe.ingredients?.some((i) => i.id === ingredient.id)}
+                    onChange={onIngredientsChange}
                   />
+                  <label htmlFor={ingredient.id}>{ingredient.name}</label>
                 </div>
               ))
             }
           </div>
         </div>
-        <div className='input_container'>
+        <div>
           <label htmlFor="steps">
             Pasos de la receta
             <i 
               className="fa-solid fa-plus"
-              onClick={() => setSteps(steps + 1)}
+              onClick={onAddStep}
+            ></i>
+            <i 
+              className="fa-solid fa-minus"
+              onClick={onDeleteStep}
             ></i>
           </label>
           <div>
             {
-              [recipe.steps].map(step => (
-                <>
-                  <label htmlFor={step}>{step}</label>
-                  <input 
+              recipe.steps?.map((step, index) => (
+                <div key={index} className='admin_steps'>
+                  <label htmlFor={index}>{index + 1}</label>
+                  <textarea 
                     required 
-                    onChange={onStepChange}
-                    value={step} 
-                    type="text" 
-                    id={step} 
+                    onChange={onStepChange} 
+                    defaultValue={step}
+                    id={index} 
                   />
-                </>
+                </div>
               ))
             }
           </div>
@@ -152,14 +192,14 @@ export default function EditModal({
     </>
 
   const recipeResponse = () => 
-    <div className='course_response'>
+    <div className='response'>
       {
         courseStatus.status === null
         ?
         (
           <>
             <img src={video} className='course_video_icon_skeleton' />
-            <h1>Creando receta...</h1>
+            <h1>Actualizando receta...</h1>
           </>
         )
         :

@@ -8,19 +8,19 @@ import video from '@assets/video_loading.png'
 
 import Modal from '@components/Modal/Modal'
 
-export default function DeleteModal({ showModal, setShowModal, courseId }) {
+export default function DeleteModal({ showModal, setShowModal, recipeId }) {
 
   const [deleting, setDeleting] = useState(false)
   
   const onDelete = async () => {
     setDeleting(true)
-    await fetchToApi(`${BACKEND_ROUTES.courses}/${courseId}`, {
+    await fetchToApi(`${BACKEND_ROUTES.recipes}/${recipeId}`, {
       method: "DELETE",
       headers: {
         'Content-Type': "application/json"
       }
     })
-    window.location.href = "/admin"
+    window.location.href = "/recipes/admin"
   }
 
   return (
@@ -30,11 +30,11 @@ export default function DeleteModal({ showModal, setShowModal, courseId }) {
         ?
         <div className='admin_deleting_container'>
           <img src={video} className='course_video_icon_skeleton' />
-          <h1>Eliminando curso...</h1>
+          <h1>Eliminando receta...</h1>
         </div>
         :
         <>
-          <h1>Estas seguro de eliminar el curso?</h1>
+          <h1>Estas seguro de eliminar la receta?</h1>
           <div className='admin_btn_container'>
             <button className='admin_cancel_btn' onClick={() => setShowModal(false)}>Cancelar</button>
             <button className='admin_delete_btn' onClick={onDelete}>Eliminar</button>

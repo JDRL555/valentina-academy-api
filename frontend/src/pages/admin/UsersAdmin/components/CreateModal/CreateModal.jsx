@@ -82,7 +82,7 @@ export default function CreateModal({
     </>
 
   const UserResponse = () => 
-    <div className='response_creation'>
+    <div className='response'>
       {
         UserStatus.status === null
         ?

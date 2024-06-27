@@ -130,7 +130,7 @@ export default function EditModal({
     </>
 
   const userResponse = () => 
-    <div className='user_response'>
+    <div className='response'>
       {
         userStatus.status === null
         ?
