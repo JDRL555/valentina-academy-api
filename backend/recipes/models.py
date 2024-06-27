@@ -10,9 +10,3 @@ class Recipes(Document):
     ingredient = ListField(ReferenceField(Ingredients, dbref=True, multiple=True))
     steps = ListField(StringField(max_length=500))
     created_at = DateTimeField(default=datetime.datetime.now)
-
-
-class Ingredient_recipes(Document):
-    recipes = ReferenceField(Recipes, dbref=True, required=True)
-    ingredients = ReferenceField(Ingredients, dbref=True, required=True)
-    ingredient_quantity = StringField(required=True, max_length=100)
