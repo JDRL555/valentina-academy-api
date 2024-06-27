@@ -35,11 +35,11 @@ class SurveysViewSet(viewsets.ModelViewSet):
                 else:
                     return Response({ "error": "Columna no encontrada a filtrar" }, status=400)
                 
-            queryset = list(self.queryset.filter(filter_q))
+            queryset = list(Surveys.objects().filter(filter_q))
             if len(queryset) == 0:
                 return Response(queryset)
         else:
-            queryset = list(self.queryset)
+            queryset = list(Surveys.objects())
     
         surveys = []
 
@@ -162,8 +162,9 @@ class QuestionsViewSet(viewsets.ModelViewSet):
     
 
     def list(self, request):
+        queryset = Questions.objects()
         questions = []
-        for question in self.queryset:
+        for question in queryset:
             question_obj =   {
                     "id": str(question.id),
                     "question": question.question,
