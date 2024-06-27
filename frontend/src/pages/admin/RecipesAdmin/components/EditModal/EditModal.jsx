@@ -89,11 +89,9 @@ export default function EditModal({
 
     const newIngredients = recipe.ingredients.map(ingredient => ingredient.id)
 
-    setRecipe({ ...recipe, ingredients: newIngredients })
-
     const recipeResponse = await fetchToApi(`${BACKEND_ROUTES.recipes}/${recipeId}`, {
       method: "PATCH",
-      body: JSON.stringify(recipe),
+      body: JSON.stringify({ ...recipe, ingredient: newIngredients }),
       headers: {
         'Content-type': "application/json"
       }

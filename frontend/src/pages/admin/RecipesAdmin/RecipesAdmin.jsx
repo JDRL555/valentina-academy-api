@@ -102,7 +102,7 @@ export default function RecipesAdmin() {
                           <h3>Ingredientes</h3>
                           <ul>
                             {
-                              recipe.ingredients.map(ingredient => (
+                              recipe.ingredients?.map(ingredient => (
                                 <li key={ingredient.id}>{ingredient.name}</li>
                               ))
                             }
@@ -112,7 +112,7 @@ export default function RecipesAdmin() {
                         <h3>Pasos</h3>
                           <ul>
                             {
-                              recipe.steps.map(step => (
+                              recipe.steps?.map(step => (
                                 <li key={step}>{step}</li>
                               ))
                             }
