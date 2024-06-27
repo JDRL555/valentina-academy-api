@@ -8,6 +8,7 @@
 }
 
 .admin_entity {
+  margin: auto;
   width: 45%;
   background-color: var(--opaque-primary-color);
   border-radius: 10px;

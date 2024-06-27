@@ -21,6 +21,9 @@ export default function AdminPage() {
           <Link to={"/recipes/admin"} className='admin_entity'>
             <h1>Recetas</h1>
           </Link>
+          <Link to={"/ingredients/admin"} className='admin_entity'>
+            <h1>Ingredientes</h1>
+          </Link>
           <Link to={"/surveys/admin"} className='admin_entity'>
             <h1>Encuestas</h1>
           </Link>

@@ -16,6 +16,7 @@ import AdminPage                        from './pages/AdminPage/AdminPage.jsx'
 import UsersAdmin                       from './pages/admin/UsersAdmin/UsersAdmin.jsx'
 import CoursesAdmin                     from './pages/admin/CoursesAdmin/CoursesAdmin.jsx'
 import RecipesAdmin                     from './pages/admin/RecipesAdmin/RecipesAdmin.jsx'
+import IngredientsAdmin                 from './pages/admin/IngredientsAdmin/IngredientsAdmin.jsx'
 
 
 import IsAuthorized                     from './layouts/IsAuthorized/IsAuthorized.jsx'
@@ -98,6 +99,14 @@ export default function App() {
             element={
               <IsAuthorized>
                 <RecipesAdmin />
+              </IsAuthorized>
+            }
+          />
+          <Route 
+            path='/ingredients/admin'
+            element={
+              <IsAuthorized>
+                <IngredientsAdmin />
               </IsAuthorized>
             }
           />
