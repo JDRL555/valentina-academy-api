@@ -6,11 +6,11 @@ import { ContextApp } from './context/ContextApp.jsx'
 
 import HomePage                         from './pages/HomePage/HomePage.jsx'
 import LandingPage                      from './pages/LandingPage/LandingPage.jsx'
-import NotFoundPage                     from './pages/NotFoundPage/NotFoundPage.jsx'
 import LoginPage                        from './pages/LoginPage/LoginPage.jsx'
 import RegisterPage                     from './pages/RegisterPage/RegisterPage.jsx'
 import CoursePage                       from './pages/CoursePage/Index.jsx'
 import SurveyPage                       from './pages/SurveyPage/SurveyPage.jsx'
+import NotFoundPage                     from './pages/NotFoundPage/NotFoundPage.jsx'
 
 import AdminPage                        from './pages/AdminPage/AdminPage.jsx'
 import UsersAdmin                       from './pages/admin/UsersAdmin/UsersAdmin.jsx'
