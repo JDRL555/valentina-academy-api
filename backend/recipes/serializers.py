@@ -9,10 +9,6 @@ class IngredientSerializer(serializers.DocumentSerializer):
         model = Ingredients
         fields = '__all__'
 
-class RecipeIngredientSerializer(serializers.DocumentSerializer):
-    name = StringField(source='ingredients.name')
-    quantity = StringField(source='ingredient_quantity')
-
 class RecipeSerializer(serializers.DocumentSerializer):
     class Meta:
         model = Recipes

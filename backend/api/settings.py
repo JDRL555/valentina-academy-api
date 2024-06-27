@@ -36,6 +36,7 @@ DEFAULT_APPS = [
 
 THIRD_PART_APPS = [
     'rest_framework',
+    'rest_authtoken',
     'rest_framework.authtoken',
     'rest_framework_mongoengine',
     'corsheaders',
@@ -159,5 +160,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_WHITELIST = [
     os.environ.get("FRONTEND_URL")
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_authtoken.auth.AuthTokenAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.permissions.BasePermission',
+        # 'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 
 APPEND_SLASH = False

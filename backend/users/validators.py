@@ -1,8 +1,13 @@
-def is_admin(user):
-    return user.groups.filter(name="admin").exists()
-  
-def is_teacher(user):
-    return user.groups.filter(name="teacher").exists()
+from rest_framework import permissions
 
-def is_student(user):
-    return user.groups.filter(name="student").exists()
+class StudentPermission(permissions.BasePermission):
+    def has_permission(self, request, view=None):
+        return request.user.groups.filter(name='student').exists()
+
+class TeacherPermission(permissions.BasePermission):
+    def has_permission(self, request, view=None):
+        return request.user.groups.filter(name='teacher').exists()
+
+class AdminPermission(permissions.BasePermission):
+    def has_permission(self, request, view=None):
+        return request.user.groups.filter(name='admin').exists()
