@@ -11,6 +11,8 @@ from django.db.models import Q
 
 from jinja2 import Environment, FileSystemLoader
 
+import datetime
+
 import pdfkit
 
 import cloudinary
@@ -177,7 +179,28 @@ class CourseCertificateViewSet(viewsets.ViewSet):
   ]
   
   def create(self, request):
-    datos = User.objects.all()
+    global user
+    global course
+    errors = {}
+    
+    if not request.data.get("user_id"):
+      errors["user"] = "El user_id es requerido"
+      
+    if not request.data.get("course_id"):
+      errors["course"] = "El course_id es requerido"
+      
+    if len(errors.keys()) != 0:
+      return Response(errors, status=400)
+    
+    try:
+      user = User.objects.get(id=request.data["user_id"])
+    except:
+      return Response({ "error": "Usuario no encontrado" }, status=404)
+    
+    try:
+      course = Courses.objects.get(id=request.data["course_id"])
+    except:
+      return Response({ "error": "Curso no encontrado" }, status=404)
 
     current_dir = os.path.dirname(__file__)
     template_dir = os.path.join(current_dir,"template")
@@ -186,18 +209,32 @@ class CourseCertificateViewSet(viewsets.ViewSet):
 
     env = Environment(loader=FileSystemLoader(template_dir))
     template = env.get_template("index_pdf.html")
+    
+    today = datetime.datetime.today().strftime('%Y-%m-%d').split("-")
+    
+    day = today[2]
+    month = today[1]
+    year = today[0]
 
     html = template.render({
-      "datos" : datos
+      "user_full_name" : f"{user.first_name} {user.last_name}",
+      "course_title": course.title,
+      "course_author": f"{course.user.first_name} {course.user.last_name}",
+      "day": day,
+      "month": month,
+      "year": year,
     })
 
-    pdfkit.from_string(
+    pdf = pdfkit.from_string(
       html,
-      "certificado.pdf",
+      output_path=False,
       configuration=config
     )
+    
+    response = HttpResponse(content_type='application/pdf')
+    response.write(pdf)
 
-    return HttpResponse(content_type='application/pdf')
+    return response
 
 class PurchasedCourseViewSet(viewsets.ModelViewSet):
   permission_classes = [
