@@ -238,7 +238,7 @@ class CourseCertificateViewSet(viewsets.ViewSet):
 
 class PurchasedCourseViewSet(viewsets.ModelViewSet):
   permission_classes = [
-    StudentPermission | TeacherPermission
+    StudentPermission | TeacherPermission | AdminPermission
   ]
   queryset = Purchased_course.objects.all()
   serializer_class = PurchasedCourseSerializer
@@ -334,8 +334,12 @@ class PurchasedCourseViewSet(viewsets.ModelViewSet):
       purchased_serialize.save()
       return Response(purchased_serialize.data, status=201)
     
-  @action(detail=False, methods=['POST'])
-  def complete_course(self, request):
+class CompleteCourseViewsSet(viewsets.ViewSet):
+  permission_classes = [
+    StudentPermission | TeacherPermission | AdminPermission
+  ]
+  serializer_class = PurchasedCourseSerializer
+  def create(self, request):
     
     global course
     global purchased
@@ -374,7 +378,9 @@ class PurchasedCourseViewSet(viewsets.ModelViewSet):
     return Response({ "purchased": serializer.data })
     
 class CourseMediaViewSet(viewsets.ModelViewSet):
-  # permission_classes = [TeacherPermission]
+  permission_classes = [
+    StudentPermission | TeacherPermission | AdminPermission
+  ]
   queryset = Courses_media.objects.all()
   serializer_class = CourseMediaSerializer
   trailing_slash = False
@@ -432,7 +438,9 @@ class CourseMediaViewSet(viewsets.ModelViewSet):
     return Response(serializer.errors, status=400)
 
 class CategoryViewSet(viewsets.ModelViewSet):
-  # permission_classes = [TeacherPermission]
+  permission_classes = [
+    StudentPermission | TeacherPermission | AdminPermission
+  ]
   queryset = Category.objects.all()
   serializer_class = CategorySerializer
   trailing_slash = False
