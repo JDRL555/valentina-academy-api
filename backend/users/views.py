@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.decorators import action
 
 from django.contrib.auth.models import User
@@ -9,9 +9,9 @@ from django.contrib.auth import logout
 
 from .serializers import UserSerializer
 
-from api.validators import AdminPermission
+from api.validators import AdminPermission, StudentPermission
 
-from rolepermissions.roles import assign_role
+from rolepermissions.roles import get_user_roles, assign_role, remove_role
 
 from rest_framework.decorators import permission_classes
 
@@ -91,37 +91,153 @@ class LogoutViewSet(ModelViewSet):
 
       return Response({'message': 'Se a cerrado la session'}, status=status.HTTP_200_OK)
     
-class RolViewSet(ModelViewSet):
-  permission_classes = [AdminPermission]
-  def update(self, request):
+class RolViewSet(ViewSet):
+  permission_classes = [
+    StudentPermission | AdminPermission
+  ]
+  
+  VALID_ROLES = ["student", "teacher", "admin"]
+  
+  def valid_role(self, rol):
+    return rol in self.VALID_ROLES
+  
+  def validate_role_data(self, data):
     errors = {}
     
-    if not request.data.get("role"): 
-      errors["role"] = "El Rol es requerido"
+    if not data.get("role"): 
+      errors["role"] = "El role es requerido"
     
-    if not request.data.get("user_id"):
-      errors["user_id"] = "El id del usuario es requerido"
+    if not data.get("user_id"):
+      errors["user_id"] = "El user_id es requerido"
     
     if len(errors.keys()) != 0:
-      return Response(errors, status=400)
+      return { 
+        "invalid_data": True, 
+        "errors": errors, 
+        "status": 400 
+      }
     
     try:
-      user = User.objects.get(id=request.data["user_id"])
+      User.objects.get(id=data["user_id"])
     except:
-      return Response({ "error": "User no encontrado" }, status=404)
+      return { 
+        "invalid_data": True, 
+        "errors": { "user": "Usuario no encontrado" }, 
+        "status": 404 
+      }
+    
+    if not self.valid_role(data["role"]):
+        return { 
+        "invalid_data": True, 
+        "errors": { "role": "Rol invalido. Seleccione: student, teacher, admin" }, 
+        "status": 400
+      }
+        
+    return {
+      "invalid_data": False,
+      "errors": {},
+      "status": 200
+    }
   
-    if not request.data["role"]:
-      return Response({ "error": "El rol es requerido" }, status=404)
-
-    if request.data["role"] not in ["student","teacher","admin"]:
-      return Response({"selecionar un rol= student, teacher, admin"})
+  def list(self, request, user_id):
+    global user
+    try:
+      user = User.objects.get(id=user_id)
+    except:
+      return Response({ "error": "Usuario no encontrado" }, status=404)
     
-    valid_roles = ["student", "teacher", "admin"]
-    if request.data["role"] not in valid_roles:
-        return Response({"error": "Rol invalido. Seleccione: student, teacher, admin"}, status=status.HTTP_400_BAD_REQUEST)
+    role = get_user_roles(user)
     
-    user.roles.set([request.data["role"]])
-    user.save()
-
-    return Response({"message": "Rol actualizado exitosamente"}, status=status.HTTP_200_OK)
+    if not role:
+      return Response({
+        "role": "El usuario no posee rol"
+      })
+    
+    return Response({ 
+      "user": { 
+        "id": user.id, 
+        "first_name": user.first_name, 
+        "last_name": user.last_name, 
+        "username": user.username, 
+        "email": user.email, 
+      }, 
+      "role": role[0].get_name() 
+    })      
+    
+    
+  def create(self, request):
+    result = self.validate_role_data(request.data)
+    
+    if result["invalid_data"]:
+      return Response({ "error": result["errors"] }, status=result["status"])
+    
+    user = User.objects.get(id=request.data["user_id"])
+    
+    role = get_user_roles(user)
+    
+    if role:
+      if role[0].get_name() == request.data["role"]:
+        return Response(
+          { 
+            "error": f"El usuario ya posee el rol {role[0].get_name()}" 
+          }, 
+          status=400
+        )
       
+      if role[0].get_name():
+        return Response({ "error": "El usuario ya posee un rol" }, status=400)
+      
+    assign_role(user=user, role=request.data["role"])
+
+    return Response({"message": "Rol asignado satisfactoriamente!"})
+
+      
+  def update(self, request):
+    result = self.validate_role_data(request.data)
+    
+    if result["invalid_data"]:
+      return Response({ "error": result["errors"] }, status=result["status"])
+    
+    user = User.objects.get(id=request.data["user_id"])
+    
+    role = get_user_roles(user)
+    
+    if not role:
+      return Response({
+        "role": "El usuario no posee rol"
+      })
+    
+    if role[0].get_name() == request.data["role"]:
+      return Response(
+        { 
+          "error": f"El usuario ya posee el rol {role[0].get_name()}" 
+        }, 
+        status=400
+      )
+    
+    remove_role(user=user, role=role[0].get_name())
+    assign_role(user=user, role=request.data["role"])
+
+    return Response({"message": "Rol asignado satisfactoriamente!"})
+  
+  def destroy(self, request):
+    result = self.validate_role_data(request.data)
+    
+    if result["invalid_data"]:
+      return Response({ "error": result["errors"] }, status=result["status"])
+    
+    user = User.objects.get(id=request.data["user_id"])
+    
+    role = get_user_roles(user)
+    
+    if role[0].get_name() != request.data["role"]:
+      return Response(
+        { 
+          "error": f"El usuario no posee el rol {request.data['role']}" 
+        }, 
+        status=400
+      )
+    
+    remove_role(user=user, role=request.data["role"])
+    
+    return Response(status=204)
