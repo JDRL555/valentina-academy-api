@@ -16,6 +16,6 @@ urlpatterns = [
   ),
   path(
     "courses/complete/", 
-    views.PurchasedCourseViewSet.as_view({ "post": "complete_course" }), name="complete"
+    views.CompleteCourseViewsSet.as_view({ "post": "create" }), name="complete"
   )
 ] + router.urls

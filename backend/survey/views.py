@@ -4,11 +4,16 @@ from rest_framework import status
 
 from mongoengine import Q
 
-from .models import Surveys, Answers, Questions
 from courses.models import Courses
+
+from .models import Surveys, Answers, Questions
 from .serializers import SurveySerializer, QuestionSerializer, AnswersSerializer
+from api.validators import StudentPermission, TeacherPermission, AdminPermission
 
 class SurveysViewSet(viewsets.ModelViewSet):
+    permission_classes = [
+    StudentPermission | TeacherPermission | AdminPermission
+    ]
     queryset = Surveys.objects()
     serializer_class = SurveySerializer
 
@@ -129,6 +134,9 @@ class SurveysViewSet(viewsets.ModelViewSet):
     
 
 class QuestionsViewSet(viewsets.ModelViewSet):
+    permission_classes = [
+    StudentPermission | TeacherPermission | AdminPermission
+    ]
     queryset = Questions.objects()
     serializer_class = QuestionSerializer
 
@@ -205,5 +213,8 @@ class QuestionsViewSet(viewsets.ModelViewSet):
 
 
 class AnswersViewSet(viewsets.ModelViewSet):
+    permission_classes = [
+    StudentPermission | TeacherPermission | AdminPermission
+    ]
     queryset = Answers.objects()
     serializer_class = AnswersSerializer

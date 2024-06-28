@@ -18,10 +18,11 @@ from rest_framework.decorators import permission_classes
 class UsersViewSet(ModelViewSet):
   queryset = User.objects.all()
   serializer_class = UserSerializer
+  permission_classes = [AdminPermission]
+
+class LoginViewSet(ModelViewSet):
   permission_classes = []
-  
-  @action(detail=False, methods=['POST'])
-  def login(self, request):
+  def create(self, request):
     global user
     
     try:
@@ -37,8 +38,9 @@ class UsersViewSet(ModelViewSet):
 
     return Response({"token": token.key, "user": serializer.data}, status=status.HTTP_200_OK)
   
-  @action(detail=False, methods=['POST'])
-  def register(self, request):
+class RegisterViewSet(ModelViewSet):
+  permission_classes = [] 
+  def create(self, request):
     serializer = UserSerializer(data=request.data)
     
     if serializer.is_valid():
@@ -52,9 +54,9 @@ class UsersViewSet(ModelViewSet):
       return Response({"user": serializer.data}, status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-  
-  @action(detail=False, methods=["GET"])
-  def auth_user(self, request, token):
+class Auth_userViewSet(ModelViewSet):
+  permission_classes = []
+  def list(self, request, token):
     try:
       token_object = Token.objects.get(key=token)
       user = token_object.user
@@ -72,9 +74,9 @@ class UsersViewSet(ModelViewSet):
       print(err)
       return Response({ "error": "El token es invalido" }, status=status.HTTP_403_FORBIDDEN)
     
-    
-  @action(detail=False, methods=['POST'])
-  def logout(self, request, token):
+class LogoutViewSet(ModelViewSet):
+  permission_classes = []
+  def create(self, request, token):
       
       if not request.user.is_authenticated:
           return Response({'error': 'Usuario no logeado'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -89,3 +91,37 @@ class UsersViewSet(ModelViewSet):
 
       return Response({'message': 'Se a cerrado la session'}, status=status.HTTP_200_OK)
     
+class RolViewSet(ModelViewSet):
+  permission_classes = [AdminPermission]
+  def update(self, request):
+    errors = {}
+    
+    if not request.data.get("role"): 
+      errors["role"] = "El Rol es requerido"
+    
+    if not request.data.get("user_id"):
+      errors["user_id"] = "El id del usuario es requerido"
+    
+    if len(errors.keys()) != 0:
+      return Response(errors, status=400)
+    
+    try:
+      user = User.objects.get(id=request.data["user_id"])
+    except:
+      return Response({ "error": "User no encontrado" }, status=404)
+  
+    if not request.data["role"]:
+      return Response({ "error": "El rol es requerido" }, status=404)
+
+    if request.data["role"] not in ["student","teacher","admin"]:
+      return Response({"selecionar un rol= student, teacher, admin"})
+    
+    valid_roles = ["student", "teacher", "admin"]
+    if request.data["role"] not in valid_roles:
+        return Response({"error": "Rol invalido. Seleccione: student, teacher, admin"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    user.roles.set([request.data["role"]])
+    user.save()
+
+    return Response({"message": "Rol actualizado exitosamente"}, status=status.HTTP_200_OK)
+      

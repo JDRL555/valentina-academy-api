@@ -1,13 +1,22 @@
 from rest_framework_mongoengine import viewsets
 from rest_framework.response import Response
+
 from .models import Recipes, Ingredients
 from .serializers import RecipeSerializer, IngredientSerializer
 
+from api.validators import StudentPermission, TeacherPermission, AdminPermission
+
 class IngredientViewSet(viewsets.ModelViewSet):
+    permission_classes = [
+    StudentPermission | TeacherPermission | AdminPermission
+    ]
     queryset = Ingredients.objects()
     serializer_class = IngredientSerializer
 
 class RecipeViewSet(viewsets.ModelViewSet):
+    permission_classes = [
+    StudentPermission | TeacherPermission | AdminPermission
+    ]
     queryset = Recipes.objects.all()  
     serializer_class = RecipeSerializer
 
