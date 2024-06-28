@@ -9,7 +9,7 @@ from django.contrib.auth import logout
 
 from .serializers import UserSerializer
 
-from api.validators import AdminPermission, StudentPermission
+from api.validators import AdminPermission, TeacherPermission, StudentPermission
 
 from rolepermissions.roles import get_user_roles, assign_role, remove_role
 
@@ -93,7 +93,7 @@ class LogoutViewSet(ModelViewSet):
     
 class RolViewSet(ViewSet):
   permission_classes = [
-    StudentPermission | AdminPermission
+    StudentPermission | TeacherPermission | AdminPermission
   ]
   
   VALID_ROLES = ["student", "teacher", "admin"]

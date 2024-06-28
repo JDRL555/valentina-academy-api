@@ -19,7 +19,6 @@ class TeacherPermission(permissions.BasePermission):
     allowed_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 
     def has_permission(self, request, view=None):
-        print(request.path)
         if not request.user.is_authenticated:
             return False
         
