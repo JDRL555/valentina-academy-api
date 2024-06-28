@@ -2,9 +2,11 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useState }                     from 'react'
 
-import { ContextApp } from './context/ContextApp.jsx'
+import { ROLES }                        from './constants/roles.js'
 
-import HomePage                         from './pages/HomePage/HomePage.jsx'
+import { ContextApp }                   from './context/ContextApp.jsx'
+
+import HomePage                         from './pages/HomePage/Index.jsx'
 import LandingPage                      from './pages/LandingPage/LandingPage.jsx'
 import LoginPage                        from './pages/LoginPage/LoginPage.jsx'
 import RegisterPage                     from './pages/RegisterPage/RegisterPage.jsx'
@@ -20,6 +22,7 @@ import IngredientsAdmin                 from './pages/admin/IngredientsAdmin/Ing
 
 
 import IsAuthorized                     from './layouts/IsAuthorized/IsAuthorized.jsx'
+import HasPermissions                   from './layouts/HasPermissions/HasPermissions.jsx'
 import IsCourseCompleted                from './layouts/IsCourseCompleted/IsCourseCompleted.jsx'
 
 import './styles/Global.css'
@@ -50,7 +53,9 @@ export default function App() {
             path="/dashboard" 
             element={
               <IsAuthorized>
-                <HomePage />
+                <HasPermissions role={ROLES}>
+                  <HomePage />
+                </HasPermissions>
               </IsAuthorized>
             } 
           />
@@ -66,23 +71,31 @@ export default function App() {
             path='/course/:id' 
             element={
               <IsAuthorized>
-                <CoursePage setCompleted={setCompleted} />
+                <HasPermissions role={"student"}>
+                  <CoursePage setCompleted={setCompleted} />
+                </HasPermissions>
               </IsAuthorized>
             } 
           />
           <Route 
             path='/survey' 
             element={
-              <IsCourseCompleted completed={completed}> 
-                <SurveyPage /> 
-              </IsCourseCompleted>
+              <IsAuthorized>
+                <HasPermissions role={"student"}>
+                  <IsCourseCompleted completed={completed}> 
+                    <SurveyPage /> 
+                  </IsCourseCompleted>
+                </HasPermissions>
+              </IsAuthorized>
             }  
           />
           <Route 
             path='/courses/admin'
             element={
               <IsAuthorized>
-                <CoursesAdmin />
+                <HasPermissions role={["teacher", "admin"]}>
+                  <CoursesAdmin />
+                </HasPermissions>
               </IsAuthorized>
             }
           />
@@ -90,7 +103,9 @@ export default function App() {
             path='/users/admin'
             element={
               <IsAuthorized>
-                <UsersAdmin />
+                <HasPermissions role={"admin"}>
+                  <UsersAdmin />
+                </HasPermissions>
               </IsAuthorized>
             }
           />
@@ -98,7 +113,9 @@ export default function App() {
             path='/recipes/admin'
             element={
               <IsAuthorized>
-                <RecipesAdmin />
+                <HasPermissions role={"admin"}>
+                  <RecipesAdmin />
+                </HasPermissions>
               </IsAuthorized>
             }
           />
@@ -106,7 +123,9 @@ export default function App() {
             path='/ingredients/admin'
             element={
               <IsAuthorized>
-                <IngredientsAdmin />
+                <HasPermissions role={"admin"}>
+                  <IngredientsAdmin />
+                </HasPermissions>
               </IsAuthorized>
             }
           />
@@ -114,7 +133,9 @@ export default function App() {
             path='/admin'
             element={
               <IsAuthorized>
-                <AdminPage />
+                <HasPermissions role={"admin"}>
+                  <AdminPage />
+                </HasPermissions>
               </IsAuthorized>
             }
           />

@@ -11,12 +11,12 @@ export default function Header({ setCategory }) {
         <p>Descubre nuestros cursos, y explora entre las dos principales categorias que tenemos para ofrecer</p>
       </div>
       <section className="categories">
-        <div onClick={() => setCategory(2)} className="comida_salada">
+        <div onClick={() => setCategory(1)} className="comida_salada">
           <div className="img_content">
             <h3>REPOSTERIA</h3>
           </div>
         </div>
-        <div onClick={() => setCategory(1)} className="reposteria">
+        <div onClick={() => setCategory(2)} className="reposteria">
           <div className="img_content">
             <h3>GASTRONOMIA</h3>
           </div>

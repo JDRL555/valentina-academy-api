@@ -50,7 +50,7 @@ export default function CreateModal({
     formData.append("cover", newCourseMedia.cover)
     formData.append("video", newCourseMedia.video)
 
-    const mediaResponse = await fetchToApi(BACKEND_ROUTES.courses_create_media, {
+    const mediaResponse = await fetchToApi(BACKEND_ROUTES.courses_media, {
       method: "POST",
       body: formData
     })

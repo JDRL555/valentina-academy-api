@@ -47,12 +47,13 @@ ul li img.user_logo{
     transition-duration: .5s;
 }
 
-ul li a{
+ul li a, ul li .sign_out{
     color: white;
     text-decoration: none;
     font-size: 20px;
     transition-property: color;
     transition-duration: .5s;
+    cursor: pointer;
 }
 
 ul li a:hover{
@@ -83,6 +84,6 @@ ul li img.user_logo:hover {
     opacity: 1;
 }
 
-ul li a.sign_out:hover {
+ul li .sign_out:hover {
     color: #f04343;
 }

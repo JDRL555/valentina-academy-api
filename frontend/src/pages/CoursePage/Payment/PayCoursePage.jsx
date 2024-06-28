@@ -33,7 +33,7 @@ export default function PayCoursePage({ course }) {
   }
 
   const onBuy = async () => {
-    const response = await fetchToApi(BACKEND_ROUTES.subscribe, {
+    const response = await fetchToApi(BACKEND_ROUTES.purchased_courses, {
       method: "POST",
       body: JSON.stringify({
         course: course.id,

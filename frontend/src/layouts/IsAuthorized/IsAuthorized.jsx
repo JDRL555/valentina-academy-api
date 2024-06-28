@@ -1,15 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { useContext, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 
 import { BACKEND_ROUTES } from '@constants/routes'
 
+import Loading from '@components/Loading/Loading'
+
 import { ContextApp } from '@context/ContextApp'
 import { fetchToApi } from '@api'
 
 export default function IsAuthorized({ children }) {
+  const [loading, setLoading] = useState(true)
   const [token] = useCookies(["access_token"])
   const navigate = useNavigate()
   const context = useContext(ContextApp)
@@ -27,10 +30,17 @@ export default function IsAuthorized({ children }) {
       } else {
         context.setUser(response.user)
       }
+      setLoading(false)
     }
     authUser()
   }, [])
 
+
+  if(loading) {
+    return (
+      <Loading />
+    )
+  }
 
   return (
     <>
