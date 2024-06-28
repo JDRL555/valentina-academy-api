@@ -1,9 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useSearchParams, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useSearchParams, useNavigate, Link } from 'react-router-dom'
+import { useEffect, useState, useContext } from 'react'
 import { useTimer } from 'react-timer-hook'
 
+import { ContextApp } from '@context/ContextApp'
+
 import Survey from './components/Survey/Survey'
+import PrevCertificate from './components/PrevCertificate/PrevCertificate'
 
 import { fetchToApi } from '@api'
 
@@ -15,7 +18,7 @@ import "./SurveyPage.css"
 export default function SurveyPage() {
 
   const expiryTimestamp = new Date()
-  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 12)
+  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 1200)
 
   const navigate = useNavigate()
   const [params] = useSearchParams() 
@@ -25,8 +28,14 @@ export default function SurveyPage() {
   const [survey, setSurvey] = useState({})
 
   let [counter, setCounter] = useState(3)
+  let [percentage, setPercentage] = useState(0)
+
+  const [htmlContent, setHtmlContent] = useState('');
+
+  const { user } = useContext(ContextApp)
 
   let counterInterval = null
+  const answersSelected = []
 
   useEffect(() => {
     async function getSurveys() {
@@ -44,7 +53,6 @@ export default function SurveyPage() {
     }
     getSurveys()
   }, [])
-
   const onStartSurvey = () => {
     setSurveyStart(true)
 
@@ -58,10 +66,9 @@ export default function SurveyPage() {
     }, 1000)
   }
 
-  const onEndSurvey = () => {
+  const validateAnswers = () => {
     const uls = document.querySelectorAll("ul")
     const error = document.querySelector(".error")
-    const answersSelected = []
 
     uls.forEach(ul => {
       const answers = ul.querySelectorAll("li")
@@ -74,30 +81,54 @@ export default function SurveyPage() {
       )
     })
 
-    if(answersSelected.length !== survey.questions.length && minutes == 0 && seconds == 0) {
+    if(answersSelected.length !== survey.questions.length) {
       setError("Completa todas las respuestas")
       error.style.display = "block"
     } else {
-      const timeOver = new Date()
-      timeOver.setSeconds(0)
-      restart(timeOver)
+      onEndSurvey()
+    }
+  }
 
-      let percentage = 0
-      answersSelected.map((answerSelected, index) => {
-        const answer = survey.questions[index].answers.find(answer => answer.answer == answerSelected)
-        if(answer.is_correct) {
-          const value = 100 / survey.questions.length
-          let result = percentage + value
-          percentage = parseInt(result.toFixed(1)) < 0 ? 0 : parseInt(result.toFixed(1))
+  const onEndSurvey = async () => {
+    const timeOver = new Date()
+    timeOver.setSeconds(0)
+    restart(timeOver)
+
+    answersSelected.map((answerSelected, index) => {
+      const answer = survey.questions[index].answers.find(answer => answer.answer == answerSelected)
+      if(answer.is_correct) {
+        const value = parseInt(100 / survey.questions.length)
+        setPercentage( percentage += value )
+      }
+    })
+    if(percentage <= 50) {
+      setError("Reprobaste la prueba :(")
+    } else {
+      console.log(
+        {
+          user_id: user.id,
+          course_id: survey.course.id
+        }
+      );
+      const certificateResponse = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/${BACKEND_ROUTES.export_certificate}/`, 
+      {
+        method: "POST",
+        body: JSON.stringify({
+          user_id: user.id,
+          course_id: survey.course.id
+        }),
+        headers: {
+          'Content-type': "application/json"
         }
       })
-      if(percentage <= 50) {
-        setError("Lo lamento, pero reprobaste la prueba:(")
-      } else {
-        setError("Felicitaciones, lograste pasar:D")
-      }
-      error.style.display = "block"
+
+      const html = await certificateResponse.text()
+      setHtmlContent(html)
+
+      setError("Aprobaste la prueba :D")
     }
+    answersSelected.length = 0
   }
 
   const {
@@ -146,7 +177,7 @@ export default function SurveyPage() {
       {seconds === 0 ? "00" : seconds < 10 ? `0${seconds}` : seconds}
     </h1>
     <Survey survey={survey} />
-    <button onClick={onEndSurvey} className="startBtn" style={{ margin: "0" }}>
+    <button onClick={validateAnswers} className="startBtn" style={{ margin: "0" }}>
       Terminar prueba
     </button>
     <p className='error' style={{ backgroundColor: COLORS.error }}>
@@ -154,10 +185,75 @@ export default function SurveyPage() {
     </p>
   </>
 
+  const renderResults = () => {
+    return (
+      <div className='survey_result_container'>
+        <h1>{ error }</h1>
+        <p><b>{ percentage }/100</b></p>
+        <p className='survey_result_text'>
+          { 
+            percentage > 50
+            ?
+            "Felicitaciones! ahora tendrás acceso a tu certificado"
+            :
+            "Lamentablemente no aprobaste. Se necesita más del 50% de respuestas válidas para obtener tu certificado." 
+          }
+        </p>
+        {
+          percentage > 50
+          &&
+          <PrevCertificate htmlContent={htmlContent} />
+        }
+        <p className='survey_result_text'>
+          { 
+            percentage <= 50
+            &&
+            "Recuerda que puedes presentar esta prueba en las próximas 24 horas, así mismo, te recomendamos que veas detenidamente el curso para asegurar que logres pasar." 
+          }
+        </p>
+        <p className='survey_result_text'>
+          <b>
+            { 
+              percentage <= 50
+              &&
+              "No te desanimes y esfuerzate para obtener tu certificado. No pares de aprender!" 
+            }
+          </b>
+        </p>
+        {
+          percentage <= 50
+          ?
+          <Link to={"/dashboard"} className='startBtn'>
+              Volver al inicio
+          </Link>
+          :
+          <button className='startBtn'>
+            Obtener certificado!
+          </button>
+
+        }
+      </div>
+    )
+  }
+
   return (
     <section className='surveyContainer'>
       <div className='survey'>
-        {!surveyStart ? renderInitialData() : counter !== 0 ? renderCounter() : renderSurvey()}
+        {
+          !surveyStart 
+          ? 
+          renderInitialData() 
+          : 
+          counter !== 0 
+          ? 
+          renderCounter() 
+          : 
+          minutes === 0 && seconds === 0
+          ?
+          renderResults()
+          :
+          renderSurvey()
+        }
       </div>
     </section>
   )

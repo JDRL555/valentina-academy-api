@@ -12,4 +12,5 @@ export const BACKEND_ROUTES = {
   ingredients: "ingredients",
   courses_create_media: "courses/create_media",
   courses_media: "courses_media",
+  export_certificate: "courses/export_certificate"
 }

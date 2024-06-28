@@ -59,3 +59,20 @@
 .timer {
   font-size: 80px;
 }
+
+.survey_result_container {
+  text-align: center;
+  width: 80%;
+  margin: auto;
+}
+
+.survey_result_text {
+  padding: 10px 0;
+}
+
+.survey_result_container .startBtn {
+  display: block;
+  width: 250px;
+  margin: 10px auto;
+} 
+
