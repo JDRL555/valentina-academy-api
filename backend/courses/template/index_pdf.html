@@ -3,16 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificado de Ejemplo</title>
-    <link rel="stylesheet" href="pdf.css">
+    <title>Certificado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        p {
+            font-size: 18px;
+        }
+        
+        .contenedor-certificado {
+            background: url(https://static.vecteezy.com/system/resources/previews/010/503/533/non_2x/gold-and-white-background-free-vector.jpg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            width: 800px;
+            margin: 0 auto;
+            box-shadow: 1px 1px 40px rgb(24, 18, 18);
+            padding: 30px;
+        }
+        
+        .encabezado {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .encabezado h1 {
+            font-size: 27px;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .encabezado h2 {
+            padding-top: 5px;
+            margin-top: 0;
+        }
+        
+        .cuerpo {
+            margin: auto;
+            text-align: center;
+        }
+        
+        .nombre {
+            font-weight: bold;
+            text-decoration: underline;
+            font-size: 30px;
+        }
+
+        .texto-titulo {
+            margin-bottom: 5px;
+        }
+        
+        .titulo-curso {
+            margin-top: 0;
+            font-weight: bold;
+            font-size: 25px;
+        }
+        
+        .firmas {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .firma-director, .firma-coordinador {
+            text-align: center;
+        }
+        
+        .pie-pagina {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
 </head>
 <body>
 
     <div class="contenedor-certificado">
         <div class="encabezado">
-            <h1>República Bolivariana de Venezuela</h1>
-            <h2>Ministerio del Poder Popular para la Educación</h2>
-            <h3>U.E. [Nombre de la institución]</h3>
+            <h1>República de Colombiana</h1>
+            <h2>Academia Valentina</h2>
         </div>
 
         <div class="cuerpo">
@@ -20,31 +92,24 @@
 
             <p>Se otorga el presente certificado a:</p>
 
-            <p class="nombre">**[Nombre del participante]**</p>
+            <p class="nombre">{{ user_full_name }}</p>
 
-            <p>Por haber participado satisfactoriamente en el taller:</p>
+            <p class="texto-titulo">Por haber concluido satisfactoriamente:</p>
 
-            <p class="titulo-taller">**[Título del taller]**</p>
+            <p class="titulo-curso">{{ course_title }}</p>
 
-            <p>Dicho taller se llevó a cabo el día **[Fecha del taller]** en la sede de la institución.</p>
-
-            <p>En constancia de lo expuesto, se firma el presente certificado en [Ciudad, Estado], a los **[Día]** días del mes de **[Mes]** de **[Año]**.</p>
+            <p>En constancia de lo expuesto, se firma el presente certificado en Colombia, departamento de Bogotá, a los {{ day }} días del mes de {{ month }} de {{ year }}.</p>
 
             <div class="firmas">
                 <div class="firma-director">
-                    <p>**[Nombre del director]**</p>
-                    <p>Director</p>
-                </div>
-
-                <div class="firma-coordinador">
-                    <p>**[Nombre del coordinador]**</p>
-                    <p>Coordinador del Taller</p>
+                    <p>{{ course_author }}</p>
+                    <p>Profesor del curso</p>
                 </div>
             </div>
         </div>
 
         <div class="pie-pagina">
-            <p>&copy; [Año] U.E. [Nombre de la institución]</p>
+            <p>&copy; {{ year }} Academia Valentina</p>
         </div>
     </div>
 
