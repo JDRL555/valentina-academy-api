@@ -60,13 +60,13 @@ class SurveysViewSet(viewsets.ModelViewSet):
             try:
                 course_obj = Courses.objects.get(id=survey.course_id)
                 survey_obj["course"] = {
+                    "id": course_obj.id,
                     "title": course_obj.title,
                     "description": course_obj.description
                 }
             except Exception as error:
                 print(error)
                 return Response({"error":"error curso no existe!"})
-                  
             for question in survey.question_id:
                 try:
                     question_obj = Questions.objects.get(id=str(question.id))
