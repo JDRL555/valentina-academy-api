@@ -66,7 +66,7 @@ class SurveysViewSet(viewsets.ModelViewSet):
                 }
             except Exception as error:
                 print(error)
-                return Response({"error":"error curso no existe!"})
+                return Response({"error":"Error, curso no encontrado"}, status=404)
             for question in survey.question_id:
                 try:
                     question_obj = Questions.objects.get(id=str(question.id))
