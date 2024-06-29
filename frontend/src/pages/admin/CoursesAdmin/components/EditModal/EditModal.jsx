@@ -27,6 +27,7 @@ export default function EditModal({
 
   useEffect(() => {
     async function getCourseInfo() {
+      setUpdating(false)
       setCourse({})
       const courseResponse = await fetchToApi(`${BACKEND_ROUTES.courses}/${courseId}`)
       setCourse({

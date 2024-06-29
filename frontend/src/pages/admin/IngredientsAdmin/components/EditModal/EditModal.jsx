@@ -23,12 +23,21 @@ export default function EditModal({
 
   useEffect(() => {
     async function getIngredientInfo() {
+      setUpdating(false)
       setIngredient({})
       const ingredientResponse = await fetchToApi(`${BACKEND_ROUTES.ingredients}/${ingredientId}`)
-      const ingredientList = ingredientResponse.name.split(" ")
+      const ingredientList = ingredientResponse.name.split("(")
       const name = ingredientList[0]
-      const quantity = ingredientList[1].slice(1, ingredientList[1].length)
-      const unit = ingredientList[2].slice(1, ingredientList[2].length)
+      let quantity = ingredientList[1].split(" ")[0]
+      let unit = null
+
+      if(quantity[quantity.length - 1] == ")") {
+        quantity = quantity.slice(0, -1)
+      }
+
+      if(ingredientList[1].split(" ")[1]?.slice) {
+        unit = ingredientList[1].split(" ")[1].slice(0, -1)
+      }
       setIngredient({
         name, quantity, unit
       })
@@ -109,12 +118,12 @@ export default function EditModal({
             value={ingredient.unit}
           >
             <option disabled value="" selected> -- Seleccione una unidad de medida -- </option>
-            <option value="gr">Gramos</option>
-            <option value="mg">Miligramos</option>
-            <option value="l">Litros</option>
-            <option value="ml">Mililitros</option>
-            <option value="">Unidades</option>
-            <option value="cucharadas">Cucharadas</option>
+            <option selected={ingredient.unit == "gr"} value="gr">Gramos</option>
+            <option selected={ingredient.unit == "mg"} value="mg">Miligramos</option>
+            <option selected={ingredient.unit == "l"} value="l">Litros</option>
+            <option selected={ingredient.unit == "ml"} value="ml">Mililitros</option>
+            <option selected={ingredient.unit == null} value="">Unidades</option>
+            <option selected={ingredient.unit == "cucharadas"} value="cucharadas">Cucharadas</option>
           </select>
         </div>
         <button type='submit'>

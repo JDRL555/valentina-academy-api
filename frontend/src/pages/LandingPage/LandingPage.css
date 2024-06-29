@@ -3,7 +3,30 @@ body {
 }
 
 .main {
-  background-color: white;
+  background-color: var(--opaque-primary-color);
   padding: 20px;
   box-sizing: border-box;
+  width: 100%;
+}
+
+.landing_content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.landing_content h1 {
+  font-size: 30px;
+  padding: 10px;
+}
+
+.landing_content p, .landing_content ol {
+  width: 60%;
+  padding: 10px;
+}
+
+.landing_final_content {
+  text-align: center;
+  margin: 10px 0;
 }

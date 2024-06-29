@@ -102,7 +102,7 @@ export default function RecipesAdmin() {
                           <h3>Ingredientes</h3>
                           <ul>
                             {
-                              recipe.ingredients?.map(ingredient => (
+                              recipe.ingredient?.map(ingredient => (
                                 <li key={ingredient.id}>{ingredient.name}</li>
                               ))
                             }

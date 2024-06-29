@@ -49,8 +49,6 @@ export default function IngredientsAdmin() {
     return <AdminSkeleton />
   }
 
-
-
   return (
     <>
       <Navbar />
@@ -91,7 +89,7 @@ export default function IngredientsAdmin() {
                   <div className='admin_info'>
                     <div className='admin_details'>
                       <h2>Detalles del ingrediente</h2>
-                      <p><b>Nombre de ingrediente</b> {ingredient.ingredientname}</p>
+                      <p><b>Nombre de ingrediente:</b> {ingredient.name}</p>
                     </div>
                   </div>
                 </div>

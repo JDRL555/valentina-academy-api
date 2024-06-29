@@ -6,7 +6,9 @@ import video from '@assets/video_loading.png'
 import error from '@assets/error.png'
 
 import { fetchToApi } from '@api'
+
 import { BACKEND_ROUTES } from '@constants/routes'
+import { ERRORS } from '@constants/errors'
 import { ROLES, SPANISH_ROLES } from '@constants/roles'
 
 import Modal from '@components/Modal/Modal'
@@ -22,9 +24,10 @@ export default function CreateModal({
     last_name: "",
     username: "",
     email: "",
-    password: ""
+    password: "",
+    role: ""
   })
-  const [newRole, setNewRole] = useState("")
+
   const [UserStatus, setUserStatus] = useState({ status: null, error: "" })
 
   const onInputChange = e => setNewUser({ ...newUser, [e.target.id]: e.target.value })
@@ -46,16 +49,8 @@ export default function CreateModal({
       return
     }
 
-    const roleResponse = await fetchToApi(BACKEND_ROUTES.roles, {
-      method: "POST",
-      body: JSON.stringify({
-        user_id: UserResponse.id,
-        role: newRole
-      })
-    })
-
-    if(roleResponse?.error) {
-      setUserStatus({ status: false, error: "Hubo un error asignando el rol, intenta nuevamente" })
+    if(UserResponse?.username) {
+      setUserStatus({ status: false, error: ERRORS[UserResponse.username[0]] })
       return
     }
 
@@ -88,8 +83,8 @@ export default function CreateModal({
           <input required onChange={onInputChange} type="password" id='password' />
         </div>
         <div className='input_container'>
-          <label htmlFor="rol">Rol</label>
-          <select required id="rol" onChange={e => setNewRole(e.target.value)}>
+          <label htmlFor="role">Rol</label>
+          <select required id="role" onChange={onInputChange}>
             <option selected value="" disabled> -- Selecciona un rol -- </option>
             {
               ROLES.map(role => (

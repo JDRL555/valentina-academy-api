@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 
 import { BACKEND_ROUTES } from '@constants/routes'
+import { SPANISH_ROLES } from '@constants/roles'
+
 import { fetchToApi } from '@api'
 
 import AdminSkeleton from '../skeleton/AdminSkeleton'
@@ -49,8 +51,6 @@ export default function UsersAdmin() {
     return <AdminSkeleton />
   }
 
-
-
   return (
     <>
       <Navbar />
@@ -91,8 +91,9 @@ export default function UsersAdmin() {
                   <div className='admin_info'>
                     <div className='admin_details'>
                       <h2>Detalles del usuario</h2>
-                      <p><b>Nombre de usuario</b> {user.username}</p>
-                      <p><b>Correo del usuario</b> {user.email}</p>
+                      <p><b>Nombre de usuario:</b> {user.username}</p>
+                      <p><b>Correo del usuario:</b> {user.email}</p>
+                      <p><b>Rol del usuario:</b> {SPANISH_ROLES[user.role]}</p>
                     </div>
                   </div>
                 </div>

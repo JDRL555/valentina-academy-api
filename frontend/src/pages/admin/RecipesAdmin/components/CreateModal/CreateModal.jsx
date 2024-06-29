@@ -41,7 +41,6 @@ export default function CreateModal({
     } else {
       newRecipe.steps[e.target.id] = e.target.value
     }
-    console.log(newRecipe);
   }
 
   const onCreateRecipe = async e => {
@@ -65,7 +64,7 @@ export default function CreateModal({
 
     setShowModal(false)
     setCreating(false)
-    window.location.href = "/recipes/admin"
+    // window.location.href = "/recipes/admin"
     
   }
 

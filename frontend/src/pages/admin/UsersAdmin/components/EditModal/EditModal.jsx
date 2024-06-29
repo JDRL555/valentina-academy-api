@@ -6,7 +6,10 @@ import video from '@assets/video_loading.png'
 import error from '@assets/error.png'
 
 import { fetchToApi } from '@api'
+
 import { BACKEND_ROUTES } from '@constants/routes'
+import { ROLES, SPANISH_ROLES } from '@constants/roles'
+import { ERRORS } from '@constants/errors'
 
 import Modal from '@components/Modal/Modal'
 
@@ -18,14 +21,19 @@ export default function EditModal({
   const [updating, setUpdating] = useState(false)
 
   const [user, setUser] = useState({})
+  const [role, setRole] = useState("")
 
   const [userStatus, setUserStatus] = useState({ status: null, error: "" })
 
   useEffect(() => {
     async function getUserInfo() {
       setUser({})
+      setUpdating(false)
       const userResponse = await fetchToApi(`${BACKEND_ROUTES.users}/${userId}`)
+      const roleResponse = await fetchToApi(`${BACKEND_ROUTES.roles}/${userId}`)
+
       setUser(userResponse)
+      setRole(roleResponse.role)
     }
     getUserInfo()
   }, [showModal])
@@ -59,9 +67,14 @@ export default function EditModal({
       return
     }
 
+    if(userResponse?.username) {
+      setUserStatus({ status: false, error: ERRORS[userResponse.username[0]] })
+      return
+    }
+
     setShowModal(false)
     setUpdating(false)
-    window.location.href = "/users/admin"
+    // window.location.href = "/users/admin"
     
   }
 
@@ -122,6 +135,23 @@ export default function EditModal({
             onChange={onInputChange} 
             type="password" id='password' 
           />
+        </div>
+        <div className='input_container'>
+          <label htmlFor="role">Rol</label>
+          <select required id="role" onChange={onInputChange}>
+            <option selected value="" disabled> -- Selecciona un rol -- </option>
+            {
+              ROLES.map(role_available => (
+                <option 
+                  key={role_available} 
+                  value={role_available}
+                  selected={role_available == role}
+                >
+                  {SPANISH_ROLES[role_available]}
+                </option>
+              ))
+            }
+          </select>
         </div>
         <button type='submit'>
           Editar usuario
