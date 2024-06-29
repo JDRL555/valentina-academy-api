@@ -2,6 +2,7 @@
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
 import { useEffect, useState, useContext } from 'react'
 import { useTimer } from 'react-timer-hook'
+import { useCookies } from 'react-cookie'
 
 import { ContextApp } from '@context/ContextApp'
 
@@ -27,12 +28,23 @@ export default function SurveyPage() {
   const [error, setError] = useState("")
   const [survey, setSurvey] = useState({})
 
+  const [certificateData, setCertificateData] = useState({
+    user_full_name: "",
+    course_title: "",
+    course_author: "",
+    day: "",
+    month: "",
+    year: ""
+  })
+
   let [counter, setCounter] = useState(3)
   let [percentage, setPercentage] = useState(0)
 
-  const [htmlContent, setHtmlContent] = useState('');
+  const [url, setUrl] = useState('');
 
   const { user } = useContext(ContextApp)
+
+  const [ token ] = useCookies(["access_token"])
 
   let counterInterval = null
   const answersSelected = []
@@ -104,12 +116,6 @@ export default function SurveyPage() {
     if(percentage <= 50) {
       setError("Reprobaste la prueba :(")
     } else {
-      console.log(
-        {
-          user_id: user.id,
-          course_id: survey.course.id
-        }
-      );
       const certificateResponse = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/${BACKEND_ROUTES.export_certificate}/`, 
       {
@@ -119,16 +125,43 @@ export default function SurveyPage() {
           course_id: survey.course.id
         }),
         headers: {
-          'Content-type': "application/json"
+          'Content-type': "application/json",
+          'Authorization': `Token ${token.access_token}`
         }
       })
 
-      const html = await certificateResponse.text()
-      setHtmlContent(html)
+      const blob = await certificateResponse.blob()
+
+      const certificateUrl = URL.createObjectURL(blob)
+      setUrl(certificateUrl)
+
+      const created_at_list = survey.course.created_at.split("-")
+      const day = created_at_list[2]
+      const month = created_at_list[1]
+      const year = created_at_list[0]
 
       setError("Aprobaste la prueba :D")
+      setCertificateData({
+        user_full_name: `${user.first_name} ${user.last_name}`,
+        course_title: `${survey.course.title}`,
+        course_author: `${survey.course.user.first_name} ${survey.course.user.last_name}`,
+        day, month, year
+      })
     }
     answersSelected.length = 0
+  }
+
+  const onExportCertificate = () => {
+    const link = document.createElement("a")
+
+    link.href = url
+    link.setAttribute("download", `certificate.pdf`)
+
+    document.body.appendChild(link)
+    link.click()
+
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
   }
 
   const {
@@ -186,6 +219,14 @@ export default function SurveyPage() {
   </>
 
   const renderResults = () => {
+    if(!error) {
+      return (
+        <div className='survey_result_container'>
+          <h1>Cargando resultados...</h1>
+        </div>
+      )
+    }
+
     return (
       <div className='survey_result_container'>
         <h1>{ error }</h1>
@@ -202,7 +243,9 @@ export default function SurveyPage() {
         {
           percentage > 50
           &&
-          <PrevCertificate htmlContent={htmlContent} />
+          <PrevCertificate 
+            data={certificateData}
+          />
         }
         <p className='survey_result_text'>
           { 
@@ -227,7 +270,7 @@ export default function SurveyPage() {
               Volver al inicio
           </Link>
           :
-          <button className='startBtn'>
+          <button className='startBtn' onClick={onExportCertificate}>
             Obtener certificado!
           </button>
 
