@@ -15,7 +15,7 @@ class StudentPermission(permissions.BasePermission):
 
 class TeacherPermission(permissions.BasePermission):
 
-    allowed_path = ["/courses/", "/courses_media/"]
+    allowed_path = ["courses", "courses_media"]
     allowed_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 
     def has_permission(self, request, view=None):
@@ -24,8 +24,11 @@ class TeacherPermission(permissions.BasePermission):
         
         if not has_role(request.user,Teacher):
             return False
+        
+        path_list = request.path.split("/")
+        new_path = path_list[1]
 
-        if request.path not in self.allowed_path and request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
+        if new_path not in self.allowed_path and request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
             return False
         
         if request.method not in self.allowed_methods:
