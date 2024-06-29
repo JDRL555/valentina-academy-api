@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 
 import { fetchToApi } from '@api'
 import { BACKEND_ROUTES } from '@constants/routes'
+import Navbar from '@components/Navbar/Navbar'
 
 import AdminSkeleton from '../skeleton/AdminSkeleton'
 
@@ -63,6 +64,7 @@ export default function CoursesAdmin() {
 
   return (
     <>
+      <Navbar />
       <main className='main_content'>
         <h1>
           Administración de cursos 
