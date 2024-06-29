@@ -20,7 +20,7 @@ export default function DeleteModal({ showModal, setShowModal, courseId }) {
         'Content-Type': "application/json"
       }
     })
-    window.location.href = "/admin"
+    window.location.href = "/courses/admin"
   }
 
   return (

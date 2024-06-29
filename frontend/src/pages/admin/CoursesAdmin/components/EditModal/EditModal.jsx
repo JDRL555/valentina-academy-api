@@ -96,7 +96,7 @@ export default function EditModal({
 
     setShowModal(false)
     setUpdating(false)
-    window.location.href = "/teacher"
+    window.location.href = "/courses/admin"
     
   }
 

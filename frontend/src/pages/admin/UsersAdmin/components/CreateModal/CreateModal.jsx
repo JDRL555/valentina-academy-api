@@ -7,6 +7,7 @@ import error from '@assets/error.png'
 
 import { fetchToApi } from '@api'
 import { BACKEND_ROUTES } from '@constants/routes'
+import { ROLES, SPANISH_ROLES } from '@constants/roles'
 
 import Modal from '@components/Modal/Modal'
 
@@ -23,11 +24,10 @@ export default function CreateModal({
     email: "",
     password: ""
   })
-
+  const [newRole, setNewRole] = useState("")
   const [UserStatus, setUserStatus] = useState({ status: null, error: "" })
 
   const onInputChange = e => setNewUser({ ...newUser, [e.target.id]: e.target.value })
-  
 
   const onCreateUser = async e => {
     setCreating(true)
@@ -46,10 +46,22 @@ export default function CreateModal({
       return
     }
 
+    const roleResponse = await fetchToApi(BACKEND_ROUTES.roles, {
+      method: "POST",
+      body: JSON.stringify({
+        user_id: UserResponse.id,
+        role: newRole
+      })
+    })
+
+    if(roleResponse?.error) {
+      setUserStatus({ status: false, error: "Hubo un error asignando el rol, intenta nuevamente" })
+      return
+    }
+
     setShowModal(false)
     setCreating(false)
     window.location.href = "/users/admin"
-    
   }
 
   const createForm = () =>     
@@ -74,6 +86,19 @@ export default function CreateModal({
         <div className='input_container'>
           <label htmlFor="password">Contraseña</label>
           <input required onChange={onInputChange} type="password" id='password' />
+        </div>
+        <div className='input_container'>
+          <label htmlFor="rol">Rol</label>
+          <select required id="rol" onChange={e => setNewRole(e.target.value)}>
+            <option selected value="" disabled> -- Selecciona un rol -- </option>
+            {
+              ROLES.map(role => (
+                <option key={role} value={role}>
+                  {SPANISH_ROLES[role]}
+                </option>
+              ))
+            }
+          </select>
         </div>
         <button type='submit'>
           Crear curso
