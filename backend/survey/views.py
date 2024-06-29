@@ -62,7 +62,12 @@ class SurveysViewSet(viewsets.ModelViewSet):
                 survey_obj["course"] = {
                     "id": course_obj.id,
                     "title": course_obj.title,
-                    "description": course_obj.description
+                    "description": course_obj.description,
+                    "user": {
+                        "first_name": course_obj.user.first_name,
+                        "last_name": course_obj.user.last_name,
+                    },
+                    "created_at": course_obj.created_at,
                 }
             except Exception as error:
                 print(error)
