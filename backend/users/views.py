@@ -15,12 +15,97 @@ from rolepermissions.roles import get_user_roles, assign_role, remove_role
 
 from rest_framework.decorators import permission_classes
 
+VALID_ROLES = ["student", "teacher", "admin"]
+
 class UsersViewSet(ModelViewSet):
   queryset = User.objects.all()
   serializer_class = UserSerializer
   permission_classes = [
     TeacherPermission | AdminPermission
   ]
+  
+  def list(self, request):
+    users = User.objects.all()
+    users_list = []
+    
+    if len(users) == 0:
+      return Response([])
+    
+    for user in users:
+      user_role = get_user_roles(user)
+      
+      user_obj = {
+        "id": user.id,
+        "username": user.username,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "email": user.email,
+        "role": user_role[0].get_name(),
+      }
+      
+      users_list.append(user_obj)
+      
+    return Response(users_list)
+  
+  def create(self, request):
+    serializer = UserSerializer(data=request.data)
+    
+    if serializer.is_valid():
+      if not request.data.get("role"):
+        return Response({ "role": "The role's required" }, status=400)
+
+      if request.data["role"] not in VALID_ROLES:
+        return Response({ "role": "Invalid role" }, status=400)
+      
+      serializer.save()
+      
+      user = User.objects.get(username=serializer.data['username'])
+      user.set_password(serializer.data['password'])
+      
+      assign_role(user, request.data["role"])
+      user.save()
+      
+      return Response({"user": serializer.data}, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=400)
+  
+  def partial_update(self, request, pk):
+    user = self.get_object()
+    serializer = UserSerializer(instance=user, data=request.data, partial=True)
+    
+    if serializer.is_valid():
+      if request.data.get("role"):
+        
+        if request.data["role"] not in VALID_ROLES:
+          return Response({ "role": "Invalid role" }, status=400)
+        
+        role = get_user_roles(user)
+        
+        if role[0].get_name() == request.data["role"]:
+          return Response({ "error": f"User already have the role {request.data['role']}" }, status=400)
+        
+        remove_role(user, role[0].get_name())
+        assign_role(user, request.data["role"])
+        
+      serializer.save()
+      
+      if request.data.get("password"):  
+        user.set_password(request.data.get("password"))
+      
+      user.save()
+      
+      return Response({"user": serializer.data})
+    return Response(serializer.errors, status=400)
+  
+  def destroy(self, request, pk):
+    user = self.get_object()
+    
+    role = get_user_roles(user)
+    
+    remove_role(user, role[0].get_name())
+    
+    user.delete()
+    
+    return Response(status=204)
 
 class LoginViewSet(ModelViewSet):
   permission_classes = []
@@ -54,8 +139,8 @@ class RegisterViewSet(ModelViewSet):
       user.save()
       
       return Response({"user": serializer.data}, status=status.HTTP_201_CREATED)
-    
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  
 class Auth_userViewSet(ModelViewSet):
   permission_classes = []
   def list(self, request, token):
@@ -98,10 +183,8 @@ class RolViewSet(ViewSet):
     StudentPermission | TeacherPermission | AdminPermission
   ]
   
-  VALID_ROLES = ["student", "teacher", "admin"]
-  
   def valid_role(self, rol):
-    return rol in self.VALID_ROLES
+    return rol in VALID_ROLES
   
   def validate_role_data(self, data):
     errors = {}
