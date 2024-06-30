@@ -83,6 +83,7 @@ class SurveysViewSet(viewsets.ModelViewSet):
                     for answer_id in question.answers_id: 
                         answer_obj = Answers.objects.get(id=str(answer_id.id))
                         questions_obj["answers"].append({
+                            "id": str(answer_obj.id),
                             "answer": answer_obj.answer, 
                             "is_correct": answer_obj.is_correct
                         })
@@ -108,6 +109,7 @@ class SurveysViewSet(viewsets.ModelViewSet):
             try:
                 course_obj = Courses.objects.get(id=course_id) 
                 survey_obj['course_id'] = {
+                    'id': course_obj.id,
                     'title': course_obj.title,
                     'description': course_obj.description,
                 }
@@ -125,6 +127,7 @@ class SurveysViewSet(viewsets.ModelViewSet):
                 for answer_id in question_obj.answers_id:
                     answer_obj = Answers.objects.get(id=str(answer_id.id))
                     answers = {
+                        "id": str(answer_obj.id),
                         "answer": answer_obj.answer,
                         "is_correct": answer_obj.is_correct,
                     }
