@@ -135,7 +135,10 @@ export default function SurveyPage() {
       const certificateUrl = URL.createObjectURL(blob)
       setUrl(certificateUrl)
 
-      const created_at_list = survey.course.created_at.split("-")
+      const date = new Date()
+      const newDate = date.toISOString().split('T')[0]
+
+      const created_at_list = newDate.split("-")
       const day = created_at_list[2]
       const month = created_at_list[1]
       const year = created_at_list[0]
@@ -162,6 +165,7 @@ export default function SurveyPage() {
 
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
+    navigate("/dashboard")
   }
 
   const {
@@ -247,22 +251,22 @@ export default function SurveyPage() {
             data={certificateData}
           />
         }
-        <p className='survey_result_text'>
           { 
             percentage <= 50
             &&
-            "Recuerda que puedes presentar esta prueba en las próximas 24 horas, así mismo, te recomendamos que veas detenidamente el curso para asegurar que logres pasar." 
+            <p className='survey_result_text'>
+              Recuerda que puedes presentar esta prueba en las próximas 24 horas, así mismo, te recomendamos que veas detenidamente el curso para asegurar que logres pasar.
+            </p>
           }
-        </p>
-        <p className='survey_result_text'>
-          <b>
             { 
               percentage <= 50
               &&
-              "No te desanimes y esfuerzate para obtener tu certificado. No pares de aprender!" 
+              <p className='survey_result_text'>
+                <b>
+                  No te desanimes y esfuerzate para obtener tu certificado. No pares de aprender! 
+                </b>
+              </p>
             }
-          </b>
-        </p>
         {
           percentage <= 50
           ?

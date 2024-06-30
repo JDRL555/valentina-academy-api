@@ -6,6 +6,8 @@ export const BACKEND_ROUTES = {
   courses: "courses",
   categories: "category",
   surveys: "surveys",
+  questions: "questions",
+  answers: "answers",
   purchased_courses: "purchased",
   users: "users",
   roles: "users/role",

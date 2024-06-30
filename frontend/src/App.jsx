@@ -19,6 +19,7 @@ import UsersAdmin                       from './pages/admin/UsersAdmin/UsersAdmi
 import CoursesAdmin                     from './pages/admin/CoursesAdmin/CoursesAdmin.jsx'
 import RecipesAdmin                     from './pages/admin/RecipesAdmin/RecipesAdmin.jsx'
 import IngredientsAdmin                 from './pages/admin/IngredientsAdmin/IngredientsAdmin.jsx'
+import SurveysAdmin                     from './pages/admin/SurveysAdmin/SurveyAdmin.jsx'
 
 
 import IsAuthorized                     from './layouts/IsAuthorized/IsAuthorized.jsx'
@@ -125,6 +126,16 @@ export default function App() {
               <IsAuthorized>
                 <HasPermissions role={"admin"}>
                   <IngredientsAdmin />
+                </HasPermissions>
+              </IsAuthorized>
+            }
+          />
+          <Route 
+            path='/surveys/admin'
+            element={
+              <IsAuthorized>
+                <HasPermissions role={"admin"}>
+                  <SurveysAdmin />
                 </HasPermissions>
               </IsAuthorized>
             }

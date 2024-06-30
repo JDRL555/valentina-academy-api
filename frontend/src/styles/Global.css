@@ -232,14 +232,62 @@ body{
   width: 70%;
 }
 
-.admin_recipe_details {
+.admin_recipe_details, .admin_surveys_details {
   display: flex;
   gap: 20px;
 }
 
-.admin_recipe_details li {
+.admin_recipe_details li, .admin_surveys_details li {
   padding: 5px;
   text-align: left;
+}
+
+.admin_questions {
+  border: 1px solid white;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.admin_questions fieldset {
+  border: none;
+}
+
+.admin_surveys_details {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.admin_survey_answers {
+  margin-left: 20px;
+}
+
+.input_survey_answers  {
+  display: flex;
+  align-items: center;
+}
+
+.input_survey_answer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 15px 0;
+}
+
+.input_survey_answers input[type="text"] {
+  width: 30%;
+}
+
+.input_survey_answer {
+  width: 30%;
+}
+
+.input_survey_answer input {
+  width: 20%;
+}
+
+.input_survey_answer label {
+  width: 60%;
 }
 
 .admin_multimedia_container h2 {
