@@ -9,14 +9,14 @@ import Navbar from '@components/Navbar/Navbar'
 import AdminSkeleton from '../skeleton/AdminSkeleton'
 
 import CreateModal from './components/CreateModal/CreateModal'
-// import EditModal from './components/EditModal/EditModal'
-// import DeleteModal from './components/DeleteModal/DeleteModal'
+import EditModal from './components/EditModal/EditModal'
+import DeleteModal from './components/DeleteModal/DeleteModal'
 
 export default function SurveysAdmin() {
   const [showCreate, setShowCreate] = useState(false)
   const [showEdit, setShowEdit] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
-  const [surveyId, setSurveyId] = useState(0)
+  const [surveyId, setSurveyId] = useState("")
 
   const [surveys, setSurveys] = useState([])
   const [courses, setCourses] = useState([])
@@ -134,17 +134,17 @@ export default function SurveysAdmin() {
         setShowModal={setShowCreate} 
         courses={courses}
       />
-      {/* <EditModal 
+      <EditModal 
         showModal={showEdit} 
         setShowModal={setShowEdit}
-        questions={questions} 
         surveyId={surveyId}
+        courses={courses}
       />
       <DeleteModal 
         showModal={showDelete}
         setShowModal={setShowDelete}
         surveyId={surveyId}
-      /> */}
+      />
     </>
   )
 }

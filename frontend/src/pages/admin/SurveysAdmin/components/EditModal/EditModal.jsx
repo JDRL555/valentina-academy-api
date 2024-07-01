@@ -31,8 +31,12 @@ export default function EditModal({
   useEffect(() => {
     async function getSurvey() {
       const surveyResponse = await fetchToApi(`${BACKEND_ROUTES.surveys}/${surveyId}`)
+      setSurvey(surveyResponse)
+      setQuestions(surveyResponse.questions.length)
+      setAnswers(surveyResponse.questions.map(question => question.answers.length))
     }
-  }, [])
+    getSurvey()
+  }, [showModal])
 
   const onAddQuestion = () => {
     setQuestions(questions + 1)
@@ -115,10 +119,14 @@ export default function EditModal({
     
     const questionPromises = survey.questions.map(async question => {
       let answersArr = []
+
       const answersPromises = question.answers.map(async answer => {
-        return await fetchToApi(BACKEND_ROUTES.answers, {
-          method: "POST",
-          body: JSON.stringify(answer),
+        return await fetchToApi(`${BACKEND_ROUTES.answers}/${answer.id}`, {
+          method: "PATCH",
+          body: JSON.stringify({
+            answer: answer.answer,
+            is_correct: answer.is_correct,
+          }),
           headers: {
             'Content-type': "application/json"
           }
@@ -128,8 +136,8 @@ export default function EditModal({
       const responses = await Promise.all(answersPromises)
       responses.map(response => answersArr.push(response.id))
 
-      const questionPromise = await fetchToApi(BACKEND_ROUTES.questions, {
-        method: "POST",
+      const questionPromise = await fetchToApi(`${BACKEND_ROUTES.questions}/${question.id}`, {
+        method: "PATCH",
         body: JSON.stringify({
           question: question.question, answers_id: answersArr
         }),
@@ -145,8 +153,8 @@ export default function EditModal({
     const responses = await Promise.all(questionPromises)
     responses.map(response => questionsArr.push(response.id))
     
-    const surveysResponse = await fetchToApi(BACKEND_ROUTES.surveys, {
-      method: "POST",
+    const surveysResponse = await fetchToApi(`${BACKEND_ROUTES.surveys}/${surveyId}`, {
+      method: "PATCH",
       body: JSON.stringify({
         ...survey, question_id: questionsArr
       }),
@@ -171,20 +179,38 @@ export default function EditModal({
       <form className='modal_form' onSubmit={onCreateSurvey}>
         <div className='input_container'>
           <label htmlFor="title">Titulo de la encuesta</label>
-          <input required onChange={onInputChange} id='title' />
+          <input 
+            required 
+            onChange={onInputChange}
+            value={survey.title} 
+            id='title' 
+          />
         </div>
         <div className='input_container'>
           <label htmlFor="description">Descripción de la encuesta</label>
-          <textarea required onChange={onInputChange} id='description' />
+          <textarea 
+            required 
+            onChange={onInputChange} 
+            value={survey.description} 
+            id='description' 
+          />
         </div>
         <div>
         <div className='input_container'>
           <label htmlFor="course_id">Curso</label>
-          <select required id="course_id" onChange={onInputChange}>
-            <option disabled selected value="">-- Selecciona un curso -- </option>
+          <select 
+            required 
+            id="course_id" 
+            onChange={onInputChange}
+          >
+            <option disabled value="">-- Selecciona un curso -- </option>
             {
-              courses.map(course => (
-                <option key={course.id} value={course.id}>
+              courses?.map(course => (
+                <option 
+                  key={course.id} 
+                  value={course.id}
+                  selected={parseInt(course.id) == survey.course_id?.id}
+                >
                   { course.title }
                 </option>
               ))
@@ -207,7 +233,12 @@ export default function EditModal({
               [...Array(questions)].map((_, questionIndex) => (
                 <div key={questionIndex} className='admin_questions'>
                   <label htmlFor={questionIndex}>Pregunta {questionIndex + 1}</label>
-                  <input required onChange={onQuestionChange} id={questionIndex} />
+                  <input 
+                    required 
+                    onChange={onQuestionChange}
+                    defaultValue={survey.questions[questionIndex].question} 
+                    id={questionIndex} 
+                  />
                   <label className='admin_answers_label'>
                     Respuestas
                     <i 
@@ -229,13 +260,16 @@ export default function EditModal({
                           <div key={answerIndex} className='input_survey_answers'>
                             <input 
                               className='input_survey_answer'
+                              defaultValue={survey.questions[questionIndex].answers[answerIndex].answer}
                               required
                               onChange={e => onAnswerChange(questionIndex, answerIndex, e.target.value, answerIndex === 0 ? true : false)}
                             ></input>
                             <div className='input_survey_answer'>
                               <input 
                                 type="radio"
-                                defaultChecked={answerIndex === 0}
+                                defaultChecked={
+                                  survey.questions[questionIndex].answers[answerIndex].is_correct
+                                }
                                 id={`pregunta_${questionIndex}_respuesta_${answerIndex + 1}`} 
                                 name={`question_${questionIndex}`}
                                 onChange={() => onIsTrueChange(questionIndex, answerIndex)}
@@ -255,20 +289,20 @@ export default function EditModal({
           </div>
         </div>
         <button type='submit'>
-          Crear encuesta
+          Editar encuesta
         </button>
       </form>
     </>
 
   const recipeResponse = () => 
-    <div className='response_creation'>
+    <div className='response'>
       {
         courseStatus.status === null
         ?
         (
           <>
             <img src={video} className='course_video_icon_skeleton' />
-            <h1>Creando encuesta...</h1>
+            <h1>Actualizando encuesta...</h1>
           </>
         )
         :
@@ -284,7 +318,7 @@ export default function EditModal({
 
   return (
     <Modal showModal={showModal} setShowModal={setShowModal}>
-      <h1>Crea una nueva encuesta</h1>
+      <h1>Actualiza la encuesta</h1>
       {
         !creating 
         ? createForm()

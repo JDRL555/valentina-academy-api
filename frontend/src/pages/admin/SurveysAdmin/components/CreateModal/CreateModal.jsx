@@ -25,7 +25,7 @@ export default function CreateModal({
     course_id: 0,
     questions: []
   })
-  const [courseStatus, setSurveyStatus] = useState({ status: null, error: "" })
+  const [surveyStatus, setSurveyStatus] = useState({ status: null, error: "" })
 
   const onAddQuestion = () => {
     setQuestions(questions + 1)
@@ -256,7 +256,7 @@ export default function CreateModal({
   const recipeResponse = () => 
     <div className='response_creation'>
       {
-        courseStatus.status === null
+        surveyStatus.status === null
         ?
         (
           <>
@@ -268,7 +268,7 @@ export default function CreateModal({
         (
           <>
             <img src={error} className='error_icon' />
-            <h1 className='error_text'>ERROR: {courseStatus.error}</h1>
+            <h1 className='error_text'>ERROR: {surveyStatus.error}</h1>
           </>
         )
       }
