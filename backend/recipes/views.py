@@ -4,7 +4,16 @@ from rest_framework.response import Response
 from .models import Recipes, Ingredients
 from .serializers import RecipeSerializer, IngredientSerializer
 
+from django.http import HttpResponse
+
 from api.validators import StudentPermission, TeacherPermission, AdminPermission
+
+from jinja2 import Environment, FileSystemLoader
+
+import os
+
+import pdfkit
+
 
 class IngredientViewSet(viewsets.ModelViewSet):
     permission_classes = [
@@ -94,3 +103,53 @@ class RecipeViewSet(viewsets.ModelViewSet):
             "ingredient": [str(ingredient.id) for ingredient in recipe.ingredient],
             "steps": recipe.steps
         })
+        
+class RecipePDFViewSet(viewsets.ModelViewSet):
+  permission_classes = [
+    StudentPermission
+  ]
+  
+  def list(self, request, recipe_id):
+    global recipe
+    ingredients = []
+    
+    try:
+      recipe = Recipes.objects.get(id=recipe_id)
+      for ingredient in recipe.ingredient:
+        ingredients.append({
+          "name": ingredient.name
+        })
+    except:
+      return Response({ "error": "Receta no encontrada" }, status=404)
+
+    current_dir = os.path.dirname(__file__)
+    template_dir = os.path.join(current_dir,"template")
+
+    config = pdfkit.configuration(wkhtmltopdf=r"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
+
+    env = Environment(loader=FileSystemLoader(template_dir))
+    template = env.get_template("recipe_pdf.html")
+
+    html = template.render({
+      "recipe_name": recipe.name,
+      "recipe_description": recipe.description,
+      "recipe_ingredients": ingredients,
+      "recipe_steps": recipe.steps,
+    })
+
+    pdf = pdfkit.from_string(
+      html,
+      output_path=False,
+      options={
+        'margin-top': '0in',
+        'margin-right': '0in',
+        'margin-bottom': '0in',
+        'margin-left': '0in',
+      },
+      configuration=config
+    )
+    
+    response = HttpResponse(content_type='application/pdf')
+    response.write(pdf)
+
+    return response
