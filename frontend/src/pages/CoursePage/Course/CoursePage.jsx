@@ -2,6 +2,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
 
 import { BACKEND_ROUTES } from '@constants/routes'
 
@@ -20,6 +21,7 @@ export default function CoursePage({ setCompleted }) {
   const [course, setCourse] = useState()
   const { id } = useParams()
   const navigate = useNavigate()
+  const [token] = useCookies(["access_token"])
 
   useEffect(() => {
     async function getCourse() {
@@ -28,6 +30,31 @@ export default function CoursePage({ setCompleted }) {
     }
     getCourse()
   }, [])
+
+  const onExportRecipe = async () => {
+    const recipeResponse = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/${BACKEND_ROUTES.export_recipe}/${course.recipe.id}/`
+    , {
+      headers: {
+        'Content-type': "application/json",
+        'Authorization': `Token ${token.access_token}`
+      }
+    })
+
+    const blob = await recipeResponse.blob()
+
+    const url = URL.createObjectURL(blob)
+
+    const link = document.createElement("a")
+
+    link.href = url
+    link.setAttribute("download", `recipe.pdf`)
+
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
 
   const onCompletedCourse = () => {
     setCompleted(true)
@@ -63,7 +90,7 @@ export default function CoursePage({ setCompleted }) {
               <div className='details'>
                 <h1>Descarga la receta</h1>
                 <p>Si necesitas la receta para analizarla y poder trabajar con ella, aqui tienes el PDF para que puedas usarlo mas adelante!</p>
-                <div className='pdfContainer'>
+                <div className='pdfContainer' onClick={onExportRecipe}>
                   <img className='pdfIcon' src={pdfIcon} alt="pdfIcon" />
                   <p>
                     <b>Descargar archivo PDF aquí</b>
