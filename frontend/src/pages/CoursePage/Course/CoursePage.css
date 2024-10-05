@@ -1,0 +1,152 @@
+.course, .courseDetails {
+  width: 100%;
+  transition: .3s;
+  color: var(--primary-color);
+}
+
+.course {
+  padding-top: 90px;
+  background-color: var(--more-opaque-dark-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.course:hover {
+  background-color: var(--opaque-dark-color);
+}
+
+.courseDetails {
+  background-color: var(--more-opaque-dark-color);
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  height: auto;
+}
+
+.courseDetails:hover {
+  background-color: var(--opaque-dark-color);
+}
+
+.details {
+  background-color: var(--opaque-dark-color);
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  height: fit-content;
+  box-sizing: border-box;
+}
+
+.details h1 {
+  font-size: 35px;
+}
+
+.details p {
+  font-size: 18px;
+  padding-top: 5px;
+  width: 500px;
+}
+
+.authorContainer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 10px 0;
+}
+
+.authorContainer img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 100%;
+  background-color: var(--primary-color);
+}
+
+.pdfContainer {
+  background-color: rgba(255, 255, 255, 0.5);
+  color: var(--dark-color);
+  padding-block: 10px;
+  border-radius: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: .3s;
+}
+
+.pdfContainer:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.pdfContainer:active {
+  transform: scale(0.9);
+}
+
+.pdfIcon {
+  width: 50px;
+}
+
+.recipe {
+  background-color: var(--opaque-dark-color);
+  border-radius: 10px;
+  width: 50%;
+  padding: 20px;
+}
+
+.recipe h1 {
+  font-size: 30px;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.recipe p {
+  text-align: center;
+  margin: 10px;
+  font-size: 18px;
+}
+
+.recipeContainer {
+  display: flex;
+}
+
+.recipeIngredients {
+  width: 30%;
+}
+
+.recipeInstructions {
+  width: 70%;
+}
+
+.recipeIngredients h2 {
+  font-size: 25px;
+}
+
+.recipeIngredients ul {
+  margin: 10px;
+  margin-left: 20px;
+  list-style-type: none;
+}
+
+.recipeIngredients ul li,
+.recipeInstructions ol li {
+  font-size: 17px;
+  padding: 5px 0;
+}
+
+.recipeInstructions p {
+  margin: 10px 0;
+}
+
+.recipeInstructions ol {
+  margin: 10px;
+}
+
+.video {
+  width: 60%;
+  text-align: center;
+  margin: 30px;
+  border-radius: 10px;
+  border: 10px solid #808080b0;
+}

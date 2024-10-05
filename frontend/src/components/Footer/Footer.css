@@ -1,0 +1,22 @@
+.footer{
+    background-color: black;
+    color: white;
+    height: 30vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.instagram_img {
+    padding-top: 10px;
+    cursor: pointer;
+    transition: .3s;
+    color: white;
+    text-decoration: none;
+}
+
+.instagram_img:hover {
+    color: pink;
+}

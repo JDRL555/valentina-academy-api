@@ -1,0 +1,77 @@
+.certificado-contenedor {
+  background: url(https://static.vecteezy.com/system/resources/previews/010/503/533/non_2x/gold-and-white-background-free-vector.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 600px;
+  margin: 0 auto;
+  box-shadow: 1px 1px 40px rgb(24, 18, 18);
+  padding: 30px;
+  cursor: default;
+}
+
+.certificado-encabezado {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.certificado-encabezado h2 {
+  font-size: 20px;
+}
+
+.certificado-encabezado h3 {
+  font-size: 17px;
+  padding-top: 5px;
+  margin-top: 0;
+}
+
+.certificado-cuerpo {
+  margin: auto;
+  text-align: center;
+}
+
+.certificado-cuerpo h2 {
+  font-size: 17px;
+}
+
+.certificado-contenedor .certificado-cuerpo p {
+  font-size: 15px;
+}
+
+.certificado-nombre {
+  font-weight: bold;
+  text-decoration: underline;
+  font-size: 10px;
+}
+
+.certificado-texto-titulo {
+  margin-bottom: 5px;
+}
+
+.certificado-titulo-curso {
+  margin-top: 0;
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.certificado-detalles {
+  width: 70%;
+  margin: auto;
+}
+
+.certificado-firmas {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.certificado-firma-director, .certificado-firma-coordinador {
+  text-align: center;
+  margin: auto;
+}
+
+.certificado-contenedor .certificado-pie-pagina p {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 10px;
+}

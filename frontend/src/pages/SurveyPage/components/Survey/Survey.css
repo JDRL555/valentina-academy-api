@@ -1,0 +1,36 @@
+.question {
+  margin: 30px 10px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: var(--dark-color);
+  color: var(--primary-color);
+  text-align: center;
+}
+
+.question ul {
+  list-style-type: none;
+}
+
+.answer {
+  font-size: 20px;
+  margin: 10px 0;
+  padding: 10px;
+  background-color: var(--opaque-primary-color);
+  color: var(--dark-color);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.answer:hover {
+  background-color: var(--opaque-dark-color);
+  color: var(--primary-color);
+}
+
+.error {
+  display: none;
+  width: 250px;
+  border-radius: 10px;
+  color: white;
+  padding: 10px;
+}

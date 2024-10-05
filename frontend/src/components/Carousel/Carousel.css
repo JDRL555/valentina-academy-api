@@ -1,0 +1,38 @@
+.container{
+    position: relative;
+    width: 300vw;
+    height: 600px;
+    display: flex;
+    align-items: center;
+}
+
+.container .arrow_right, 
+.container .arrow_left {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+    padding: 0 25px;
+    font-size: 150px;
+    height: 100%;
+    cursor: pointer;
+    color: var(--primary-color);
+    background: #000;
+}
+
+.arrow_right{
+    left: 30%;
+    mask-image: linear-gradient(to right, transparent 1%, black 90%);
+}
+
+.arrow_left {
+    mask-image: linear-gradient(to left, transparent 1%, black 90%);
+}
+
+.carrusel_container{
+    width: 100%;
+    position: absolute;
+    left: 0vw;
+    transition: left 1s;
+    display: inline-flex;
+}

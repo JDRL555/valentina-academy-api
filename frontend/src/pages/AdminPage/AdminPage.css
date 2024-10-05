@@ -1,0 +1,26 @@
+.admin_entities {
+  margin: auto;
+  margin-top: 10px;
+  width: 90%;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.admin_entity {
+  margin: auto;
+  width: 45%;
+  background-color: var(--opaque-primary-color);
+  border-radius: 10px;
+  padding: 15px;
+  text-decoration: none;
+  font-size: 18px;
+  color: black;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.admin_entity:hover {
+  background-color: var(--opaque-dark-color);
+  color: var(--primary-color);
+}

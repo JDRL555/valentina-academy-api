@@ -1,0 +1,79 @@
+.surveyContainer {
+  background-color: var(--opaque-dark-color);
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 30px;
+  color: var(--dark-color);
+}
+
+.survey {
+  box-sizing: border-box;
+  margin: auto;
+  padding: 30px;
+  overflow-y: auto;
+  width: 80%;
+  height: 100%;
+  background-color: var(--opaque-primary-color);
+  border-radius: 20px;
+}
+
+.survey h1 {
+  font-size: 40px;
+}
+
+.survey p {
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+.startBtn {
+  padding: 20px;
+  font-size: 20px;
+  margin: 20px 0;
+  border: 1px solid var(--opaque-primary-color);
+  border-radius: 10px;
+  background-color: var(--dark-color);
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: .3s;
+}
+
+.startBtn:hover {
+  border: 1px solid var(--dark-color);
+  background-color: var(--more-opaque-primary-color);
+  color: var(--dark-color);
+}
+
+.counterCotainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.counterCotainer h1 {
+  font-size: 100px;
+}
+
+.timer {
+  font-size: 80px;
+}
+
+.survey_result_container {
+  text-align: center;
+  width: 80%;
+  margin: auto;
+}
+
+.survey_result_text {
+  padding: 10px 0;
+}
+
+.survey_result_container .startBtn {
+  display: block;
+  width: 250px;
+  margin: 0 auto;
+  margin-top: 10px;
+} 
+

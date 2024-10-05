@@ -1,0 +1,29 @@
+.course_container {
+    text-align: center;
+    padding: 10px;
+    background-color: var(--opaque-primary-color);
+    color: black;
+}
+
+.course_container h1 {
+    padding: 10px;
+    font-size: 40px;
+}
+
+.courses_container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin: 30px;
+    margin-top: 10px;
+}
+
+.reload_icon {
+    cursor: pointer;
+    transition: .5s;
+}
+
+.reload_icon:hover {
+    transform: rotate(360deg);
+}
