@@ -1,9 +1,13 @@
 from pathlib import Path
 from dotenv import load_dotenv
+
 from .utils.mongo import connectToMongo
+from .services.cloudinary import config_cloudinary
+
 import os
 
 load_dotenv()
+config_cloudinary()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,9 +36,11 @@ DEFAULT_APPS = [
 
 THIRD_PART_APPS = [
     'rest_framework',
+    'rest_authtoken',
     'rest_framework.authtoken',
     'rest_framework_mongoengine',
     'corsheaders',
+    'rolepermissions',
 ]
 
 PROJECT_APPS = [
@@ -155,5 +161,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_WHITELIST = [
     os.environ.get("FRONTEND_URL")
 ]
+
+REST_FRAMEWORK = {
+   'DEFAULT_AUTHENTICATION_CLASSES': (
+       'rest_framework.authentication.TokenAuthentication',
+   ),
+   'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAdminUser'
+   )
+}
+
+ROLEPERMISSIONS_MODULE = 'api.roles'
 
 APPEND_SLASH = False
