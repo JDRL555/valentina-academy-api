@@ -1,4 +1,5 @@
 from mongoengine import connect
 
-def connectToMongo(db: str, host: str, port: int):
-  connect(db=db, host=host, port=port)
+def connectToMongo(host: str):
+  print("connecting...")
+  connect(host=host)
