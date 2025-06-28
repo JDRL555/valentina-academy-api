@@ -18,5 +18,4 @@ class Admin(AbstractUserRole):
         'RECIPES': True,
         'SURVEY':True,
         'USERS':True,
-       
     }

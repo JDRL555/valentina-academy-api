@@ -45,9 +45,9 @@ export default function IngredientsAdmin() {
     ingredientsInfo.style.animation = animationData[index].animation
   }
   
-  if(ingredients?.length == 0) {
-    return <AdminSkeleton />
-  }
+  // if(ingredients?.length == 0) {
+  //   return <AdminSkeleton />
+  // }
 
   return (
     <>

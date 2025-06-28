@@ -5,6 +5,7 @@ from .utils.mongo import connectToMongo
 from .services.cloudinary import config_cloudinary
 
 import os
+import dj_database_url
 
 load_dotenv()
 config_cloudinary()
@@ -21,7 +22,7 @@ SECRET_KEY = 'django-insecure-ut*#isk0k#=p8!$3!lru=38as0^)$^p57vixb!$7d8dn)*2-jg
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -40,7 +41,7 @@ THIRD_PART_APPS = [
     'rest_framework.authtoken',
     'rest_framework_mongoengine',
     'corsheaders',
-    'rolepermissions',
+    'rolepermissions'
 ]
 
 PROJECT_APPS = [
@@ -89,14 +90,7 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get("POSTGRES_DB_NAME"),
-        'USER': os.environ.get("POSTGRES_DB_USER"),
-        'PASSWORD': os.environ.get("POSTGRES_DB_PASSWORD"),
-        'HOST': os.environ.get("POSTGRES_DB_HOST"),
-        'PORT': os.environ.get("POSTGRES_DB_PORT"),
-    }
+    "default": dj_database_url.config(default=os.getenv("POSTGRES_DB_HOST"), conn_max_age=600)
 }
 
 MONGODB_DATABASES = {
@@ -109,9 +103,7 @@ MONGODB_DATABASES = {
 
 try:
     connectToMongo(
-        db=os.environ.get("MONGO_DB_NAME"),
-        host=os.environ.get("MONGO_DB_HOST"),
-        port=int(os.environ.get("MONGO_DB_PORT")),
+        host=os.environ.get("MONGO_DB_HOST")
     )
 except Exception as err:
     print(f"ERROR con la conexion a mongodb: {err}")
@@ -151,24 +143,26 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ORIGIN_WHITELIST = [
-    os.environ.get("FRONTEND_URL")
-]
+# CORS_ORIGIN_WHITELIST = [
+#     os.environ.get("FRONTEND_URL")
+# ]
+
+CORS_ALLOW_ALL_ORIGINS = True  # Permitir cualquier frontend
 
 REST_FRAMEWORK = {
-   'DEFAULT_AUTHENTICATION_CLASSES': (
-       'rest_framework.authentication.TokenAuthentication',
-   ),
-   'DEFAULT_PERMISSION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAdminUser'
-   )
+    )
 }
 
 ROLEPERMISSIONS_MODULE = 'api.roles'

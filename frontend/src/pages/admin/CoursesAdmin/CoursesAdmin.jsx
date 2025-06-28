@@ -12,6 +12,7 @@ import EditModal from './components/EditModal/EditModal'
 import DeleteModal from './components/DeleteModal/DeleteModal'
 
 export default function CoursesAdmin() {
+  const [loading, setLoading] = useState(true)
   const [showCreate, setShowCreate] = useState(false)
   const [showEdit, setShowEdit] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
@@ -35,6 +36,7 @@ export default function CoursesAdmin() {
       setCategories(categoriesResponse)
       setUsers(usersResponse)
       setRecipes(recipesResponse)
+      setLoading(false)
     }
     getCourseInfo()
   }, [])
@@ -58,9 +60,9 @@ export default function CoursesAdmin() {
     teacherInfo.style.animation = animationData[index].animation
   }
 
-  if(courses?.length == 0) {
-    return <AdminSkeleton />
-  }
+  // if(loading == false) {
+  //   return <AdminSkeleton />
+  // }
 
   return (
     <>

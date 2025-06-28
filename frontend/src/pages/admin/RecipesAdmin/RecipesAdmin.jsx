@@ -50,9 +50,9 @@ export default function RecipesAdmin() {
     teacherInfo.style.animation = animationData[index].animation
   }
 
-  if(recipes?.length == 0) {
-    return <AdminSkeleton />
-  }
+  // if(recipes?.length == 0) {
+  //   return <AdminSkeleton />
+  // }
 
   return (
     <>

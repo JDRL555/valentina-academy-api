@@ -50,9 +50,9 @@ export default function SurveysAdmin() {
     teacherInfo.style.animation = animationData[index].animation
   }
 
-  if(surveys?.length == 0) {
-    return <AdminSkeleton />
-  }
+  // if(surveys?.length == 0) {
+  //   return <AdminSkeleton />
+  // }
 
   return (
     <>
