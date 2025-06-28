@@ -34,6 +34,8 @@ class UsersViewSet(ModelViewSet):
     for user in users:
       user_role = get_user_roles(user)
       
+      print(user_role)
+      
       user_obj = {
         "id": user.id,
         "username": user.username,

@@ -1,4 +1,3 @@
-   
 from django.urls import path, re_path, include
 from django.contrib import admin
 
@@ -10,8 +9,6 @@ from recipes.urls.export import urlpatterns as export_recipes_views
 from survey.urls.question import urlpatterns as question_views
 from survey.urls.answers import urlpatterns as answer_views
 from survey.urls.surveys import urlpatterns as survey_views
-
-
 
 urlpatterns = [
     path('', include(courses_views)),
